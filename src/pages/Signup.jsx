@@ -232,7 +232,8 @@ const navigate = useNavigate();
       Object.values(formData).every((field) => field);
     if (allFieldsValid) {
       console.log("Form submitted:", formData);
-       navigate('/buyer');
+      //  navigate('/buyer');
+      navigate('/otp', { state: { email: formData.email } });
     } else {
       alert("Please fix the errors first.");
     }
