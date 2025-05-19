@@ -1,0 +1,83 @@
+import ReusableSelect from '../Dropdown';
+
+
+const StepThree = ({ formData, handleChange,errors }) => {
+
+    
+
+  return(
+  
+  <div className="space-y-4">
+      <h1 className="text-2xl font-semibold ">TRANSACTION DETAILS</h1>
+    <div className="flex gap-[5%] w-full">
+      
+    <div className="w-[550px]">
+        <h1>Reason For Sale</h1>
+      <ReusableSelect
+      
+        label="Reason for Sale"
+        name="salereason"
+        value={formData.salereason}
+        onChange={handleChange}
+        options={['Sales', 'Profit']}
+        className={`w-full px-3 py-2 border rounded `}
+        width={550}
+          error={errors.salereason}
+        
+      />
+    </div>
+    <div>
+       <h1>Asking Price(Rs)</h1> 
+     <input
+     label='Asking Price'
+      type="text"
+      name="askingPrice"
+      placeholder="Asking Price"
+      value={formData.askingPrice}
+      onChange={handleChange}
+      // className="w-[550px] px-3 py-2 border rounded"
+      className={`w-[550px] px-3 py-2 border rounded ${
+          errors.askingPrice ? 'border-red-500 ' : 'border-gray-300'
+        }`}
+    />
+  </div>
+  </div>
+ 
+<div className=''>
+  <h1 className="text-xl font-semibold mb-4">Preferred Arrangement</h1>
+<div className=" flex flex-wrap  ">
+  {["Cash", "Stock", "Royalty", "Acquihire"].map((option) => (
+    <button
+      key={option}
+      type="button"
+      className={`w-[100px] py-3 rounded-sm  border text-sm ${
+        formData.preferredArrangement.includes(option)
+          ?  "bg-white text-gray-800 border-gray-300":"bg-blue-100 text-blue-500 border-blue-500"
+          
+      } hover:bg-blue-100 border border-blue`}
+      onClick={() => {
+        const isSelected = formData.preferredArrangement.includes(option);
+        const newSelection = isSelected
+          ? formData.preferredArrangement.filter((item) => item !== option)
+          : [...formData.preferredArrangement, option];
+
+        handleChange({
+          target: {
+            name: "preferredArrangement",
+            value: newSelection,
+          },
+        });
+      }}
+    >
+      {option}
+    </button>
+  ))}
+</div>
+{errors.preferredArrangement && (
+  <p className="text-red-500 text-sm mt-1">{errors.preferredArrangement}</p>
+)}
+</div>
+</div>
+)};
+
+export default StepThree;

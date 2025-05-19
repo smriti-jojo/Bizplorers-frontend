@@ -1,97 +1,97 @@
 import ReusableSelect from "../Dropdown";
 import { TextField } from "@mui/material";
-import ReusableRadioButton from '../RadioButton';
+import ReusableRadioButton from "../RadioButton";
 
 const countryCityMap = {
-  India: ['Delhi', 'Mumbai', 'Bangalore'],
-  USA: ['New York', 'Los Angeles', 'Chicago'],
-  Germany: ['Berlin', 'Munich', 'Frankfurt'],
+  India: ["Delhi", "Mumbai", "Bangalore"],
+  USA: ["New York", "Los Angeles", "Chicago"],
+  Germany: ["Berlin", "Munich", "Frankfurt"],
 };
 
-const StepTwo = ({ formData, handleChange ,errors}) => (
+const StepTwo = ({ formData, handleChange, errors }) => (
   <div className="space-y-4">
-    
-      <div>
-      {/* <ReusableSelect
-      multiple
-        label="Business Categories of Interest"
-        name="businessCategory"
-        value={formData.businessCategory}
-        onChange={handleChange}
-        options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
-        className={`w-full px-3 py-2 border rounded `}
-          error={errors.businessCategory}
-          width={350}
-        
-      />  */}
+    <div className="rounded-md ">
       <div className="flex gap-5 w-full ">
-        <div className="w-1/2"><h1>	Last Financial year(Rs) </h1>
-        <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" /></div>
-         <div className="w-1/2">
+        <div className="w-1/2">
+          <h1> Last Financial year(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
           <h1> Previous Financial Year(Rs)*</h1>
-           <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full"/>
-         </div>
-     
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
       </div>
       <div className="flex gap-5 w-full ">
-        <div className="w-1/2"><h1>	Pre-previous Financial Year(Rs) </h1>
-        <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" /></div>
-         <div className="w-1/2">
+        <div className="w-1/2">
+          <h1> Pre-previous Financial Year(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
           <h1>Trailing 12 months(Rs)</h1>
-           <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full"/>
-         </div>
-     
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
       </div>
 
-      <div className='flex justify-between w-full '>
-          <div className='w-[350px]'>
-            <h1>Last month(Rs)</h1>
-             <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
-        
-          </div>
-           <div className='w-[350px]'>
-            <h1>Previous month(Rs)</h1>
-             <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
-        
-          </div>
-           <div className='w-[350px]'>
-            <h1>Pre-previous month(Rs)</h1>
-             <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
-        
-          </div>
-           </div>
-
-      <div className="flex gap-[4%]">
-         <ReusableSelect
-        label="Business Location Preference Country"
-        name="businessLocation"
-        value={formData.businessLocation}
-        onChange={handleChange}
-        // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
-       options={Object.keys(countryCityMap)}
-        className={`w-full py-2 border rounded `}
-          error={errors.businessLocation}
-          width={350}
-      />
-       {formData.businessLocation && (
-        <div>
-          <ReusableSelect
-          multiple
-    label="City"
-    name="city"
-    value={formData.city}
-    onChange={handleChange}
-    options={countryCityMap[formData.businessLocation] || []}
-    error={errors.city}
-    width={350}
-  />
-  </div>
-)}
+      <div className="flex justify-between w-full ">
+        <div className="w-[350px]">
+          <h1>Last month(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-[350px]">
+          <h1>Previous month(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-[350px]">
+          <h1>Pre-previous month(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
       </div>
 
       <div>
         {/* <h1>Open to Pre-revenue Business</h1> */}
-        <div className="px-3 py-5">
+        {/* <div className="px-3 py-5">
   <label className="block mb-2 font-medium">Open to Pre-revenue Business</label>
   <div className="flex gap-4">
     <label>
@@ -117,9 +117,9 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       NO
     </label>
   </div>
-</div>
+</div> */}
 
-{formData.openToPreRevenue === 'NO' && (
+        {/* {formData.openToPreRevenue === 'NO' && (
   <>
    <label className="block mb-2 font-medium px-3">Open to Pre-breakeven businesses</label>
    <div className="flex gap-4 px-3">
@@ -152,15 +152,183 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       </div>
 
   </>
-)}
-
-
-
+)} */}
       </div>
-     </div>
+    </div>
 
-      
-     
+    {/**Profits */}
+    <div className="rounded-md py-[5%]">
+      <h1 className="text-2xl font-semibold ">PROFITS(PAT)</h1>
+      <div className="flex gap-5 w-full py-4 ">
+        <div className="w-1/2">
+          <h1> Last Financial year(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <h1> Previous Financial Year(Rs)*</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+      <div className="flex gap-5 w-full py-4">
+        <div className="w-1/2">
+          <h1> Pre-previous Financial Year(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <h1>Trailing 12 months(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+      <div className="flex gap-5 w-full py-4">
+        <div className="w-1/2">
+          <h1>Last month(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <h1>Previous month(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+      <div className="flex gap-5 w-full">
+        <div className="w-1/2">
+          <h1>Pre-previous month(Rs)</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <h1>EBITDA Margin (current) %</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+    </div>
+
+    {/**Cashflow */}
+    <div className="rounded-md">
+      <h1 className="text-2xl font-semibold ">OPERATING CASH FLOW</h1>
+      <div className="flex gap-5 w-full py-4 ">
+        <div className="w-1/2">
+          <h1> Last Financial year(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <h1> Previous Financial Year(Rs)*</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+      <div className="flex w-full pr-5">
+        <div className="w-1/2">
+          <h1> Pre-previous Financial Year(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+      {/**ASSETS */}
+      <div>
+        <h1 className="text-2xl font-semibold pt-[5%]">ASSESTS</h1>
+        <div className="pt-4">
+          <h1>Description of Key Assest/IP</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+      {/**Sources */}
+       <div>
+        <h1 className="text-2xl font-semibold pt-[5%]">Sources Of Funds</h1>
+          
+        <div className="flex gap-5 w-full py-4 ">
+         
+        <div className="w-1/2">
+          <h1> Equity(Rs) </h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <h1> Debt(Rs)*</h1>
+          <TextField
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
+            slotProps={{ inputLabel: { shrink: false } }}
+            className="!w-full"
+          />
+        </div>
+      </div>
+        </div>
+      </div>
     
   </div>
 );

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Stepper from '../../component/Multistep_Form/Stepper';
 import StepOne from '../../component/Multistep_Seller/StepOne';
 import StepTwo from '../../component/Multistep_Seller/StepTwo';
-import StepThree from '../../component/Multistep_Form/StepThree';
+import StepThree from '../../component/Multistep_Seller/StepThree';
 import Confirmation from '../../component/Multistep_Form/Confirmation';
 
 
@@ -27,6 +27,9 @@ const Seller = () => {
     state:[],
      city:[],
      status:'',
+     salereason:'',
+     askingPrice:'',
+     preferredArrangement:[]
   });
 const [errors, setErrors] = useState({});
   // const nextStep = () => setStep((prev) => prev + 1);
