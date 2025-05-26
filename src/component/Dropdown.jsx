@@ -1,32 +1,4 @@
 
-// const Dropdown = ({ label, name, options, value, onChange, error, type }) => {
-//   return (
-//     <div className="w-full">
-//       {label && <label className="block mb-1 text-sm font-medium">{label}</label>}
-
-//       <select
-//         multiple={type === "multiple"}
-      
-//         name={name}
-//         value={value}
-//         onChange={onChange}
-//         className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-//           error ? "border-red-500" : "border-gray-300"
-//         }`}
-//       >
-//         {/* <option value="">{`Select ${label}`}</option> */}
-//         <option value="">Select {label}</option>
-//         {options.map((option) => (
-//           <option key={option} value={option}>
-//             {option}
-//           </option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// };
-
-// export default Dropdown;
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -67,8 +39,8 @@ export default function ReusableSelect({
   const theme = useTheme();
 
   return (
-    <FormControl sx={{ m: 1, width }} error={error}>
-      <InputLabel id={`${label}-label`}>{label}</InputLabel>
+    <FormControl sx={{ my:1, width }} error={error}>
+       {/* <InputLabel id={`${label}-label`}>{label}</InputLabel> */}
       {/* <Select
         labelId={`${label}-label`}
         id={`${label}-select`}
@@ -117,6 +89,7 @@ export default function ReusableSelect({
       <Select
 //  displayEmpty
 //      inputProps={{ 'aria-label': 'Without label' }}
+variant='outlined'
       size='small'
   labelId={`${label}-label`}
   id={`${label}-select`}
@@ -126,7 +99,7 @@ export default function ReusableSelect({
   onChange={onChange}
   input={multiple ? <OutlinedInput /> : undefined}
   MenuProps={MenuProps}
-  label={label}
+  label=''
   renderValue={
     multiple
       ? (selected) => (

@@ -1,40 +1,28 @@
 import React, { useState } from 'react';
 import Stepper from '../../component/Stepper';
-import StepOne from '../../component/Multistep_Form/StepOne';
-import StepTwo from '../../component/Multistep_Form/StepTwo';
-import StepThree from '../../component/Multistep_Form/StepThree';
-import Confirmation from '../../component/Multistep_Form/Confirmation';
-import { Link } from 'react-router-dom';
-import { Menu, X } from "lucide-react";
+import StepOne from '../../component/Multistep_Broker/StepOne';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { Menu, X } from "lucide-react";
 
 
 
-const Buyer = ({type}) => {
-   const [menuOpen, setMenuOpen] = useState(false);
+const Broker = () => {
+     const [menuOpen, setMenuOpen] = useState(false);
   const [step, setStep] = useState(1);
- 
   const [formData, setFormData] = useState({
-   
-    buyertype:'',
-    designation:'',
-    description:'',
-    linkedIn:'',
-    businessCategory:[],
-    ticketSizemin:'',
-    ticketSizemax:'',
-    businessLocation:'',
-    city:[],
-    openToPreRevenue:'',
-    openToPreBreakeven:'',
-    revenueMin:'',
-    revenueMax:'',
-    metric:'',
-    maxMultiple:'',
-    preferredArrangement:[]
+    firstName: '',
+    lastName: '',
+   mobile_no:'',
+   address:'',
+   country:'',
+   state:'',
+   city:'',
+   zip:''
   });
 const [errors, setErrors] = useState({});
- const navigate=useNavigate();
+const navigate=useNavigate();
   // const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
@@ -130,17 +118,14 @@ const handleNext = () => {
 };
 
 const handleSubmit=()=>{
-  alert("data submit successfully");
-  if(type !='modal'){
-  navigate('/buyer/dashboard');
-  }
+  alert("data submitted successfully");
+navigate('/broker/dashboard');
 }
 
-const stepsList = ['PERSONAL DETAILS', 'PREFERENCE DETAILS', 'TRANSACTION DETAILS'];
+const stepsList = ['BROKER DETAILS'];
   return (
-    <div className='bg-gray-100 min-h-screen'>
-      {type=='modal'?'':(
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+    <>
+     <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
             <img alt='logo' width={50} className="object-contain" />
              <nav className="hidden md:flex gap-8 text-sm font-medium">
               <Link to="/homepage" className="hover:text-blue-600 text-xl">
@@ -172,19 +157,22 @@ const stepsList = ['PERSONAL DETAILS', 'PREFERENCE DETAILS', 'TRANSACTION DETAIL
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
               </div>
             )}
-          </header>)}
-    <div className={`flex justify-center max-h-screen ${type=='modal'?'pt-0':'pt-[7%]'}`}>
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-[90%] h-full">
-     
+          </header>
+    <div className="flex justify-center py-[7%] min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-[90%]">
+        {/* <h2 className="text-2xl font-bold mb-2 text-center">Multi Step Form</h2>
+        <p className="text-center text-sm text-gray-600 mb-6">
+          React Tailwind UI multi step form with basic validation.
+        </p> */}
         <Stepper step={step} steps={stepsList}/>
 
         {step === 1 && <StepOne formData={formData} handleChange={handleChange}  errors={errors} />}
-        {step === 2 && <StepTwo formData={formData} handleChange={handleChange}  errors={errors} />}
+        {/* {step === 2 && <StepTwo formData={formData} handleChange={handleChange}  errors={errors} />} */}
         {/* {step === 3 && <Confirmation formData={formData} />} */}
-          {step === 3 && <StepThree formData={formData} handleChange={handleChange}  errors={errors} />}
+          {/* {step === 3 && <StepThree formData={formData} handleChange={handleChange}  errors={errors} />} */}
 
         <div className="flex gap-5 mt-6">
-          {step > 1 && (
+          {/* {step > 1 && (
             <button onClick={prevStep} className="px-4 py-2 bg-gray-300 rounded">
               Back
             </button>
@@ -193,8 +181,8 @@ const stepsList = ['PERSONAL DETAILS', 'PREFERENCE DETAILS', 'TRANSACTION DETAIL
             <button onClick={handleNext} className="px-4 py-2 bg-blue-600 text-white rounded">
               Next
             </button>
-          )}
-          {step==3 && (
+          )} */}
+          {step==1 && (
             <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded">
               Submit
             </button>
@@ -202,8 +190,8 @@ const stepsList = ['PERSONAL DETAILS', 'PREFERENCE DETAILS', 'TRANSACTION DETAIL
         </div>
       </div>
     </div>
-    </div>
+    </>
   );
 };
 
-export default Buyer;
+export default Broker;

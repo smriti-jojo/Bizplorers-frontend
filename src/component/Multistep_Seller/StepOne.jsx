@@ -9,53 +9,9 @@ const StepOne = ({ formData, handleChange,errors }) => {
   return(
   
   <div className="space-y-4">
-    {/* <input
-      type="text"
-      name="firstName"
-      placeholder="First Name"
-      value={formData.firstName}
-      onChange={handleChange}
-      className="w-full px-3 py-2 border rounded"
-    />
-    <input
-      type="text"
-      name="lastName"
-      placeholder="Last Name"
-      value={formData.lastName}
-      onChange={handleChange}
-      className="w-full px-3 py-2 border rounded"
-    /> */}
-     {/* <input
-      type="text"
-      name="lastName"
-      placeholder="Last Name"
-      value={formData.lastName}
-      onChange={handleChange}
-      className="w-full px-3 py-2 border rounded"
-    /> */}
-      
-    {/* <div className="flex gap-[5%] w-full"> */}
-    {/* <div>
-<h1>Type of Seller</h1>
-       <div className="w-[550px]">
-      <ReusableSelect
-      hiddenLabel
-  id="filled-hidden-label-small"
-        label="Type of Buyer"
-        name="buyertype"
-        value={formData.buyertype}
-        onChange={handleChange}
-        options={['Individual', 'Organization']}
-        className={`w-full px-3  border rounded `}
-        width={550}
-          error={errors.buyertype}
-        
-      />
-    </div>
-    </div> */}
     <div>
         <h1>Company Name</h1>
-        <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+        <TextField name="company_name"  value={formData.company_name} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
     </div>
    
 
@@ -92,44 +48,31 @@ const StepOne = ({ formData, handleChange,errors }) => {
 
    </div>
    
-  {/* <div>
-    <h1>Description of Individual/Organization</h1>
-    <textarea
-    type="textbox"
-    name="description"
-    rows={4}
-      placeholder="Enter Description"
-      value={formData.description}
-      onChange={handleChange}
-       className={`w-full px-3 py-2 border rounded ${
-          errors.description ? 'border-red-500' : 'border-gray-300'
-        }`}
-      />
-  </div> */}
+  
   <div className='flex gap-5 w-full'>
     <div className='w-1/2'>
     <h1>Website Url</h1>
-     <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+     <TextField name="website_url" value={formData.website_url} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
 </div>
  <div className='w-1/2'>
     <h1>CIN</h1>
-     <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+     <TextField  name="CIN" value={formData.CIN} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
 </div>
   </div>
   <div className='flex gap-5 w-full'>
     <div className='w-1/2'>
     <h1>Company Linkedin Page</h1>
-     <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+     <TextField name="company_linkedin" value={formData.company_linkedin} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
 </div>
  <div className='w-1/2'>
     <h1>Co-founders Linkedin Profiles</h1>
-     <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+     <TextField name="cofounder_linkedin" value={formData.cofounder_linkedin} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
 </div>
   </div>
 
   <div>
     <h1>Description about business</h1>
-     <TextField multiline rows={5} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+     <TextField name="description_business" value={formData.description_business} onChange={handleChange} multiline rows={3} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
   </div>
   <div className='flex justify-between w-full'>
     <div>
@@ -179,17 +122,17 @@ const StepOne = ({ formData, handleChange,errors }) => {
    <div className='flex justify-between w-full '>
     <div className='w-[350px]'>
       <h1>Number of co-founders</h1>
-       <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+       <TextField name="numcofounder" value={formData.numcofounder} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
   
     </div>
      <div className='w-[350px]'>
       <h1>Team Size</h1>
-       <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+       <TextField name="teamSize" value={formData.teamSize} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
   
     </div>
      <div className='w-[350px]'>
       <h1>Number of Locations</h1>
-       <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
+       <TextField name="numLocation" value={formData.numLocation} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-full" />
   
     </div>
      </div>
@@ -243,20 +186,6 @@ const StepOne = ({ formData, handleChange,errors }) => {
           />
     </div>
  </div>  
-  {/* <div>
-      <h1>Buyer Linkedin Profile</h1>
-     <input
-      type="text"
-      name="linkedIn"
-      placeholder="Enter Linkedin Profile"
-      value={formData.linkedIn}
-      onChange={handleChange}
-      // className="w-full px-3 py-2 border rounded"
-      className={`w-full px-3 py-2 border rounded ${
-          errors.linkedIn ? 'border-red-500' : 'border-gray-300'
-        }`}
-    />
-  </div> */}
 </div>
 )};
 

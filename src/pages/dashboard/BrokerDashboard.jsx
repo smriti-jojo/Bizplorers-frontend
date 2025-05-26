@@ -1,0 +1,304 @@
+import React from 'react';
+import ReusableTabs from '../../component/ReusableTabs';
+import { useState } from 'react';
+import { Menu, X } from "lucide-react";
+import { Button } from '@mui/material';
+import ViewProfile from '../../component/Broker/ViewProfile';
+import ReusableCards from '../../component/ReusableCards';
+import AddIcon from '@mui/icons-material/Add';
+import { Link } from 'react-router-dom';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import Stepper from '../../component/Stepper';
+// import StepOne from '../../component/Multistep_Form/StepOne';
+import StepOne from '../../component/Multistep_Seller/StepOne';
+// import StepTwo from '../../component/Multistep_Form/StepTwo';
+import StepTwo from '../../component/Multistep_Seller/StepTwo';
+// import StepThree from '../../component/Multistep_Form/StepThree';
+import StepThree from '../../component/Multistep_Seller/StepThree';
+import Seller from '../../pages/signup_steps/Seller';
+import Buyer from '../../pages/signup_steps/Buyer';
+
+const Transition = React.forwardRef((props, ref) => {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const BrokerDashboard = () => {
+    const [duration, setDuration] = useState('');
+      const [menuOpen, setMenuOpen] = useState(false);
+        
+  const [step, setStep] = useState(1);
+ const [openDialog, setOpenDialog] = useState(false);
+   
+     const handleDialogClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+//   const handleDropdownChange = (event) => {
+//     setDuration(event.target.value);
+//   };
+const RenderBuyerCards = () => {
+  const cardData = [
+    { title: 'Card 1', content: <ReusableCards/> },
+    { title: 'Card 2', content: <ReusableCards/> },
+    { title: 'Card 3', content: <ReusableCards/> },
+     { title: 'Card 4', content: <ReusableCards/> },
+      { title: 'Card 5', content: <ReusableCards/> },
+       { title: 'Card 6', content: <ReusableCards/> },
+  ];
+
+  return (
+    <>
+    <div className='px-[5%]  '>
+    <div className='flex justify-end pb-4'>
+      <Button variant='contained' onClick={handleDialogClickOpen}><AddIcon className='mr-1'/>Add Buyer</Button>
+    </div>
+        <Dialog
+          open={openDialog}
+          slots={{
+            transition: Transition,
+          }}
+          keepMounted
+          onClose={handleDialogClose}
+          aria-describedby="alert-dialog-slide-description"
+          PaperProps={{
+            style: {
+              width: "90vw",
+              height: "100vh",
+              maxWidth: "none", // Override default maxWidth
+              maxHeight: "none", // Override default maxHeight
+            },
+          }}
+        >
+          <DialogContent className="z-10">
+            <DialogContentText id="alert-dialog-slide-description">
+              <Buyer type={"modal"}/>
+            </DialogContentText>
+          </DialogContent>
+          {/* <DialogActions>
+           
+            <div className="flex gap-5 mt-3">
+              {step > 1 && (
+                <button
+                  onClick={prevStep}
+                  className="px-4 py-2 bg-gray-300 rounded"
+                >
+                  Back
+                </button>
+              )}
+              {step < 3 && (
+                <button
+                  onClick={handleNext}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Next
+                </button>
+              )}
+              {step == 3 && (
+                <button
+            
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Submit
+                </button>
+              )}
+            </div>
+          
+          </DialogActions> */}
+          <DialogActions className="absolute top-0 right-2 z-10">
+            <Button onClick={handleDialogClose}>
+              <X size={40} color="black" />
+            </Button>
+          </DialogActions>
+        </Dialog>
+    <div className="flex flex-wrap gap-x-[5%] gap-y-10">
+      {cardData.map((card, index) => (
+        <ReusableCards key={index} title={card.title} content={card.content} />
+      ))}
+    </div>
+    </div>
+    </>
+  );
+};
+const RenderSellerCards = () => {
+   const [openDialog, setOpenDialog] = useState(false);
+   const stepsList = ['COMPANY DETAILS', 'FINANCIAL DETAILS', 'TRANSACTION DETAILS'];
+     const handleDialogClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+  const cardData = [
+    { title: 'Card 1', content: <ReusableCards/> },
+    { title: 'Card 2', content: <ReusableCards/> },
+    { title: 'Card 3', content: <ReusableCards/> },
+     { title: 'Card 4', content: <ReusableCards/> },
+      { title: 'Card 5', content: <ReusableCards/> },
+       { title: 'Card 6', content: <ReusableCards/> },
+  ];
+
+  return (
+    <>
+    <div className='px-[5%] '>
+    <div className='flex justify-end pb-4'>
+      <Button variant='contained' onClick={handleDialogClickOpen}><AddIcon className='mr-1'/>Add Seller</Button>
+    </div>
+       <Dialog
+          open={openDialog}
+          slots={{
+            transition: Transition,
+          }}
+          keepMounted
+          onClose={handleDialogClose}
+          aria-describedby="alert-dialog-slide-description"
+          PaperProps={{
+            style: {
+              width: "90vw",
+              height: "100vh",
+              maxWidth: "none", // Override default maxWidth
+              maxHeight: "none", // Override default maxHeight
+            },
+          }}
+        >
+          <DialogContent className="">
+            <DialogContentText id="alert-dialog-slide-description">
+              <Seller type={"modal"}/>
+            </DialogContentText>
+          </DialogContent>
+          {/* <DialogActions>
+           
+            <div className="flex gap-5 mt-3">
+              {step > 1 && (
+                <button
+                  onClick={prevStep}
+                  className="px-4 py-2 bg-gray-300 rounded"
+                >
+                  Back
+                </button>
+              )}
+              {step < 3 && (
+                <button
+                  onClick={handleNext}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Next
+                </button>
+              )}
+              {step == 3 && (
+                <button
+            
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  Submit
+                </button>
+              )}
+            </div>
+          
+          </DialogActions> */}
+          <DialogActions className="absolute top-0 right-2">
+            <Button onClick={handleDialogClose}>
+              <X size={40} color="black" />
+            </Button>
+          </DialogActions>
+        </Dialog>
+    <div className="flex flex-wrap gap-x-[5%] gap-y-10">
+      {cardData.map((card, index) => (
+        <ReusableCards key={index} title={card.title} content={card.content} />
+      ))}
+    </div>
+    </div>
+    </>
+  );
+};
+
+  const durationOptions = [
+    { label: 'Days', value: '10' },
+    { label: 'Month', value: '20' },
+    { label: 'Year', value: '30' },
+  ];
+
+  const tabs = [
+    { label: 'View Profile', component:()=> <ViewProfile/> },
+    { label: 'Registered Buyer', component: () => <RenderBuyerCards/>},
+     { label: 'Registered Seller', component: ()=><RenderSellerCards/> },
+   
+  ];
+  return (
+    
+    <div>
+         {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+                <img alt='logo' width={50} className="object-contain" />
+                <div className="hidden md:flex gap-2">
+                  <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Login</button>
+                  <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Sign Up</button>
+                </div>
+                <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
+                  {menuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+                {menuOpen && (
+                  <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
+                    <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Login</button>
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Sign Up</button>
+                  </div>
+                )}
+              </header> */}
+                 <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+                          <img alt='logo' width={50} className="object-contain" />
+                           <nav className="hidden md:flex gap-8 text-sm font-medium">
+                            <Link to="/homepage" className="hover:text-blue-600 text-xl">
+                              About Us
+                            </Link>
+                            <Link to="/dashboard" className="hover:text-blue-600 text-xl">
+                             Services
+                            </Link>
+                            <Link to="/ask-ai" className="hover:text-blue-600 text-xl">
+                              Seller
+                            </Link>
+                             <Link to="/homepage" className="hover:text-blue-600 text-xl">
+                              Buyer
+                            </Link>
+                             <Link to="/homepage" className="hover:text-blue-600 text-xl">
+                              How It Work?
+                            </Link>
+                          </nav>
+                          <div className="hidden md:flex gap-2">
+                            <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Log In</button>
+                            <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
+                          </div>
+                          <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
+                            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+                          </button>
+                          {menuOpen && (
+                            <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
+                              <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Log In</button>
+                              <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
+                            </div>
+                          )}
+                        </header>
+              <div className='pt-[5%] '>
+                 <ReusableTabs
+      tabs={tabs}
+    //   dropdownComponent={DropdownSelect}
+      dropdownOptions={durationOptions}
+      dropdownValue={duration}
+    //   onDropdownChange={handleDropdownChange}
+      buttonLabel="New Shipments"
+      onButtonClick={() => alert('Add Shipment')}
+    />
+              </div>
+        
+     
+    </div>
+  )
+}
+
+export default BrokerDashboard

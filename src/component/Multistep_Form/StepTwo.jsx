@@ -10,26 +10,9 @@ const countryCityMap = {
 
 const StepTwo = ({ formData, handleChange ,errors}) => (
   <div className="space-y-4">
-    {/* <input
-      type="email"
-      name="email"
-      placeholder="Email"
-      value={formData.email}
-      onChange={handleChange}
-      className="w-full px-3 py-2 border rounded"
-    />
-    <select
-      name="gender"
-      value={formData.gender}
-      onChange={handleChange}
-      className="w-full px-3 py-2 border rounded"
-    >
-      <option value="">Select Gender</option>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-      <option value="other">Other</option>
-    </select> */}
+   
      <div>
+      <h1>Business Categories of Interest</h1>
       <ReusableSelect
       multiple
         label="Business Categories of Interest"
@@ -42,17 +25,19 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
           width={350}
         
       />
-      <div className="flex gap-[5%] px-3 py-5 ">
+      <div className="flex gap-[5%]  py-2 ">
         <div><h1>Ticket Size(Rs)(min)*</h1>
-        <TextField  id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" /></div>
+        <TextField name="ticketSizemin" value={formData.ticketSizemin} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" error={errors.ticketSizemin}/></div>
          <div>
           <h1>Ticket Size(Rs)(max)*</h1>
-           <TextField id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]"/>
+           <TextField name="ticketSizemax" value={formData.ticketSizemax} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" error={errors.ticketSizemax}/>
          </div>
      
       </div>
 
-      <div className="flex gap-[4%]">
+      <div className="flex gap-[5%] py-2">
+        <div>
+        <h1>Business Location Preference Country</h1>
          <ReusableSelect
         label="Business Location Preference Country"
         name="businessLocation"
@@ -64,8 +49,10 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
           error={errors.businessLocation}
           width={350}
       />
+      </div>
        {formData.businessLocation && (
         <div>
+          <h1>City</h1>
           <ReusableSelect
           multiple
     label="City"
@@ -82,7 +69,7 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
 
       <div>
         {/* <h1>Open to Pre-revenue Business</h1> */}
-        <div className="px-3 py-5">
+        <div className="px-3 py-2">
   <label className="block mb-2 font-medium">Open to Pre-revenue Business</label>
   <div className="flex gap-4">
     <label>
@@ -137,10 +124,17 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       NO
     </label>
   </div>
-   <div className="flex gap-[5%] px-3 py-5">
-         <TextField id="outlined-basic" label="Revenue Size(min)*" variant="outlined" size="small" className="!w-[350px]" />
-      <TextField id="outlined-basic" label="Revenue Size(min)(max)*" variant="outlined" size="small" className="!w-[350px]"/>
+   <div className="flex gap-[5%]  py-2">
+    <div>
+      <h1>Revenue Size(min)*</h1>
+         <TextField name="revenueMin" value={formData.revenueMin} onChange={handleChange} id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueMin}/>
+    </div>
+    <div>
+      <h1>Revenue Size(min)(max)*</h1>
+      <TextField name="revenueMax" value={formData.revenueMax} onChange={handleChange}  id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueMax}/>
       </div>
+    </div>
+      
 
   </>
 )}

@@ -52,7 +52,8 @@ const StepThree = ({ formData, handleChange,errors }) => {
       type="button"
       className={`w-[100px] py-3 rounded-sm  border text-sm ${
         formData.preferredArrangement.includes(option)
-          ?  "bg-white text-gray-800 border-gray-300":"bg-blue-100 text-blue-500 border-blue-500"
+          ? "bg-blue-100 text-blue-500 border-blue-500":
+           "bg-white text-gray-800 border-gray-300"
           
       } hover:bg-blue-100 border border-blue`}
       onClick={() => {

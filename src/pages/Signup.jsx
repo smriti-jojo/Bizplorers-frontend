@@ -150,6 +150,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import RealEstateAgentIcon from '@mui/icons-material/RealEstateAgent';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -162,6 +164,7 @@ const SignUp = () => {
   });
 
   const [errors, setErrors] = useState({});
+   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     validateField("name", formData.name);
@@ -233,17 +236,52 @@ const navigate = useNavigate();
     if (allFieldsValid) {
       console.log("Form submitted:", formData);
       //  navigate('/buyer');
-      navigate('/otp', { state: { email: formData.email } });
+      navigate('/otp', { state: { email: formData.email ,role:formData.role} });
     } else {
       alert("Please fix the errors first.");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+    <>
+       <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+        <img alt='logo' width={50} className="object-contain" />
+         <nav className="hidden md:flex gap-8 text-sm font-medium">
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">
+            About Us
+          </Link>
+          <Link to="/dashboard" className="hover:text-blue-600 text-xl">
+           Services
+          </Link>
+          <Link to="/ask-ai" className="hover:text-blue-600 text-xl">
+            Seller
+          </Link>
+           <Link to="/homepage" className="hover:text-blue-600 text-xl">
+            Buyer
+          </Link>
+           <Link to="/homepage" className="hover:text-blue-600 text-xl">
+            How It Work?
+          </Link>
+        </nav>
+        <div className="hidden md:flex gap-2">
+          <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Log In</button>
+          <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
+        </div>
+        <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+        {menuOpen && (
+          <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
+            <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Log In</button>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
+          </div>
+        )}
+      </header>
+      {/**Signup Form */}
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 mt-[2%]">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
+        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md "
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
@@ -253,10 +291,10 @@ const navigate = useNavigate();
         <input
           type="text"
           name="name"
-          placeholder="Buyer 1"
+          placeholder="Name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full mb-1 p-2 border rounded"
+          className="w-full mb-2 p-2 border rounded "
         />
         {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
 
@@ -267,12 +305,12 @@ const navigate = useNavigate();
           placeholder="Email Address"
           value={formData.email}
           onChange={handleChange}
-          className="w-full mb-1 p-2 border rounded"
+          className="w-full mb-2 p-2 border rounded"
         />
         {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
 
         {/* Phone */}
-        <div className="flex mb-1">
+        <div className="flex mb-2">
           <span className="p-2 bg-gray-100 border border-r-0 rounded-l">+91</span>
           <input
             type="text"
@@ -280,7 +318,7 @@ const navigate = useNavigate();
             placeholder="Mobile Number"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full p-2 border rounded-r"
+            className="w-full p-2 border rounded-r "
           />
         </div>
         {errors.phone && <p className="text-red-500 text-sm mb-2">{errors.phone}</p>}
@@ -292,7 +330,7 @@ const navigate = useNavigate();
           placeholder="Enter Password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full mb-1 p-2 border rounded"
+          className="w-full mb-2 p-2 border rounded"
         />
         {errors.password && (
           <p className="text-red-500 text-sm mb-2">{errors.password}</p>
@@ -305,13 +343,13 @@ const navigate = useNavigate();
           placeholder="Confirm Password"
           value={formData.confirmPassword}
           onChange={handleChange}
-          className="w-full mb-1 p-2 border rounded"
+          className="w-full mb-2 p-2 border rounded"
         />
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm mb-2">{errors.confirmPassword}</p>
         )}
                {/* Role Tabs */}
-        <div className="flex mb-4 my-3 bg-gray-200 rounded-lg overflow-hidden">
+        {/* <div className="flex mb-4 my-3 bg-gray-200 rounded-lg overflow-hidden">
           <button
             type="button"
             onClick={() => handleRoleChange("buyer")}
@@ -350,7 +388,43 @@ const navigate = useNavigate();
           >
          <RealEstateAgentIcon/>   Broker
           </button>
-        </div>
+        </div> */}
+        <div className="flex mb-4 my-3 bg-gray-200 rounded-lg overflow-hidden">
+  <button
+    type="button"
+    onClick={() => handleRoleChange("buyer")}
+    className={`w-1/3 py-2 text-center font-medium transition border-r ${
+      formData.role === "buyer"
+        ? "bg-blue-600 text-white hover:bg-blue-300"
+        : "border-blue-500 text-blue-500 bg-white border-b-2"
+    }`}
+  >
+    <AccountCircleIcon /> Buyer
+  </button>
+  <button
+    type="button"
+    onClick={() => handleRoleChange("seller")}
+    className={`w-1/3 py-2 text-center font-medium transition border-r ${
+      formData.role === "seller"
+        ? "bg-blue-600 text-white hover:bg-blue-300"
+        : "border-blue-500 text-blue-500 bg-white border-b-2"
+    }`}
+  >
+    <StorefrontIcon /> Seller
+  </button>
+  <button
+    type="button"
+    onClick={() => handleRoleChange("broker")}
+    className={`w-1/3 py-2 text-center font-medium transition ${
+      formData.role === "broker"
+        ? "bg-blue-600 text-white hover:bg-blue-300"
+        : "border-blue-500 text-blue-500 bg-white border-b-2"
+    }`}
+  >
+    <RealEstateAgentIcon /> Broker
+  </button>
+</div>
+
         {/* {errors.role && <p className="text-red-500 text-sm mb-2">{errors.role}</p>} */}
 
         {/* Submit */}
@@ -363,6 +437,7 @@ const navigate = useNavigate();
         </button>
       </form>
     </div>
+    </>
   );
 };
 

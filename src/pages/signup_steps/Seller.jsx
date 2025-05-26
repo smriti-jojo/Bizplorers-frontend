@@ -1,37 +1,59 @@
 import React, { useState } from 'react';
-import Stepper from '../../component/Multistep_Form/Stepper';
+import Stepper from '../../component/Stepper';
 import StepOne from '../../component/Multistep_Seller/StepOne';
 import StepTwo from '../../component/Multistep_Seller/StepTwo';
 import StepThree from '../../component/Multistep_Seller/StepThree';
 import Confirmation from '../../component/Multistep_Form/Confirmation';
+import { useNavigate } from 'react-router-dom';
 
 
-const Seller = () => {
+const Seller = ({type}) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-   
- 
-    
+   company_name:'',
+   website_url:'',
+   CIN:'',
+   company_linkedin:'',
+   description_business:'',
+   numcofounder:'',
+   teamSize:'',
+   numLocation:'',
+   year:'',
+   month:'',
+   cofounder_linkedin:'',
     businessCategory:[],
     businessLocation:'',
-    // city:[],
-    // openToPreRevenue:'',
-    // openToPreBreakeven:'',
-    // metric:'',
-    // maxMultiple:'',
-    // preferredArrangement:[],
-
-    //
     entityStructure:[],
     country:'',
     state:[],
      city:[],
      status:'',
+     lastFinancialYear:'',
+     prevFinancialYear:'',
+     prePrevFinancialYear:'',
+     trail12months:'',
+     lastmonth:'',
+     prevMonth:'',
+     prePrevMonth:'',
+     PATlastFinancialYear:'',
+     PATprevFinancialYear:'',
+     PATtrailing12months:'',
+     PATlastmonth:'',
+     PATprevMonth:'',
+     PATprePrevMonth:'',
+     EBITDA:'',
+     OCFlastFinancialYear:'',
+     assestDesc:'',
+     equity:'',
+     debt:'',
+     OCFprevFinancialYear:'',
+     OCFprePrevFinancialYear:'',
      salereason:'',
      askingPrice:'',
      preferredArrangement:[]
   });
 const [errors, setErrors] = useState({});
+const navigate=useNavigate();
   // const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
@@ -127,13 +149,18 @@ const handleNext = () => {
 };
 
 const handleSubmit=()=>{
-  console.log("submission")
+  alert("Data saved successfully");
+  
+    if(type !='modal'){
+navigate('/seller/dashboard');
+    }
 }
+  
 
 const stepsList = ['COMPANY DETAILS', 'FINANCIAL DETAILS', 'TRANSACTION DETAILS'];
   return (
     <div className="flex justify-center py-[3%] min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-[90%]">
+      <div className={`bg-white p-8 rounded shadow-md w-full max-w-[90%]`}>
         {/* <h2 className="text-2xl font-bold mb-2 text-center">Multi Step Form</h2>
         <p className="text-center text-sm text-gray-600 mb-6">
           React Tailwind UI multi step form with basic validation.
