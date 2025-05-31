@@ -15,7 +15,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Last Financial year(Rs) </h1>
           <TextField
-          name="lastFinancialYear" value={formData.lastFinancialYear} onChange={handleChange}
+            name="lastFinancialYear"
+            value={formData.lastFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -27,14 +29,15 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Previous Financial Year(Rs)*</h1>
           <TextField
-          name="prevFinancialYear" value={formData.prevFinancialYear} onChange={handleChange}
+            name="prevFinancialYear"
+            value={formData.prevFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
             slotProps={{ inputLabel: { shrink: false } }}
             className="!w-full"
             error={errors.prevFinancialYear}
-
           />
         </div>
       </div>
@@ -42,7 +45,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Pre-previous Financial Year(Rs) </h1>
           <TextField
-          name="prePrevFinancialYear" value={formData.prePrevFinancialYear} onChange={handleChange}
+            name="prePrevFinancialYear"
+            value={formData.prePrevFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -54,7 +59,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1>Trailing 12 months(Rs)</h1>
           <TextField
-          name="trail12months" value={formData.trail12months} onChange={handleChange}
+            name="trail12months"
+            value={formData.trail12months}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -69,7 +76,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-[350px]">
           <h1>Last month(Rs)</h1>
           <TextField
-          name="lastmonth" value={formData.lastmonth} onChange={handleChange}
+            name="lastmonth"
+            value={formData.lastmonth}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -81,7 +90,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-[350px]">
           <h1>Previous month(Rs)</h1>
           <TextField
-          name="prevMonth" value={formData.prevMonth} onChange={handleChange}
+            name="prevMonth"
+            value={formData.prevMonth}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -93,7 +104,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-[350px]">
           <h1>Pre-previous month(Rs)</h1>
           <TextField
-          name="prePrevMonth" value={formData.prePrevMonth} onChange={handleChange}
+            name="prePrevMonth"
+            value={formData.prePrevMonth}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -104,12 +117,7 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         </div>
       </div>
 
-      <div>
-        {/* <h1>Open to Pre-revenue Business</h1> */}
-  
-
- 
-      </div>
+      <div>{/* <h1>Open to Pre-revenue Business</h1> */}</div>
     </div>
 
     {/**Profits */}
@@ -119,7 +127,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Last Financial year(Rs) </h1>
           <TextField
-          name="PATlastFinancialYear" value={formData.PATlastFinancialYear} onChange={handleChange}
+            name="PATlastFinancialYear"
+            value={formData.PATlastFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -131,7 +141,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Previous Financial Year(Rs)*</h1>
           <TextField
-          name="PATprevFinancialYear" value={formData.PATprevFinancialYear} onChange={handleChange}
+            name="PATprevFinancialYear"
+            value={formData.PATprevFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -145,7 +157,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Pre-previous Financial Year(Rs) </h1>
           <TextField
-          name="PATprePrevFinancialYear" value={formData.PATprePrevFinancialYear} onChange={handleChange}
+            name="PATprePrevFinancialYear"
+            value={formData.PATprePrevFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -157,7 +171,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1>Trailing 12 months(Rs)</h1>
           <TextField
-          name="PATtrailing12months" value={formData.PATtrailing12months} onChange={handleChange}
+            name="PATtrailing12months"
+            value={formData.PATtrailing12months}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -171,7 +187,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1>Last month(Rs)</h1>
           <TextField
-          name="PATlastmonth" value={formData.PATlastmonth} onChange={handleChange}
+            name="PATlastmonth"
+            value={formData.PATlastmonth}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -183,7 +201,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1>Previous month(Rs)</h1>
           <TextField
-          name="PATprevMonth" value={formData.PATprevMonth} onChange={handleChange}
+            name="PATprevMonth"
+            value={formData.PATprevMonth}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -197,7 +217,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1>Pre-previous month(Rs)</h1>
           <TextField
-          name="PATprePrevMonth" value={formData.PATprePrevMonth} onChange={handleChange}
+            name="PATprePrevMonth"
+            value={formData.PATprePrevMonth}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -209,7 +231,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1>EBITDA Margin (current) %</h1>
           <TextField
-          name="EBITDA" value={formData.EBITDA} onChange={handleChange}
+            name="EBITDA"
+            value={formData.EBITDA}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -228,7 +252,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Last Financial year(Rs) </h1>
           <TextField
-          name="OCFlastFinancialYear" value={formData.OCFlastFinancialYear} onChange={handleChange}
+            name="OCFlastFinancialYear"
+            value={formData.OCFlastFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -240,7 +266,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Previous Financial Year(Rs)*</h1>
           <TextField
-          name="OCFprevFinancialYear" value={formData.OCFprevFinancialYear} onChange={handleChange}
+            name="OCFprevFinancialYear"
+            value={formData.OCFprevFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -254,7 +282,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="w-1/2">
           <h1> Pre-previous Financial Year(Rs) </h1>
           <TextField
-          name="OCFprePrevFinancialYear" value={formData.OCFprePrevFinancialYear} onChange={handleChange}
+            name="OCFprePrevFinancialYear"
+            value={formData.OCFprePrevFinancialYear}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -270,7 +300,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         <div className="pt-4">
           <h1>Description of Key Assest/IP</h1>
           <TextField
-          name="assestDesc" value={formData.assestDesc} onChange={handleChange}
+            name="assestDesc"
+            value={formData.assestDesc}
+            onChange={handleChange}
             id="outlined-basic"
             variant="outlined"
             size="small"
@@ -281,39 +313,41 @@ const StepTwo = ({ formData, handleChange, errors }) => (
         </div>
       </div>
       {/**Sources */}
-       <div>
+      <div>
         <h1 className="text-2xl font-semibold pt-[5%]">Sources Of Funds</h1>
-          
+
         <div className="flex gap-5 w-full py-4 ">
-         
-        <div className="w-1/2">
-          <h1> Equity(Rs) </h1>
-          <TextField
-          name="equity" value={formData.equity} onChange={handleChange}
-            id="outlined-basic"
-            variant="outlined"
-            size="small"
-            slotProps={{ inputLabel: { shrink: false } }}
-            className="!w-full"
-            error={errors.equity}
-          />
-        </div>
-        <div className="w-1/2">
-          <h1> Debt(Rs)*</h1>
-          <TextField
-          name="debt" value={formData.debt} onChange={handleChange}
-            id="outlined-basic"
-            variant="outlined"
-            size="small"
-            slotProps={{ inputLabel: { shrink: false } }}
-            className="!w-full"
-            error={errors.debt}
-          />
+          <div className="w-1/2">
+            <h1> Equity(Rs) </h1>
+            <TextField
+              name="equity"
+              value={formData.equity}
+              onChange={handleChange}
+              id="outlined-basic"
+              variant="outlined"
+              size="small"
+              slotProps={{ inputLabel: { shrink: false } }}
+              className="!w-full"
+              error={errors.equity}
+            />
+          </div>
+          <div className="w-1/2">
+            <h1> Debt(Rs)*</h1>
+            <TextField
+              name="debt"
+              value={formData.debt}
+              onChange={handleChange}
+              id="outlined-basic"
+              variant="outlined"
+              size="small"
+              slotProps={{ inputLabel: { shrink: false } }}
+              className="!w-full"
+              error={errors.debt}
+            />
+          </div>
         </div>
       </div>
-        </div>
-      </div>
-    
+    </div>
   </div>
 );
 

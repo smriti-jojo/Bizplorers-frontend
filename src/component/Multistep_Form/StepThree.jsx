@@ -19,7 +19,7 @@ const StepThree = ({ formData, handleChange,errors }) => {
         name="metric"
         value={formData.metric}
         onChange={handleChange}
-        options={['Sales', 'Profit']}
+        options={['sales', 'profit']}
         className={`w-full px-3 py-2 border rounded `}
         width={550}
           error={errors.metric}

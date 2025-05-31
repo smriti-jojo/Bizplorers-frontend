@@ -10,11 +10,18 @@ import Broker from './pages/signup_steps/Broker';
 import BuyerDashboard from "./pages/dashboard/BuyerDashboard";
 import SellerDashboard from "./pages/dashboard/SellerDashboard";
 import BrokerDashboard from "./pages/dashboard/BrokerDashboard";
+import AdminDashboard from "./pages/dashboard/AdminDashboard";
+import AdminWithSidebar from "./pages/dashboard/AdminWithSidebar";
+import Login from "./pages/Login";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <div className="App">
+      
        <BrowserRouter>
+ <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           <Route path="/" element={<SignUp/>}/>
            <Route path="/otp" element={<OTPVerification/>}/>
@@ -25,6 +32,8 @@ function App() {
              <Route path="/buyer/dashboard" element={<BuyerDashboard/>}/>
               <Route path="/seller/dashboard" element={<SellerDashboard/>}/>
                <Route path="/broker/dashboard" element={<BrokerDashboard/>}/>
+                <Route path="/admin" element={<AdminWithSidebar/>}/>
+                <Route path="/login" element={<Login/>}/>
           </Routes>
           </BrowserRouter>
     </div>

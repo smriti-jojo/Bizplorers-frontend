@@ -1,33 +1,48 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { Menu, X } from "lucide-react";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Link } from 'react-router-dom';
 
+// Reusable row component for input or display
+const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
+  <div className='flex items-start gap-2 my-2'>
+    <span className='font-semibold flex items-center'>{icon}{label}:</span>
+    {editable ? (
+      textarea ? (
+        <textarea className='border p-2 rounded-md w-full' value={value} onChange={(e) => onChange(e.target.value)} />
+      ) : (
+        <input className='border p-2 rounded-md w-full' value={value} onChange={(e) => onChange(e.target.value)} />
+      )
+    ) : (
+      <span>{value}</span>
+    )}
+  </div>
+);
+
 const BuyerDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
   const [buyerData, setBuyerData] = useState({
-   
-    buyertype: 'individual',
-    designation: 'owner',
-    description: 'want to buy a good service',
-    linkedIn: 'profile@linkedin.in',
-    businessCategory: ['Offline Retail', 'Fintech'],
-    ticketSizemin: '20',
-    ticketSizemax: '100',
-    businessLocation: 'India',
-    city: ['delhi', 'mumbai', 'kolkata'],
-    openToPreRevenue: 'No',
-    openToPreBreakeven: 'Yes',
-    revenueMin: '20',
-    revenueMax: '100',
-    metric: 'profit',
-    maxMultiple: '200',
-    preferredArrangement: ['stock', 'royalty']
+    typeOfBuyer: '',
+    designation: '',
+    description: '',
+    linkedinProfile: '',
+    businessCategories: [],
+    ticketSizeMin: '',
+    ticketSizeMax: '',
+    businesslocationCountry: '',
+    businesslocationCities: [],
+    openToPreRevenue: '',
+    openToPreBreakeven: '',
+    revenueSizeMin: '',
+    revenueSizeMax: '',
+    metric: '',
+    maxMultiple: '',
+    preferredArrangement: []
   });
+
+  const token = localStorage.getItem('token');
 
   const handleChange = (key, value) => {
     setBuyerData(prev => ({ ...prev, [key]: value }));
@@ -39,123 +54,151 @@ const BuyerDashboard = () => {
     setBuyerData(prev => ({ ...prev, [key]: newArray }));
   };
 
+  const fetchBuyerData = async () => {
+    try {
+      const response = await fetch('https://bizplorers-backend.onrender.com/api/buyer/getBuyer', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      const data = await response.json();
+      alert('Data fetched successfully!');
+      setBuyerData(data);
+    } catch (error) {
+      console.error(error);
+      alert('Getting Data failed.');
+    }
+  };
+
+  const updateData = async () => {
+    try {
+      const response = await fetch('https://bizplorers-backend.onrender.com/api/buyer/updateBuyer', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(buyerData),
+      });
+
+      if (!response.ok) throw new Error('Update failed');
+
+      const updated = await response.json();
+      alert('Details updated successfully!');
+      console.log(updated);
+    } catch (error) {
+      console.error(error);
+      alert('Update failed');
+    }
+  };
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      updateData();
+    }
+    setIsEditing(!isEditing);
+  };
+
+  useEffect(() => {
+    fetchBuyerData();
+  }, []);
+
+  const handleLogout=()=>{
+  localStorage.removeItem('token');
+  window.location.href = '/login'; // or your login route
+};
+
+  
   return (
     <div>
-      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
         <img alt='logo' width={50} className="object-contain" />
+        <nav className="hidden md:flex gap-8 text-sm font-medium">
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">About Us</Link>
+          <Link to="/dashboard" className="hover:text-blue-600 text-xl">Services</Link>
+          <Link to="/ask-ai" className="hover:text-blue-600 text-xl">Seller</Link>
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">Buyer</Link>
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">How It Works?</Link>
+        </nav>
         <div className="hidden md:flex gap-2">
-          <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Login</button>
-          <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Sign Up</button>
+          {token? (<button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogout}>Log Out</button>
+       ) :  (<button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Log In</button>)}
+          <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
         </div>
-        <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
+        <button className="md:hidden" onClick={() => setMenuOpen(prev => !prev)}>
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
         {menuOpen && (
           <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
-            <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Login</button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Sign Up</button>
+            <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Log In</button>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
           </div>
         )}
-      </header> */}
-       <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
-            <img alt='logo' width={50} className="object-contain" />
-             <nav className="hidden md:flex gap-8 text-sm font-medium">
-              <Link to="/homepage" className="hover:text-blue-600 text-xl">
-                About Us
-              </Link>
-              <Link to="/dashboard" className="hover:text-blue-600 text-xl">
-               Services
-              </Link>
-              <Link to="/ask-ai" className="hover:text-blue-600 text-xl">
-                Seller
-              </Link>
-               <Link to="/homepage" className="hover:text-blue-600 text-xl">
-                Buyer
-              </Link>
-               <Link to="/homepage" className="hover:text-blue-600 text-xl">
-                How It Work?
-              </Link>
-            </nav>
-            <div className="hidden md:flex gap-2">
-              <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Log In</button>
-              <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
-            </div>
-            <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
-              {menuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-            {menuOpen && (
-              <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
-                <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Log In</button>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
-              </div>
-            )}
-          </header>
+      </header>
 
       <div className='flex justify-center'>
-        <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%] '>
+        <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%]'>
           <div className='flex justify-between w-full mt-[2%]'>
             <div className='text-2xl font-bold'>BUYER DETAILS</div>
-            <div>
-              <Button variant='contained' onClick={() => setIsEditing(!isEditing)}>
-                {isEditing ? 'Save' : 'Edit Details'}
-              </Button>
-            </div>
+            <Button variant='contained' onClick={handleEditToggle}>
+              {isEditing ? 'Save' : 'Edit Details'}
+            </Button>
           </div>
 
           {/* Personal Details */}
           <div className='flex flex-col text-black my-[2%]'>
             <h1 className='text-xl font-bold'>Personal Details</h1>
-            <EditableRow label="Type Of Buyer" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.buyertype} editable={isEditing} onChange={(val) => handleChange('buyertype', val)} />
-            <EditableRow label="Designation" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.designation} editable={isEditing} onChange={(val) => handleChange('designation', val)} />
-            <EditableRow label="Description" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.description} editable={isEditing} onChange={(val) => handleChange('description', val)} textarea />
-            <EditableRow label="LinkedIn" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.linkedIn} editable={isEditing} onChange={(val) => handleChange('linkedIn', val)} />
+            <EditableRow label="Type Of Buyer" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.typeOfBuyer} editable={isEditing} onChange={val => handleChange('typeOfBuyer', val)} />
+            <EditableRow label="Designation" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.designation} editable={isEditing} onChange={val => handleChange('designation', val)} />
+            <EditableRow label="Description" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.description} editable={isEditing} onChange={val => handleChange('description', val)} textarea />
+            <EditableRow label="LinkedIn" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.linkedinProfile} editable={isEditing} onChange={val => handleChange('linkedinProfile', val)} />
           </div>
 
           {/* Preferences Details */}
           <div className='flex flex-col text-black my-[2%]'>
             <h1 className='text-xl font-bold'>Preferences Details</h1>
+
+            {/* Business Categories */}
             <div className='flex gap-3 flex-wrap'>
               <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Business Categories:</h1>
-              {buyerData.businessCategory.map((cat, i) =>
+              {buyerData.businessCategories.map((cat, i) =>
                 isEditing ? (
-                  <input key={i} className="border px-2 py-1 rounded-md" value={cat} onChange={e => handleArrayChange('businessCategory', i, e.target.value)} />
+                  <input key={i} className="border px-2 py-1 rounded-md" value={cat} onChange={e => handleArrayChange('businessCategories', i, e.target.value)} />
                 ) : (
                   <p key={i} className='mr-2'>{cat},</p>
                 )
               )}
             </div>
 
-            <EditableRow label="Ticket Size (min)" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.ticketSizemin} editable={isEditing} onChange={(val) => handleChange('ticketSizemin', val)} />
-            <EditableRow label="Ticket Size (max)" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.ticketSizemax} editable={isEditing} onChange={(val) => handleChange('ticketSizemax', val)} />
-            <EditableRow label="Country" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.businessLocation} editable={isEditing} onChange={(val) => handleChange('businessLocation', val)} />
+            <EditableRow label="Ticket Size (min)" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.ticketSizeMin} editable={isEditing} onChange={val => handleChange('ticketSizeMin', val)} />
+            <EditableRow label="Ticket Size (max)" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.ticketSizeMax} editable={isEditing} onChange={val => handleChange('ticketSizeMax', val)} />
+            <EditableRow label="Country" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.businesslocationCountry} editable={isEditing} onChange={val => handleChange('businesslocationCountry', val)} />
 
+            {/* Cities */}
             <div className='flex gap-3 flex-wrap'>
               <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Cities:</h1>
-              {buyerData.city.map((ct, i) =>
+              {buyerData.businesslocationCities.map((ct, i) =>
                 isEditing ? (
-                  <input key={i} className="border px-2 py-1 rounded-md" value={ct} onChange={e => handleArrayChange('city', i, e.target.value)} />
+                  <input key={i} className="border px-2 py-1 rounded-md" value={ct} onChange={e => handleArrayChange('businesslocationCities', i, e.target.value)} />
                 ) : (
                   <p key={i} className='mr-2'>{ct},</p>
                 )
               )}
             </div>
 
-            <EditableRow label="Open to Pre-Revenue" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreRevenue} editable={isEditing} onChange={(val) => handleChange('openToPreRevenue', val)} />
-            {buyerData.openToPreRevenue === "No" && (
-              <>
-                <EditableRow label="Open to Pre-Breakeven" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreBreakeven} editable={isEditing} onChange={(val) => handleChange('openToPreBreakeven', val)} />
-                <EditableRow label="Revenue Min" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueMin} editable={isEditing} onChange={(val) => handleChange('revenueMin', val)} />
-                <EditableRow label="Revenue Max" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueMax} editable={isEditing} onChange={(val) => handleChange('revenueMax', val)} />
-              </>
-            )}
-          </div>
+            <EditableRow label="Open to Pre-Revenue" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreRevenue ? "Yes" : "No"} editable={isEditing} onChange={val => handleChange('openToPreRevenue', val === 'Yes')} />
+            <EditableRow label="Open to Pre-Breakeven" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreBreakeven ? "Yes" : "No"} editable={isEditing} onChange={val => handleChange('openToPreBreakeven', val === 'Yes')} />
+            <EditableRow label="Revenue Min" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueSizeMin} editable={isEditing} onChange={val => handleChange('revenueSizeMin', val)} />
+            <EditableRow label="Revenue Max" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueSizeMax} editable={isEditing} onChange={val => handleChange('revenueSizeMax', val)} />
+            <EditableRow label="Metric" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.metric} editable={isEditing} onChange={val => handleChange('metric', val)} />
+            <EditableRow label="Max Multiple" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.maxMultiple} editable={isEditing} onChange={val => handleChange('maxMultiple', val)} />
 
-          {/* Value Multiple */}
-          <div className='flex flex-col text-black my-[2%]'>
-            <h1 className='text-xl font-bold'>Preferred Value Multiple</h1>
-            <EditableRow label="Metric" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.metric} editable={isEditing} onChange={(val) => handleChange('metric', val)} />
-            <EditableRow label="Max Multiple" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.maxMultiple} editable={isEditing} onChange={(val) => handleChange('maxMultiple', val)} />
-
+            {/* Preferred Arrangement */}
             <div className='flex gap-3 flex-wrap'>
               <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Preferred Arrangement:</h1>
               {buyerData.preferredArrangement.map((arr, i) =>
@@ -173,21 +216,4 @@ const BuyerDashboard = () => {
   );
 };
 
-// Reusable editable row
-const EditableRow = ({ label, icon, value, editable, onChange, textarea = false }) => (
-  <div className='flex gap-5 items-start flex-wrap my-2'>
-    <h1 className='font-semibold flex items-center'>{icon}<span className="ml-1">{label}:</span></h1>
-    {editable ? (
-      textarea ? (
-        <textarea className="border rounded px-2 py-1 w-full md:w-[60%]" value={value} onChange={e => onChange(e.target.value)} />
-      ) : (
-        <input className="border rounded px-2 py-1" value={value} onChange={e => onChange(e.target.value)} />
-      )
-    ) : (
-      <p>{value}</p>
-    )}
-  </div>
-);
-
 export default BuyerDashboard;
-

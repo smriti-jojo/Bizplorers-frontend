@@ -41,13 +41,13 @@ const StepOne = ({ formData, handleChange,errors }) => {
       hiddenLabel
   id="filled-hidden-label-small"
         label="Type of Buyer"
-        name="buyertype"
-        value={formData.buyertype}
+        name="typeOfBuyer"
+        value={formData.typeOfBuyer}
         onChange={handleChange}
         options={['Individual', 'Organization']}
         className={`w-full px-3  border rounded `}
         width={550}
-          error={errors.buyertype}
+          error={errors.typeOfBuyer}
         
       />
     </div>
@@ -86,13 +86,13 @@ const StepOne = ({ formData, handleChange,errors }) => {
       <h1>Buyer Linkedin Profile</h1>
      <input
       type="text"
-      name="linkedIn"
+      name="linkedinProfile"
       placeholder="Enter Linkedin Profile"
-      value={formData.linkedIn}
+      value={formData.linkedinProfile}
       onChange={handleChange}
       // className="w-full px-3 py-2 border rounded"
       className={`w-full px-3 py-2 border rounded ${
-          errors.linkedIn ? 'border-red-500' : 'border-gray-300'
+          errors.linkedinProfile ? 'border-red-500' : 'border-gray-300'
         }`}
     />
   </div>

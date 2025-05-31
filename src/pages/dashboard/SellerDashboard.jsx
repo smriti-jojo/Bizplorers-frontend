@@ -1,59 +1,75 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Button } from '@mui/material';
 import { Menu, X } from "lucide-react";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const SellerDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const [sellerData, setSellerData] = useState({
-   company_name:'abc',
-   website_url:'abc@gmail.com',
-   CIN:'123',
-   company_linkedin:'abc@linkedin.in',
-   description_business:'abc is a good business',
-    numcofounder:'5',
-   cofounder:'smriti',
-   teamSize:'5',
-   numLocation:'mumbai',
-   year:'2025',
-   month:'09',
-   cofounder_linkedin:'smriti@linkedin.in',
-    businessCategory:['offline retail','ecommerce'],
-    businessLocation:'new delhi',
-    entityStructure:['entity','noentity'],
-    country:'India',
-    state:['UP'],
-     city:['mumbai','new delhi'],
-     status:'Active',
-     lastFinancialYear:'10 crores',
-     prevFinancialYear:'8crores',
-     prePrevFinancialYear:'5 crores',
-     trail12months:'1234',
-     lastmonth:'1 crore',
-     prevMonth:'50lakhs',
-     prePrevMonth:'30lakh',
-     PATlastFinancialYear:'20%',
-     PATprevFinancialYear:'10%',
-     PATprePrevFinancialYear:'15%',
-     PATtrailing12months:'30%',
-     PATlastmonth:'10%',
-     PATprevMonth:'15%',
-     PATprePrevMonth:'20%',
-     EBITDA:'10%',
-     OCFlastFinancialYear:'20%',
-     assestDesc:'ecommerce services',
-     equity:'50%',
-     debt:'10lakh',
-     OCFprevFinancialYear:'20lakh',
-     OCFprePrevFinancialYear:'10lakh',
-     salereason:'debt',
-     askingPrice:'20lakh',
-     preferredArrangement:['stocks','royalty']
+   company_name:'',
+   website_url:'',
+   CIN:'',
+   company_linkedin:'',
+   description_business:'',
+    numcofounder:'',
+   cofounder:'',
+   teamSize:'',
+   numLocation:'',
+   year:'',
+   month:'',
+   cofounder_linkedin:'',
+    businessCategory:[],
+    businessLocation:'',
+    entityStructure:[],
+    country:'',
+    state:[],
+     city:[],
+     status:'',
+     lastFinancialYear:'',
+     prevFinancialYear:'',
+     prePrevFinancialYear:'',
+     trail12months:'',
+     lastmonth:'',
+     prevMonth:'',
+     prePrevMonth:'',
+     PATlastFinancialYear:'',
+     PATprevFinancialYear:'',
+     PATprePrevFinancialYear:'',
+     PATtrailing12months:'',
+     PATlastmonth:'',
+     PATprevMonth:'',
+     PATprePrevMonth:'',
+     EBITDA:'',
+     OCFlastFinancialYear:'',
+     assestDesc:'',
+     equity:'',
+     debt:'',
+     OCFprevFinancialYear:'',
+     OCFprePrevFinancialYear:'',
+     salereason:'',
+     askingPrice:'',
+     preferredArrangement:[]
   });
 
+  const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
+  <div className='flex items-start gap-2 my-2'>
+    <span className='font-semibold flex items-center'>{icon}{label}:</span>
+    {editable ? (
+      textarea ? (
+        <textarea className='border p-2 rounded-md w-full' value={value} onChange={(e) => onChange(e.target.value)} />
+      ) : (
+        <input className='border p-2 rounded-md w-full' value={value} onChange={(e) => onChange(e.target.value)} />
+      )
+    ) : (
+      <span>{value}</span>
+    )}
+  </div>
+);
   const handleChange = (key, value) => {
     setSellerData(prev => ({ ...prev, [key]: value }));
   };
@@ -64,9 +80,79 @@ const SellerDashboard = () => {
     setSellerData(prev => ({ ...prev, [key]: newArray }));
   };
 
+  const notifySuccess = (msg = "Data Updated Successfully!") => {
+       toast.success(msg, {
+         position: "top-right",
+         autoClose: 3000,
+         hideProgressBar: false,
+         pauseOnHover: true,
+         draggable: true,
+         theme: "colored",
+       });
+     };
+
+  const token = localStorage.getItem('token');
+    const fetchSellerData = async () => {
+    try {
+      const response = await fetch('https://bizplorers-backend.onrender.com/api/seller/get_detail', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      const data = await response.json();
+      
+      setSellerData(data);
+    } catch (error) {
+      console.error(error);
+      alert('Getting Data failed.');
+    }
+  };
+
+  const updateData = async () => {
+    try {
+      const response = await fetch('https://bizplorers-backend.onrender.com/api/seller/update_detail', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(sellerData),
+      });
+
+      if (!response.ok) throw new Error('Update failed');
+
+      const updated = await response.json();
+      notifySuccess();
+      console.log(updated);
+    } catch (error) {
+      console.error(error);
+      alert('Update failed');
+    }
+  };
+
+   const handleEditToggle = () => {
+    if (isEditing) {
+      updateData();
+    }
+    setIsEditing(!isEditing);
+  };
+  useEffect(() => {
+      fetchSellerData();
+    }, []);
+  
+    const handleLogout=()=>{
+    localStorage.removeItem('token');
+    window.location.href = '/login'; // or your login route
+  };
+
   return (
     <div>
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
         <img alt='logo' width={50} className="object-contain" />
         <div className="hidden md:flex gap-2">
           <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Login</button>
@@ -81,6 +167,30 @@ const SellerDashboard = () => {
             <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Sign Up</button>
           </div>
         )}
+      </header> */}
+         <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+        <img alt='logo' width={50} className="object-contain" />
+        <nav className="hidden md:flex gap-8 text-sm font-medium">
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">About Us</Link>
+          <Link to="/dashboard" className="hover:text-blue-600 text-xl">Services</Link>
+          <Link to="/ask-ai" className="hover:text-blue-600 text-xl">Seller</Link>
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">Buyer</Link>
+          <Link to="/homepage" className="hover:text-blue-600 text-xl">How It Works?</Link>
+        </nav>
+        <div className="hidden md:flex gap-2">
+          {token? (<button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogout}>Log Out</button>
+       ) :  (<button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Log In</button>)}
+          <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
+        </div>
+        <button className="md:hidden" onClick={() => setMenuOpen(prev => !prev)}>
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+        {menuOpen && (
+          <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
+            <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Log In</button>
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
+          </div>
+        )}
       </header>
 
       <div className='flex justify-center'>
@@ -88,7 +198,7 @@ const SellerDashboard = () => {
           <div className='flex justify-between w-full mt-[2%]'>
             <div className='text-2xl font-bold'>SELLER DETAILS</div>
             <div>
-              <Button variant='contained' onClick={() => setIsEditing(!isEditing)}>
+              <Button variant='contained' onClick={handleEditToggle}>
                 {isEditing ? 'Save' : 'Edit Details'}
               </Button>
             </div>

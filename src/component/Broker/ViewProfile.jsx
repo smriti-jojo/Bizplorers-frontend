@@ -3,20 +3,22 @@ import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { Menu, X } from "lucide-react";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const ViewProfile= () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const [brokerData, setBrokerData] = useState({
-      firstName: 'abc',
-    lastName: 'abc',
-   mobile_no:'8765981234',
-   address:'Address',
-   country:'India',
-   state:'UP',
-   city:'Noida',
-   zip:'201303'
+      firstName: '',
+    lastName: '',
+   mobileNumber:'',
+   address:'',
+   country:'',
+   state:'',
+   city:'',
+   zipcode:''
   });
 
   const handleChange = (key, value) => {
@@ -29,9 +31,83 @@ const ViewProfile= () => {
     setBrokerData(prev => ({ ...prev, [key]: newArray }));
   };
 
+   const token = localStorage.getItem('token');
+  
+    const notifySuccess = (msg = "Data Updated Successfully!") => {
+     toast.success(msg, {
+       position: "top-right",
+       autoClose: 3000,
+       hideProgressBar: false,
+       pauseOnHover: true,
+       draggable: true,
+       theme: "colored",
+     });
+   };
+   
+  
+    const fetchBrokerData = async () => {
+      try {
+        const response = await fetch('https://bizplorers-backend.onrender.com/api/broker/getBroker', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) throw new Error('Failed to fetch');
+  
+        const data = await response.json();
+        // alert('Data fetched successfully!');
+        setBrokerData(data);
+      } catch (error) {
+        console.error(error);
+        alert('Getting Data failed.');
+      }
+    };
+  
+    const updateData = async () => {
+      try {
+        const response = await fetch('https://bizplorers-backend.onrender.com/api/broker/updateBroker', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(brokerData),
+        });
+  
+        if (!response.ok) throw new Error('Update failed');
+  
+        const updated = await response.json();
+        // alert('Details updated successfully!');
+        notifySuccess();
+        console.log(updated);
+      } catch (error) {
+        console.error(error);
+        alert('Update failed');
+      }
+    };
+  
+    const handleEditToggle = () => {
+      if (isEditing) {
+        updateData();
+      }
+      setIsEditing(!isEditing);
+    };
+  
+    useEffect(() => {
+      fetchBrokerData();
+    }, []);
+  
+    const handleLogout=()=>{
+    localStorage.removeItem('token');
+    window.location.href = '/login'; // or your login route
+  };
+
   return (
     <div>
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
         <img alt='logo' width={50} className="object-contain" />
         <div className="hidden md:flex gap-2">
           <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Login</button>
@@ -46,14 +122,14 @@ const ViewProfile= () => {
             <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Sign Up</button>
           </div>
         )}
-      </header>
+      </header> */}
 
       <div className='flex justify-center'>
         <div className='flex flex-col border-2 border-slate-500 rounded-md px-[5%] w-[80%] '>
           <div className='flex justify-between w-full mt-[1%]'>
             <div className='text-2xl font-bold'>BROKER DETAILS</div>
             <div>
-              <Button variant='contained' onClick={() => setIsEditing(!isEditing)}>
+              <Button variant='contained' onClick={handleEditToggle}>
                 {isEditing ? 'Save' : 'Edit Details'}
               </Button>
             </div>
@@ -65,11 +141,11 @@ const ViewProfile= () => {
             <EditableRow label="First Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.firstName} editable={isEditing} onChange={(val) => handleChange('firstName', val)} />
             <EditableRow label="Last Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.lastName} editable={isEditing} onChange={(val) => handleChange('lastName', val)} />
             <EditableRow label="Address" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.address} editable={isEditing} onChange={(val) => handleChange('address', val)} textarea />
-            <EditableRow label="Mobile No" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.mobile_no} editable={isEditing} onChange={(val) => handleChange('mobile_no', val)} />
+            <EditableRow label="Mobile No" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.mobileNumber} editable={isEditing} onChange={(val) => handleChange('mobileNumber', val)} />
          <EditableRow label="Country" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.country} editable={isEditing} onChange={(val) => handleChange('country', val)} />
           <EditableRow label="State" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.state} editable={isEditing} onChange={(val) => handleChange('state', val)} />
           <EditableRow label="City" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.city} editable={isEditing} onChange={(val) => handleChange('city', val)} />
-        <EditableRow label="Zip Code" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.zip} editable={isEditing} onChange={(val) => handleChange('zip', val)} />
+        <EditableRow label="Zip Code" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.zipcode} editable={isEditing} onChange={(val) => handleChange('zipcode', val)} />
         
           </div>
 

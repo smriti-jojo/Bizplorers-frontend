@@ -16,21 +16,21 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       <ReusableSelect
       multiple
         label="Business Categories of Interest"
-        name="businessCategory"
-        value={formData.businessCategory}
+        name="businessCategories"
+        value={formData.businessCategories}
         onChange={handleChange}
         options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
         className={`w-full px-3 py-2 border rounded `}
-          error={errors.businessCategory}
+          error={errors.businessCategories}
           width={350}
         
       />
       <div className="flex gap-[5%]  py-2 ">
         <div><h1>Ticket Size(Rs)(min)*</h1>
-        <TextField name="ticketSizemin" value={formData.ticketSizemin} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" error={errors.ticketSizemin}/></div>
+        <TextField name="ticketSizeMin" value={formData.ticketSizeMin} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" error={errors.ticketSizeMin}/></div>
          <div>
           <h1>Ticket Size(Rs)(max)*</h1>
-           <TextField name="ticketSizemax" value={formData.ticketSizemax} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" error={errors.ticketSizemax}/>
+           <TextField name="ticketSizeMax" value={formData.ticketSizeMax} onChange={handleChange} id="outlined-basic"  variant="outlined" size="small" slotProps={{ inputLabel: { shrink: false } }} className="!w-[350px]" error={errors.ticketSizeMax}/>
          </div>
      
       </div>
@@ -40,27 +40,27 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
         <h1>Business Location Preference Country</h1>
          <ReusableSelect
         label="Business Location Preference Country"
-        name="businessLocation"
-        value={formData.businessLocation}
+        name="businesslocationCountry"
+        value={formData.businesslocationCountry}
         onChange={handleChange}
         // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
        options={Object.keys(countryCityMap)}
         className={`w-full py-2 border rounded `}
-          error={errors.businessLocation}
+          error={errors.businesslocationCountry}
           width={350}
       />
       </div>
-       {formData.businessLocation && (
+       {formData.businesslocationCountry && (
         <div>
           <h1>City</h1>
           <ReusableSelect
           multiple
     label="City"
-    name="city"
-    value={formData.city}
+    name="businesslocationCities"
+    value={formData.businesslocationCities}
     onChange={handleChange}
-    options={countryCityMap[formData.businessLocation] || []}
-    error={errors.city}
+    options={countryCityMap[formData.businesslocationCountry] || []}
+    error={errors.businesslocationCities}
     width={350}
   />
   </div>
@@ -76,28 +76,28 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       <input
         type="radio"
         name="openToPreRevenue"
-        value="YES"
-        checked={formData.openToPreRevenue === 'YES'}
+        value="Yes"
+        checked={formData.openToPreRevenue === 'Yes'}
         onChange={handleChange}
         className="mr-1"
       />
-      YES
+      Yes
     </label>
     <label>
       <input
         type="radio"
         name="openToPreRevenue"
-        value="NO"
-        checked={formData.openToPreRevenue === 'NO'}
+        value="No"
+        checked={formData.openToPreRevenue === 'No'}
         onChange={handleChange}
         className="mr-2"
       />
-      NO
+      No
     </label>
   </div>
 </div>
 
-{formData.openToPreRevenue === 'NO' && (
+{formData.openToPreRevenue === 'No' && (
   <>
    <label className="block mb-2 font-medium px-3">Open to Pre-breakeven businesses</label>
    <div className="flex gap-4 px-3">
@@ -105,33 +105,33 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       <input
         type="radio"
         name="openToPreBreakeven"
-        value="YES"
-        checked={formData.openToPreBreakeven === 'YES'}
+        value="Yes"
+        checked={formData.openToPreBreakeven === 'Yes'}
         onChange={handleChange}
         className="mr-1"
       />
-      YES
+      Yes
     </label>
     <label>
       <input
         type="radio"
         name="openToPreBreakeven"
-        value="NO"
-        checked={formData.openToPreBreakeven === 'NO'}
+        value="No"
+        checked={formData.openToPreBreakeven === 'No'}
         onChange={handleChange}
         className="mr-1"
       />
-      NO
+      No
     </label>
   </div>
    <div className="flex gap-[5%]  py-2">
     <div>
       <h1>Revenue Size(min)*</h1>
-         <TextField name="revenueMin" value={formData.revenueMin} onChange={handleChange} id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueMin}/>
+         <TextField name="revenueSizeMin" value={formData.revenueSizeMin} onChange={handleChange} id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueSizeMin}/>
     </div>
     <div>
       <h1>Revenue Size(min)(max)*</h1>
-      <TextField name="revenueMax" value={formData.revenueMax} onChange={handleChange}  id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueMax}/>
+      <TextField name="revenueSizeMax" value={formData.revenueSizeMax} onChange={handleChange}  id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueSizeMax}/>
       </div>
     </div>
       

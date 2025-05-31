@@ -1,4 +1,12 @@
 import ReusableSelect from '../Dropdown';
+import {
+  Select,
+  MenuItem,
+  TextField,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+} from "@mui/material";
 
 
 const StepThree = ({ formData, handleChange,errors }) => {
@@ -13,19 +21,41 @@ const StepThree = ({ formData, handleChange,errors }) => {
       
     <div className="w-[550px]">
         <h1>Reason For Sale</h1>
-      <ReusableSelect
+      {/* <ReusableSelect
       
         label="Reason for Sale"
         name="salereason"
         value={formData.salereason}
         onChange={handleChange}
-        options={['Sales', 'Profit']}
+        options={['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation']}
         className={`w-full px-3 py-2 border rounded `}
         width={550}
           error={errors.salereason}
         
-      />
+      /> */}
+
+       
+         <FormControl className="w-[350px]" error={!!errors.salereason}>
+         <InputLabel>Reason for Sale</InputLabel>
+          <Select
+            labelId="salereason"
+            label="Select salereason"
+            name="salereason"
+            value={formData.salereason}
+            onChange={handleChange}
+            
+         >
+            {['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation'].map((entity,index) => (
+              <MenuItem key={index} value={entity}>
+                {entity}
+              </MenuItem>
+            ))}
+          </Select>
+          {errors.salereason && <FormHelperText>{errors.salereason}</FormHelperText>}
+        </FormControl>
     </div>
+
+
     <div>
        <h1>Asking Price(Rs)</h1> 
      <input

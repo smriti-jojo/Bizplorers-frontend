@@ -7,6 +7,23 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from "lucide-react";
 
 
+const countryStateCityMap = {
+  India: {
+    Delhi: ["New Delhi", "Dwarka", "Rohini"],
+    Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+    Karnataka: ["Bangalore", "Mysore", "Mangalore"],
+  },
+  USA: {
+    NewYork: ["New York City", "Buffalo", "Rochester"],
+    California: ["Los Angeles", "San Francisco", "San Diego"],
+    Illinois: ["Chicago", "Springfield", "Naperville"],
+  },
+  Germany: {
+    Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
+    Bavaria: ["Munich", "Nuremberg", "Augsburg"],
+    Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
+  },
+};
 
 const Broker = () => {
      const [menuOpen, setMenuOpen] = useState(false);
@@ -14,12 +31,12 @@ const Broker = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-   mobile_no:'',
+   mobileNumber:'',
    address:'',
    country:'',
    state:'',
    city:'',
-   zip:''
+   zipcode:''
   });
 const [errors, setErrors] = useState({});
 const navigate=useNavigate();
@@ -78,49 +95,71 @@ const handleChange = (e) => {
   const validateStep = () => {
     const newErrors = {};
 
-    if (step === 1) {
-      if (!formData.buyertype.trim()) {
-        newErrors.buyertype = 'Type Of Buyer is required';
+    
+      if (!formData.firstName.trim()) {
+        newErrors.firstName = 'First Name is required';
       }
-      if (!formData.designation.trim()) {
-        newErrors.designation = 'Designation is required';
+      if (!formData.lastName.trim()) {
+        newErrors.lastName = 'LastName is required';
       }
-        if (!formData.description.trim()) {
-        newErrors.description= 'Description is required';
+        if (!formData.mobileNumber.trim()) {
+        newErrors.mobileNumber= 'Mobile Number is required';
       }
-        if (!formData.linkedIn.trim()) {
-        newErrors.linkedIn = 'Linkedin profile is required';
+        if (!formData.address.trim()) {
+        newErrors.address = ' Address is required';
       }
-    }
-      if (step === 2) {
-      if (!formData.businessCategory || formData.businessCategory.length === 0){
-        newErrors.businessCategory = 'Business Category is required';
+        if (!formData.country.trim()) {
+        newErrors.country= 'Country is required';
       }
-      // if (!formData.designation.trim()) {
-      //   newErrors.designation = 'Designation is required';
-      // }
-      //   if (!formData.description.trim()) {
-      //   newErrors.description= 'Description is required';
-      // }
-      //   if (!formData.linkedIn.trim()) {
-      //   newErrors.linkedIn = 'Linkedin profile is required';
-      // }
+        if (!formData.state.trim()) {
+        newErrors.state = 'State is required';
+      }
+        if (!formData.city.trim()) {
+        newErrors.city= 'City is required';
+      }
+    
+    
+      if (!formData.zipcode.trim()){
+        newErrors.zipcode = 'Zipcode is required';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-const handleNext = () => {
-  if (validateStep()) {
-    setStep((prev) => prev + 1);
-  }
-};
 
-const handleSubmit=()=>{
+
+const handleSubmit1=()=>{
   alert("data submitted successfully");
 navigate('/broker/dashboard');
 }
+
+const token=localStorage.getItem("token");
+ const handleSubmit = async () => {
+    if (!validateStep()) return;
+
+    try {
+      console.log("data------formdata ",formData);
+      const response = await fetch('https://bizplorers-backend.onrender.com/api/broker/add_detail', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' ,
+        'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error('Something went wrong!');
+console.log("formdata",formData);
+const data = await response.json();
+      alert('Data submitted successfully!');
+      console.log("brokerData----",data);
+       navigate('/broker/dashboard');
+    } catch (error) {
+      console.error(error);
+      alert('Submission failed.');
+    }
+  };
+
 
 const stepsList = ['BROKER DETAILS'];
   return (
