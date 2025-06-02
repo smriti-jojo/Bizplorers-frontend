@@ -4,58 +4,51 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const users = [
   {
-    id: 7,
-    username: "sandeepjethwa",
-    name: "Sandeep",
+    id: 1,
+    username: "Admin Bizplorers",
+    name: "Admin",
     role: "Admin",
-    registeredOn: "21 Apr, 2024 12:57 PM",
-    status: "Active",
-  },
-  {
-    id: 6,
-    username: "test2",
-    name: "test1",
-    role: "Customer services",
-    registeredOn: "24 Aug, 2022 05:42 AM",
-    status: "Active",
-  },
-  {
-    id: 4,
-    username: "Support",
-    name: "Support",
-    role: "Customer services",
-    registeredOn: "14 Aug, 2022 01:51 AM",
-    status: "Active",
-  },
-  {
-    id: 3,
-    username: "admin_3",
-    name: "Bishu",
-    role: "Editor",
-    registeredOn: "24 Jul, 2019 11:14 AM",
+    // registeredOn: "21 Apr, 2024 12:57 PM",
     status: "Active",
   },
   {
     id: 2,
-    username: "admin",
-    name: "Admin 2",
-    role: "Admin",
-    registeredOn: "19 Jul, 2019 02:01 PM",
+    username: "test2",
+    name: "test1",
+    role: "Buyer",
+    // registeredOn: "24 Aug, 2022 05:42 AM",
     status: "Active",
   },
   {
-    id: 1,
-    username: "superadmin",
-    name: "Vk bishu",
-    role: "Super Admin",
-    registeredOn: "02 Dec, 2017 07:27 AM",
+    id: 3,
+    username: "smriti",
+    name: "smriti",
+    role: "Seller",
+    // registeredOn: "14 Aug, 2022 01:51 AM",
     status: "Active",
   },
+  // {
+  //   id: 3,
+  //   username: "admin_3",
+  //   name: "Bishu",
+  //   role: "Editor",
+  //   registeredOn: "24 Jul, 2019 11:14 AM",
+  //   status: "Active",
+  // },
+  {
+    id: 4,
+    username: "Amit",
+    name: "Amit",
+    role: "Seller",
+    // registeredOn: "19 Jul, 2019 02:01 PM",
+    status: "Active",
+  },
+ 
 ];
 
 const AdminUserTable=() =>{
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
+    <div className="p-6 bg-white shadow-lg rounded- w-full">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Admin User</h2>
         <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
@@ -69,7 +62,7 @@ const AdminUserTable=() =>{
             <th className="p-2 border">Username</th>
             <th className="p-2 border">Name</th>
             <th className="p-2 border">Role</th>
-            <th className="p-2 border">Registered On</th>
+            {/* <th className="p-2 border">Registered On</th> */}
             <th className="p-2 border">Status</th>
             <th className="p-2 border">Action</th>
           </tr>
@@ -81,7 +74,7 @@ const AdminUserTable=() =>{
               <td className="p-2 border">{user.username}</td>
               <td className="p-2 border">{user.name}</td>
               <td className="p-2 border">{user.role}</td>
-              <td className="p-2 border">{user.registeredOn}</td>
+              {/* <td className="p-2 border">{user.registeredOn}</td> */}
               <td className="p-2 border">
                 <span className="px-2 py-1 text-sm bg-green-100 text-green-700 rounded">
                   {user.status}

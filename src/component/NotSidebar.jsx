@@ -199,6 +199,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
+import pic from '../assests/place.jpg';
+import place from '../assests/place.jpg';
 
 export default function Sidebar({ onPicklistChange, onCategorySelect, selectedCategory }) {
   const [isOpen, setIsOpen] = useState(true);
@@ -272,7 +274,7 @@ export default function Sidebar({ onPicklistChange, onCategorySelect, selectedCa
         </div>
 
         <div className="flex items-center gap-3 p-3 border-2 border-slate-300 shadow-lg rounded-md w-[90%] mx-3 my-3">
-          <img alt="profile" className="rounded-full w-10" />
+          <img src={place} />
           <div className="flex flex-col">
             <h1 className="font-semibold">Hi! Admin</h1>
           </div>

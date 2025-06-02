@@ -32,7 +32,7 @@ function App() {
              <Route path="/buyer/dashboard" element={<BuyerDashboard/>}/>
               <Route path="/seller/dashboard" element={<SellerDashboard/>}/>
                <Route path="/broker/dashboard" element={<BrokerDashboard/>}/>
-                <Route path="/admin" element={<AdminWithSidebar/>}/>
+                <Route path="/admin/dashboard" element={<AdminWithSidebar/>}/>
                 <Route path="/login" element={<Login/>}/>
           </Routes>
           </BrowserRouter>
