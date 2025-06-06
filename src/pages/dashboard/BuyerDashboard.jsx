@@ -53,6 +53,11 @@ const BuyerDashboard = () => {
     newArray[index] = value;
     setBuyerData(prev => ({ ...prev, [key]: newArray }));
   };
+const handleLogout = () => {
+    localStorage.removeItem("token");
+     localStorage.removeItem("user");
+    window.location.href = "/login"; // or your login route
+  };
 
   const fetchBuyerData = async () => {
     try {
@@ -108,16 +113,16 @@ const BuyerDashboard = () => {
     fetchBuyerData();
   }, []);
 
-  const handleLogout=()=>{
-  localStorage.removeItem('token');
-    localStorage.removeItem('user');
-  window.location.href = '/login'; // or your login route
-};
+//   const handleLogout=()=>{
+//   localStorage.removeItem('token');
+//     localStorage.removeItem('user');
+//   window.location.href = '/login'; // or your login route
+// };
 
   
   return (
     <div>
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
         <img alt='logo' width={50} className="object-contain" />
         <nav className="hidden md:flex gap-8 text-sm font-medium">
           <Link to="/homepage" className="hover:text-blue-600 text-xl">About Us</Link>
@@ -140,7 +145,54 @@ const BuyerDashboard = () => {
             <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
           </div>
         )}
-      </header>
+      </header> */}
+         <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+                           {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+                           <Link to="/">
+                             <img
+                               alt="logo"
+                               width={50}
+                               className="object-contain cursor-pointer"
+                             />
+                           </Link>
+                           <nav className="hidden md:flex gap-8">
+                             <Link to="/aboutUs" className="text-xl hover:text-blue-600">
+                               About Us
+                             </Link>
+                             <Link to="/services" className="text-xl hover:text-blue-600">
+                               Services
+                             </Link>
+                             <Link to="/seller" className="text-xl hover:text-blue-600">
+                               Seller
+                             </Link>
+                             <Link to="/buyer" className="text-xl hover:text-blue-600">
+                               Buyer
+                             </Link>
+                             {/* <Link to="/login" className="text-xl hover:text-blue-600">
+                               Log In
+                             </Link> */}
+                             <Link to="/signUp" className="text-xl hover:text-blue-600">
+                               Register
+                             </Link>
+                             {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
+                           </nav>
+                           <div className="hidden md:flex gap-2">
+                             {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
+                             <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogout}>
+                                       Log Out
+                                     </button>
+                                      {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
+                                       Signup
+                                     </button> */}
+                 
+                             <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
+                               Post A Business
+                             </button>
+                           </div>
+                           {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
+                           {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
+                         </header>
+             
 
       <div className='flex justify-center'>
         <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%]'>

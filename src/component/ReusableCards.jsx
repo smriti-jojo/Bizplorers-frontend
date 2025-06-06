@@ -9,11 +9,12 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Button } from '@mui/material';
 import place from '../assests/place.jpg';
 const ReusableCards = ({description_business,company_name,city,askingPrice,EBITDA}) => {
+  const token=localStorage.getItem('token');
   return (
     <div className='relative'>
       <div className='w-[350px] border-2 border-slate-300 rounded-md p-4 '>
         <div><CircleIcon fontSize='5px' className='!text-green-600 mr-2'/>Newly Established Restaurant for Sale</div>
-        <h1 className='font-semibold text-lg py-1'>For Sale:{company_name?company_name:'Profitable Business '} </h1>
+        <h1 className='font-semibold text-lg py-1'>For Sale:<span className={token?'':'blur-sm'}>{company_name?company_name:'Profitable Business '}</span> </h1>
      <div className='flex gap-3 py-1'>
      <div><EmailIcon fontSize='7px' className='mr-1 text-blue-400'/> Official Email</div> 
      <div><PhoneIcon fontSize='7px' className='mr-1 text-green-400'/>Phone</div>
@@ -34,10 +35,10 @@ const ReusableCards = ({description_business,company_name,city,askingPrice,EBITD
      </div>
      <div className='p-4 bg-slate-100 space-y-2'>
       <div className='flex justify-between text-[15px]'>
-        Run Rate Sales... <span>INR 1.3crore</span>
+        Run Rate Sales... <span className={token?'':'blur-sm'}>INR 1.3crore</span>
       </div>
       <div className='flex justify-between text-[15px]'>
-        EBITDA Margin... <span>{EBITDA?EBITDA:20}%</span>
+        EBITDA Margin... <span className={token?'':'blur-sm'}>{EBITDA?EBITDA:20}%</span>
       </div>
      </div>
      <div className='flex justify-between py-2'>
@@ -45,7 +46,7 @@ const ReusableCards = ({description_business,company_name,city,askingPrice,EBITD
         <h1>Business for Sale <InfoIcon fontSize='small'/></h1>
        <div className="flex items-end gap-1 text-blue-700">
   <p className="text-[12px] ">INR</p>
-  <h1 className="text-2xl font-bold">{askingPrice?askingPrice:'40L'}</h1>
+  <h1 className={token?"text-2xl font-bold":"text-2xl font-bold blur-sm"}>{askingPrice?askingPrice:'40L'}</h1>
 </div>
 
        

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 
-const StepThree = ({ formData, handleChange,errors }) => {
+const StepThree = ({ formData, handleChange,errors,type }) => {
 
     
 
@@ -35,7 +35,7 @@ const StepThree = ({ formData, handleChange,errors }) => {
       /> */}
 
        
-         <FormControl className="w-[350px]" error={!!errors.salereason}>
+         <FormControl className={`${type==='modal'?'w-[350px]':'w-[600px]'}`} error={!!errors.salereason} size='small'>
          <InputLabel>Reason for Sale</InputLabel>
           <Select
             labelId="salereason"

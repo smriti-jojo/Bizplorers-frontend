@@ -128,11 +128,16 @@ const handleChange = (e) => {
   };
 
 
-
+      const handleLogout=()=>{
+    localStorage.removeItem('token');
+    window.location.href = '/login'; // or your login route
+      }
 const handleSubmit1=()=>{
   alert("data submitted successfully");
 navigate('/broker/dashboard');
 }
+
+
 
 const token=localStorage.getItem("token");
  const handleSubmit = async () => {
@@ -164,7 +169,7 @@ const data = await response.json();
 const stepsList = ['BROKER DETAILS'];
   return (
     <>
-     <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+     {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
             <img alt='logo' width={50} className="object-contain" />
              <nav className="hidden md:flex gap-8 text-sm font-medium">
               <Link to="/homepage" className="hover:text-blue-600 text-xl">
@@ -196,7 +201,53 @@ const stepsList = ['BROKER DETAILS'];
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
               </div>
             )}
-          </header>
+          </header> */}
+              <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+                                     {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+                                     <Link to="/">
+                                       <img
+                                         alt="logo"
+                                         width={50}
+                                         className="object-contain cursor-pointer"
+                                       />
+                                     </Link>
+                                     <nav className="hidden md:flex gap-8">
+                                       <Link to="/aboutUs" className="text-xl hover:text-blue-600">
+                                         About Us
+                                       </Link>
+                                       <Link to="/services" className="text-xl hover:text-blue-600">
+                                         Services
+                                       </Link>
+                                       <Link to="/seller" className="text-xl hover:text-blue-600">
+                                         Seller
+                                       </Link>
+                                       <Link to="/buyer" className="text-xl hover:text-blue-600">
+                                         Buyer
+                                       </Link>
+                                       {/* <Link to="/login" className="text-xl hover:text-blue-600">
+                                         Log In
+                                       </Link> */}
+                                       <Link to="/signUp" className="text-xl hover:text-blue-600">
+                                         Register
+                                       </Link>
+                                       {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
+                                     </nav>
+                                     <div className="hidden md:flex gap-2">
+                                       {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
+                                       <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
+                                                 Log Out
+                                               </button>
+                                                {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
+                                                 Signup
+                                               </button> */}
+                           
+                                       <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
+                                         Post A Business
+                                       </button>
+                                     </div>
+                                     {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
+                                     {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
+                                   </header>
     <div className="flex justify-center py-[7%] min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-[90%]">
         {/* <h2 className="text-2xl font-bold mb-2 text-center">Multi Step Form</h2>

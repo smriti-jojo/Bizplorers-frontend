@@ -43,7 +43,7 @@ const ViewProfile= () => {
        theme: "colored",
      });
    };
-   
+ 
   
     const fetchBrokerData = async () => {
       try {
@@ -62,7 +62,7 @@ const ViewProfile= () => {
         setBrokerData(data);
       } catch (error) {
         console.error(error);
-        alert('Getting Data failed.');
+        // alert('Getting Data failed.');
       }
     };
   

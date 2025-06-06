@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Footer from "../component/Footer";
 
 
 const Login = () => {
@@ -146,14 +147,16 @@ const handleSignup=()=>{
 }
   return (
     <div className="min-h-screen bg-slate-100 ">
-        <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+        {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
+        <Link to="/">
         <img alt='logo' width={50} className="object-contain" />
+        </Link>
         <nav className="hidden md:flex gap-8 text-sm font-medium">
-          <Link to="/homepage" className="hover:text-blue-600 text-xl">About Us</Link>
-          <Link to="/dashboard" className="hover:text-blue-600 text-xl">Services</Link>
-          <Link to="/ask-ai" className="hover:text-blue-600 text-xl">Seller</Link>
-          <Link to="/homepage" className="hover:text-blue-600 text-xl">Buyer</Link>
-          <Link to="/homepage" className="hover:text-blue-600 text-xl">How It Works?</Link>
+          <Link to="/aboutUs" className="hover:text-blue-600 text-xl">About Us</Link>
+          <Link to="/services" className="hover:text-blue-600 text-xl">Services</Link>
+          <Link to="/seller" className="hover:text-blue-600 text-xl">Seller</Link>
+          <Link to="/buyer" className="hover:text-blue-600 text-xl">Buyer</Link>
+      
         </nav>
         <div className="hidden md:flex gap-2">
        <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleSignup}>Sign Up</button>
@@ -168,9 +171,55 @@ const handleSignup=()=>{
             <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
           </div>
         )}
-      </header>
+      </header> */}
+          <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+                {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+                <Link to="/">
+                  <img
+                    alt="logo"
+                    width={50}
+                    className="object-contain cursor-pointer"
+                  />
+                </Link>
+                <nav className="hidden md:flex gap-8">
+                  <Link to="/aboutUs" className="text-xl hover:text-blue-600">
+                    About Us
+                  </Link>
+                  <Link to="/services" className="text-xl hover:text-blue-600">
+                    Services
+                  </Link>
+                  <Link to="/seller" className="text-xl hover:text-blue-600">
+                    Seller
+                  </Link>
+                  <Link to="/buyer" className="text-xl hover:text-blue-600">
+                    Buyer
+                  </Link>
+                  <Link to="/login" className="text-xl hover:text-blue-600">
+                    Log In
+                  </Link>
+                  <Link to="/signUp" className="text-xl hover:text-blue-600">
+                    Register
+                  </Link>
+                  {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
+                </nav>
+                <div className="hidden md:flex gap-2">
+                  {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
+                  {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
+                            Log In
+                          </button>
+                           <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
+                            Signup
+                          </button> */}
+      
+                  <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
+                    Post A Business
+                  </button>
+                </div>
+                {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
+                {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
+              </header>
 
-    <div className="flex  justify-center items-center min-h-screen ">
+    <div className="flex  justify-center items-center pt-[10%] pb-[5%] ">
     <div className=" bg-gray-100 w-[400px]">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
         <h2 className="text-2xl font-bold text-center mb-4 text-black">
@@ -230,6 +279,7 @@ const handleSignup=()=>{
       </div>
     </div>
     </div>
+    <Footer/>
     </div>
   );
 };

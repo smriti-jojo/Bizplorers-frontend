@@ -1,13 +1,13 @@
 import ReusableSelect from '../Dropdown';
 
 
-const StepOne = ({ formData, handleChange,errors }) => {
+const StepOne = ({ formData, handleChange,errors,type }) => {
 
     
 
   return(
   
-  <div className="space-y-4">
+  <div className="space-y-4 ">
     {/* <input
       type="text"
       name="firstName"
@@ -33,7 +33,7 @@ const StepOne = ({ formData, handleChange,errors }) => {
       className="w-full px-3 py-2 border rounded"
     /> */}
       
-    <div className="flex gap-[5%] w-full">
+    <div className={`flex gap-[5%] w-full `}>
     <div>
 <h1>Type of Buyer</h1>
        <div className="w-[550px]">
