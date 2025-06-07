@@ -755,7 +755,7 @@ const BuyerCard = ({ buyer }) => {
         </div>
 
         <h1 className='font-semibold text-lg py-1'>
-          Buyer: <span className={token?"blur-sm":""}>{buyer.name}</span>
+          Buyer: <span className={token?"":"blur-sm"}>{buyer.name}</span>
         </h1>
 
         <div className='flex gap-3 py-1'>
