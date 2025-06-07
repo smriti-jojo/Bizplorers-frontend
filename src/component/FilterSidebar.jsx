@@ -103,7 +103,7 @@ const FilterSidebar = ({ filters, setFilters, onReset }) => {
   };
 
   return (
-    <div className="w-full md:w-64">
+    <div className="w-full md:w-56">
       {/* Mobile Toggle */}
       <div className="md:hidden mb-4">
         <button

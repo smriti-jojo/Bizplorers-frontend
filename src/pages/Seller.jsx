@@ -328,7 +328,7 @@ setLoading(true);
             EBITDA={card.EBITDA}
             />
         ))} */}
-        <div className="flex flex-wrap gap-6 w-full">
+        <div className="flex flex-wrap  gap-y-3 w-full">
           {loading?
           <div className="flex justify-center w-full min-h-screen">
       <CircularProgress />
