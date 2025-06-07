@@ -118,10 +118,14 @@ import { Link } from "react-router-dom";
 import ReusableCards from "../component/ReusableCards";
 import { useEffect } from "react";
 import Footer from "../component/Footer";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 
 const Seller = () => {
   const [sortBy, setSortBy] = useState("Newest");
   const[allBusinesses,setAllBusinesses]=useState([]);
+  const [loading,setLoading]=useState(false);
 
   const [filters, setFilters] = useState({
     category: "",
@@ -140,6 +144,7 @@ const Seller = () => {
   });
 
     const fetchSellerData = async () => {
+setLoading(true);
     try {
       const response = await fetch('https://bizplorers-backend.onrender.com/api/seller/getAllSeller', {
         method: 'GET'
@@ -155,6 +160,7 @@ const Seller = () => {
       console.error(error);
       // alert('Getting Data failed.');
     }
+    setLoading(false);
   };
    useEffect(() => {
          fetchSellerData();
@@ -322,8 +328,12 @@ const Seller = () => {
             EBITDA={card.EBITDA}
             />
         ))} */}
-        <div className="flex flex-wrap gap-6">
-  {filteredBusinesses.map((card, index) => (
+        <div className="flex flex-wrap gap-6 w-full">
+          {loading?
+          <div className="flex justify-center w-full min-h-screen">
+      <CircularProgress />
+    </div>:(
+  filteredBusinesses.map((card, index) => (
     <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
       <ReusableCards
         description_business={card.description_business}
@@ -333,7 +343,8 @@ const Seller = () => {
         EBITDA={card.EBITDA}
       />
     </div>
-  ))}
+  )))
+}
 </div>
 
       </div>
