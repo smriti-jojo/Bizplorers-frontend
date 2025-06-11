@@ -90,9 +90,11 @@
 
 // export default FilterSidebar;
 import React, { useState } from "react";
+import { useEffect } from "react";
 
-const FilterSidebar = ({ filters, setFilters, onReset }) => {
+const SellerFilterSidebar = ({ filters, setFilters, onReset }) => {
   const [showFilters, setShowFilters] = useState(true);
+  const[picklistData,setpicklistData]=useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +103,22 @@ const FilterSidebar = ({ filters, setFilters, onReset }) => {
       [name]: value,
     }));
   };
+
+  // const SavedData=JSON.parse(localStorage.getItem("picklists"));
+  // console.log("localstorage--data",SavedData);
+  // setpicklistData([SavedData.data]);
+//   setTimeout(()=>{
+// console.log("picklistsDattttaaaa--",picklistData);
+//   },1000)
+useEffect(() => {
+    const SavedData = JSON.parse(localStorage.getItem("picklists"));
+    console.log("localstorage--data", SavedData);
+    if (SavedData?.data) {
+      setpicklistData(SavedData.data);
+    }
+  }, []); 
+
+  console.log("savedpicklistdata---",picklistData);
 
   return (
     <div className="w-full md:w-56">
@@ -117,6 +135,38 @@ const FilterSidebar = ({ filters, setFilters, onReset }) => {
       {showFilters && (
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-4">Business Filters</h2>
+          {/* {picklistData.map((item,index)=>(
+            <div key={index}>
+ <label className="block text-sm font-medium mb-1">Select Category of Business</label>
+          <select name="category" value={filters.item.BusinessCategoriesInterest} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
+            <option value="">Select</option>
+            {item.BusinessCategoriesInterest((data,index)=>(
+              <option value={data}>{data}</option>
+            ))}
+         
+          </select>
+          </div>
+          ))} */}
+     {/* {Object.entries(picklistData).map(([categoryKey, options], index) => (
+  <div key={index}>
+    <label className="block text-sm font-medium mb-1">
+      Select {categoryKey.replace(/([A-Z])/g, ' $1').trim()}
+    </label>
+    <select
+      name={categoryKey}
+      value={filters[categoryKey] || ""}
+      onChange={handleChange}
+      className="w-full p-2 mb-3 border rounded"
+    >
+      <option value="">Select</option>
+      {options.map((option) => (
+        <option key={option.id} value={option.name}>
+          {option.name}
+        </option>
+      ))}
+    </select>
+  </div>
+))} */}
 
           {/* Category */}
           <label className="block text-sm font-medium mb-1">Select Category of Business</label>
@@ -199,6 +249,6 @@ const FilterSidebar = ({ filters, setFilters, onReset }) => {
   );
 };
 
-export default FilterSidebar;
+export default SellerFilterSidebar;
 
 

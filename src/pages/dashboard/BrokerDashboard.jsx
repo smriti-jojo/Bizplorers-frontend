@@ -23,6 +23,7 @@ import StepTwo from "../../component/Multistep_Seller/StepTwo";
 import StepThree from "../../component/Multistep_Seller/StepThree";
 import Seller from "../../pages/signup_steps/Seller";
 import Buyer from "../../pages/signup_steps/Buyer";
+import Footer from "../../component/Footer";
 
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -368,7 +369,7 @@ useEffect(()=>{
                    </header>
        
      
-      <div className="pt-[5%] ">
+      <div className="py-[5%]  ">
         <ReusableTabs
           tabs={tabs}
           //   dropdownComponent={DropdownSelect}
@@ -379,6 +380,7 @@ useEffect(()=>{
           onButtonClick={() => alert("Add Shipment")}
         />
       </div>
+      <Footer/>
     </div>
   );
 };

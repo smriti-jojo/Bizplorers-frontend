@@ -111,7 +111,7 @@
 // export default Seller;
 
 import React, { useState } from "react";
-import FilterSidebar from "../component/FilterSidebar";
+import SellerFilterSidebar from "../component/FilterSidebar";
 import BusinessCard from "../component/BusinessCard";
 import SortDropdown from "../component/SortDropdown";
 import { Link } from "react-router-dom";
@@ -310,7 +310,8 @@ setLoading(true);
                 {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
               </header>
               <div className="mt-[5%] flex gap-5 w-full">
-      <FilterSidebar filters={filters} setFilters={setFilters} onReset={onReset} />
+      {/* <FilterSidebar filters={filters} setFilters={setFilters} onReset={onReset} /> */}
+      <SellerFilterSidebar filters={filters} setFilters={setFilters} onReset={onReset} />
 
       <div className="flex-1 ">
         <div className="flex justify-between items-center mb-4">

@@ -1,5 +1,7 @@
 
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import {
   Select,
   MenuItem,
@@ -30,6 +32,12 @@ const countryStateCityMap = {
 };
 
 const StepOne = ({ formData, handleChange, errors ,type}) => {
+  const [cofounderLinks, setCofounderLinks] = useState([""]);
+
+  useEffect(() => {
+    // Push to parent if needed
+    handleChange({ target: { name: "cofounderLinks", value: cofounderLinks } });
+  }, [cofounderLinks]);
   return (
     <div className="space-y-4">
       <div>
@@ -79,28 +87,7 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
            
           {errors.entityStructure && <FormHelperText>{errors.entityStructure}</FormHelperText>}
         </FormControl>
-        {/* <div className="w-1/2">
-          <h1>Category Of Business</h1>
-          <ReusableSelect
-            label="Business Categories of Interest"
-            name="businessCategory"
-            value={formData.businessCategory}
-            onChange={handleChange}
-            options={[
-              "E-commerce",
-              "Offline Retail",
-              "Fintech",
-              "Edtech",
-              "Saas",
-              "Education & training",
-              "Restaurant/café",
-              "Mobile App",
-            ]}
-            className={`!w-full px-3 py-2 border rounded`}
-            error={errors.businessCategory}
-            width={"100%"}
-          />
-        </div> */}
+    
          <FormControl className={`${type==='modal'?'w-[550px]':'w-[600px]'}`} error={!!errors.businessCategory} size="small">
          <InputLabel>businessCategory</InputLabel>
           <Select
@@ -172,19 +159,70 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
             helperText={errors.company_linkedin}
           />
         </div>
-        <div className="w-1/2">
-          <h1>Co-founders Linkedin Profiles</h1>
-          <TextField
-            name="cofounder_linkedin"
-            value={formData.cofounder_linkedin}
-            onChange={handleChange}
-            variant="outlined"
-            size="small"
-            className="!w-full"
-            error={!!errors.cofounder_linkedin}
-            helperText={errors.cofounder_linkedin}
-          />
-        </div>
+     
+
+<div className="w-1/2">
+  <h1>Co-founders LinkedIn Profiles</h1>
+  {cofounderLinks.map((link, index) => (
+    <div key={index} className="flex space-x-2 mb-2">
+      <TextField
+        type="url"
+        name={`cofounderLinks${index}`}
+        value={link}
+        onChange={(e) => {
+          const updated = [...cofounderLinks];
+          updated[index] = e.target.value;
+          setCofounderLinks(updated);
+
+          // Update parent form data
+          handleChange({
+            target: {
+              name: "cofounderLinks",
+              value: updated,
+            },
+          });
+        }}
+        placeholder="Enter LinkedIn URL"
+        variant="outlined"
+        size="small"
+        className="!w-full"
+        error={!!errors.cofounderLinks}
+        helperText={index === 0 ? errors.cofounderLinks : ""}
+      />
+
+      {index === cofounderLinks.length - 1 ? (
+        <button
+          type="button"
+          onClick={() => setCofounderLinks([...cofounderLinks, ""])}
+          className="px-3 py-2 h-[40px] bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          +
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => {
+            const filtered = cofounderLinks.filter((_, i) => i !== index);
+            setCofounderLinks(filtered);
+
+            // Also update the formData
+            handleChange({
+              target: {
+                name: "cofounderLinks",
+                value: filtered,
+              },
+             
+            });
+          }}
+          className="px-2 py-2 h-[40px] text-white rounded hover:bg-red-600"
+        >
+          ❌
+        </button>
+      )}
+    </div>
+  ))}
+</div>
+
       </div>
 
       <div>
@@ -312,7 +350,9 @@ width={350}
  />
  </div>
   </div> */}
-      <div className="flex justify-between w-full gap-4">
+
+
+       <div className="flex justify-between w-full gap-4">
         <div className="w-[350px]">
           <h1>Number of co-founders</h1>
           <TextField
@@ -352,7 +392,8 @@ width={350}
             helperText={errors.numLocation}
           />
         </div>
-      </div>
+      </div> 
+   
 
       <div className="flex gap-[3.5%]">
         <div>
@@ -370,7 +411,7 @@ width={350}
                 width={150}
               />
             </div> */}
-              <FormControl className="w-[350px]" error={!!errors.year} size="small">
+              {/* <FormControl className="w-[350px]" error={!!errors.year} size="small">
          
           <Select
             labelId="year"
@@ -387,31 +428,7 @@ width={350}
           </Select>
           {errors.year && <FormHelperText>{errors.year}</FormHelperText>}
         </FormControl>
-            {/* <div>
-              <ReusableSelect
-                label="Month"
-                name="month"
-                value={formData.month}
-                onChange={handleChange}
-                options={[
-                  "01",
-                  "02",
-                  "03",
-                  "04",
-                  "05",
-                  "06",
-                  "07",
-                  "08",
-                  "09",
-                  "10",
-                  "11",               
-                  "12",
-                ]}
-                className={`w-full py-2 border rounded`}
-                error={errors.month}
-                width={150}
-              />
-            </div> */}
+           
                <FormControl className="w-[350px]" error={!!errors.month} size="small">
          
           <Select
@@ -441,7 +458,47 @@ width={350}
             ))}
           </Select>
           {errors.month && <FormHelperText>{errors.month}</FormHelperText>}
-        </FormControl>
+        </FormControl> */}
+        <FormControl className="w-[350px]" error={!!errors.year} size="small">
+  <InputLabel id="year-label">Select Year</InputLabel>
+  <Select
+    labelId="year-label"
+    id="year"
+    label="Select Year"
+    name="year"
+    value={formData.year}
+    onChange={handleChange}
+  >
+    {["2025", "2024", "2023", "2022", "2021", "2020"].map((year, index) => (
+      <MenuItem key={index} value={year}>
+        {year}
+      </MenuItem>
+    ))}
+  </Select>
+  {errors.year && <FormHelperText>{errors.year}</FormHelperText>}
+</FormControl>
+
+<FormControl className="w-[350px]" error={!!errors.month} size="small">
+  <InputLabel id="month-label">Select Month</InputLabel>
+  <Select
+    labelId="month-label"
+    id="month"
+    label="Select Month"
+    name="month"
+    value={formData.month}
+    onChange={handleChange}
+  >
+    {["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].map(
+      (month, index) => (
+        <MenuItem key={index} value={month}>
+          {month}
+        </MenuItem>
+      )
+    )}
+  </Select>
+  {errors.month && <FormHelperText>{errors.month}</FormHelperText>}
+</FormControl>
+
           </div>
         </div>
       </div>

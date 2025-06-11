@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import Footer from '../component/Footer';
 
 const OTPVerification = ({type}) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -175,14 +176,14 @@ if (storedUser.role === "buyer") {
                             Signup
                           </button> */}
 
-              <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
+              {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
                 Post A Business
-              </button>
+              </button> */}
             </div>
             {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
             {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
           </header>
-      <div className='w-full h-screen flex justify-center items-center'>
+      <div className='w-full py-[7%] flex justify-center items-center'>
         <div className='border-2 border-slate-300 rounded-md shadow-md shadow-slate-400 w-[40%] py-[2%]'>
             <h1 className='text-2xl flex justify-center font-bold'>Complete Your Registration</h1>
            <h2 className='flex justify-center py-2'>Enter the Verification Code send to</h2>
@@ -204,7 +205,9 @@ if (storedUser.role === "buyer") {
            
         </div>
       </div>
+      <Footer/>
       </>}
+
     </div>
   )
 }

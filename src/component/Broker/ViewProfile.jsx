@@ -124,8 +124,11 @@ const ViewProfile= () => {
         )}
       </header> */}
 
-      <div className='flex justify-center'>
-        <div className='flex flex-col border-2 border-slate-500 rounded-md px-[5%] w-[80%] '>
+      {/* <div className='flex justify-center'>
+        <div className='flex flex-col border-2 border-slate-500 rounded-md px-[5%] w-[80%] '> */}
+        {/**Added Margin */}
+         <div className='flex justify-center items-center'>
+  <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-6 w-full m-4  max-w-screen-md'>
           <div className='flex justify-between w-full mt-[1%]'>
             <div className='text-2xl font-bold'>BROKER DETAILS</div>
             <div>

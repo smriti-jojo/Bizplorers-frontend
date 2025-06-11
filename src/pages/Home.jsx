@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TrendingBusinesses from "../component/Home/TrendingBusiness";
 import ActiveBuyers from "../component/Home/ActiveBuyer";
 import { Briefcase } from 'lucide-react';
@@ -24,13 +24,35 @@ const categories = [
 const Home = () => {
 const navigate=useNavigate();
 
-   const handleLogin = () => {
-    navigate('/login');
-  };
-  const handleSignup = () => {
-    navigate('/signUp');
+  const fetchAllPicklists = async () => {
+    try {
+      const response = await fetch(
+        "https://bizplorers-backend.onrender.com/api/picklist/get_all",
+        {
+          method: "GET",
+          // headers: {
+          //   "Content-Type": "application/json",
+          // },
+        }
+      );
+
+      const result = await response.json();
+console.log("picklistResults---",result);
+      if (response.ok) {
+        // setUserData(result.data);
+        console.log("picklists--value",JSON.stringify(result));
+        localStorage.setItem("picklists", JSON.stringify(result));
+      } else {
+        console.error("Error fetching users:", result.message);
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
   };
 
+  useEffect(()=>{
+    fetchAllPicklists();
+  },[]);
 
   return (
     <div>

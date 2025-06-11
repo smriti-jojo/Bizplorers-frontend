@@ -23,7 +23,7 @@ const SignUp = ({ type }) => {
   const [errors, setErrors] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
   const [status, setStatus] = useState(false);
-  const[loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const validateField = (field, value) => {
@@ -51,11 +51,13 @@ const SignUp = ({ type }) => {
 
         newErrors.email = isValid ? "" : "Invalid email";
         break;
+
       case "phone":
-        newErrors.phone = /^\d{7,14}$/.test(value)
+        newErrors.phone = /^[6-9]\d{9}$/.test(value)
           ? ""
-          : "Enter a valid phone number";
+          : "Enter a valid 10-digit phone number";
         break;
+
       case "password":
         newErrors.password = value ? "" : "Password is required";
         break;
@@ -69,6 +71,8 @@ const SignUp = ({ type }) => {
       default:
         break;
     }
+
+    console.log("Error:", newErrors.phone); // DEBUG
     setErrors(newErrors);
   };
 
@@ -78,9 +82,57 @@ const SignUp = ({ type }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePhoneChange = (value) => {
-    validateField("phone", value);
-    setFormData((prev) => ({ ...prev, phone: value }));
+  // const handlePhoneChange = (value) => {
+  //   const cleanedValue = value.replace(/^\+91/, "").slice(0, 10);
+  //   setFormData((prev) => ({ ...prev, phone: cleanedValue }));
+  //   validateField("phone", `+91${cleanedValue}`);
+  // };
+
+  // const handlePhoneChange = (value, data, event, formattedValue) => {
+  //   // Ensure only digits after +91 are used
+  //   const cleaned = value.replace(/\D/g, "").slice(-10); // take last 10 digits
+  //   const fullPhone = `+91${cleaned}`;
+
+  //   setFormData((prev) => ({ ...prev, phone: fullPhone }));
+
+  //   // Validate
+  //   if (/^\+91[6-9]\d{9}$/.test(fullPhone)) {
+  //     setErrors((prev) => ({ ...prev, phone: "" }));
+  //   } else {
+  //     setErrors((prev) => ({
+  //       ...prev,
+  //       phone: "Enter a valid 10-digit Indian phone number",
+  //     }));
+  //   }
+  // };
+
+  // const handlePhoneChange = (value) => {
+  //   setFormData((prev) => ({ ...prev, phone: value }));
+  //    console.log("Phone Changed:", value); // DEBUG
+  //   validateField("phone", value);
+  // };
+  // const handlePhoneChange = (value) => {
+  //   const onlyNumber = value.replace("+91", "").replace(/\D/g, "");
+  //   setFormData((prev) => ({ ...prev, phone: onlyNumber }));
+  //   validateField("phone", onlyNumber);
+  // };
+  // const handlePhoneChange = (value) => {
+
+  //   if (value.length <= 10) {
+  //     setFormData((prev) => ({ ...prev, phone: value }));
+  //     console.log("Phone Changed:", value); // DEBUG
+  //     validateField("phone", value);
+  //   }
+  // };
+  const handlePhoneChange = (e) => {
+    const rawValue = e.target.value;
+    const numericValue = rawValue.replace(/\D/g, ""); // Remove non-numeric characters
+
+    if (numericValue.length <= 10) {
+      setFormData((prev) => ({ ...prev, phone: numericValue }));
+      console.log("Phone Changed:", numericValue); // DEBUG
+      validateField("phone", numericValue);
+    }
   };
 
   const notifySuccess = (msg = "Registered successfully!") => {
@@ -176,7 +228,6 @@ const SignUp = ({ type }) => {
     } else {
       alert("Please fix the errors first.");
     }
-    
   };
 
   //    const notifySuccess = (msg = "Saved successfully!") => {
@@ -225,23 +276,22 @@ const SignUp = ({ type }) => {
                 <p className="text-red-500 text-sm">{errors.email}</p>
               )}
 
-              {/* <PhoneInput country={'ind'} value={formData.phone} onChange={handlePhoneChange}   className="w-full mb-2  border rounded" /> */}
-              <PhoneInput
-                country={"auto"}
-                enableSearch={true}
-                disableCountryCode={false}
-                enableAreaCodes={true}
-                enableAreaCodesOnLocalNumbers={true}
-                placeholder="Enter mobile number"
-                value={formData.phone}
-                onChange={handlePhoneChange}
-                inputStyle={{ width: "100%" }}
-                className="w-full mb-2 border rounded"
-              />
-
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone}</p>
-              )}
+              <div className="flex flex-col space-y-1 mb-2">
+                <div className="flex items-center border rounded-md px-3 py-2 focus-within:ring-2 focus-within:ring-black">
+                  <span className="mr-2 text-gray-600 font-medium">+91</span>
+                  <input
+                    type="text"
+                    maxLength={10}
+                    value={formData.phone}
+                    onChange={handlePhoneChange}
+                    className="w-full outline-none bg-transparent "
+                    placeholder="Enter 10-digit mobile number"
+                  />
+                </div>
+                {errors.phone && (
+                  <p className="text-sm text-red-500">{errors.phone}</p>
+                )}
+              </div>
 
               <input
                 type="password"
@@ -287,7 +337,7 @@ const SignUp = ({ type }) => {
                 type="submit"
                 className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
               >
-                {loading?'Signing in...':'Sign Up'}
+                {loading ? "Signing in..." : "Sign Up"}
               </button>
             </form>
           </div>
@@ -325,17 +375,9 @@ const SignUp = ({ type }) => {
               {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
             </nav>
             <div className="hidden md:flex gap-2">
-              {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-              {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                            Log In
-                          </button>
-                           <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                            Signup
-                          </button> */}
-
-              <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
+              {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
                 Post A Business
-              </button>
+              </button> */}
             </div>
             {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
             {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
@@ -372,23 +414,34 @@ const SignUp = ({ type }) => {
                 <p className="text-red-500 text-sm">{errors.email}</p>
               )}
 
-              {/* <PhoneInput country={'ind'} value={formData.phone} onChange={handlePhoneChange}   className="w-full mb-2  border rounded" /> */}
-              <PhoneInput
-                country={"auto"}
-                enableSearch={true}
-                disableCountryCode={false}
-                enableAreaCodes={true}
-                enableAreaCodesOnLocalNumbers={true}
-                placeholder="Enter mobile number"
-                value={formData.phone}
-                onChange={handlePhoneChange}
-                inputStyle={{ width: "100%" }}
-                className="w-full mb-2 border rounded"
-              />
+              {/* <PhoneInput
+  country={"in"}
+  disableDropdown={true}
+  countryCodeEditable={false}
+  disableCountryCode={false}
+  placeholder="Enter 10-digit mobile number"
+  value={formData.phone}
+  onChange={handlePhoneChange}
+  inputStyle={{ width: "100%" }}
+  className="w-full mb-2 border rounded"
+/> */}
 
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone}</p>
-              )}
+              <div className="flex flex-col space-y-1 mb-2">
+                <div className="flex items-center border rounded-md px-3 py-2 focus-within:ring-2 focus-within:ring-black">
+                  <span className="mr-2 text-gray-600 font-medium">+91</span>
+                  <input
+                    type="text"
+                    maxLength={10}
+                    value={formData.phone}
+                    onChange={handlePhoneChange}
+                    className="w-full outline-none bg-transparent"
+                    placeholder="Enter 10-digit mobile number"
+                  />
+                </div>
+                {errors.phone && (
+                  <p className="text-sm text-red-500">{errors.phone}</p>
+                )}
+              </div>
 
               <input
                 type="password"
@@ -434,7 +487,7 @@ const SignUp = ({ type }) => {
                 type="submit"
                 className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
               >
-               {loading?'Signing in...':'Sign Up'}
+                {loading ? "Signing in..." : "Sign Up"}
               </button>
             </form>
           </div>

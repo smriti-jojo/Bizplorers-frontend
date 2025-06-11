@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useRef } from "react";
 import { IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -23,7 +23,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { EditIcon } from "lucide-react";
-import {TextField} from "@mui/material";
+import { TextField } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -33,128 +33,139 @@ import { DialogTitle } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Footer from "../../component/Footer";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
-
-function Sidebar({ picklists, setPicklists, management, setManagement, selectedCategory, setSelectedCategory }) {
+function Sidebar({
+  picklists,
+  setPicklists,
+  management,
+  setManagement,
+  selectedCategory,
+  setSelectedCategory,
+}) {
   const [isOpen, setIsOpen] = useState(true);
   const [isMainMenuOpen, setIsMainMenuOpen] = useState(true);
-    const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(true);
-      const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const MainMenuOpen = () => setIsMainMenuOpen(!isMainMenuOpen);
-    const AdminMenuOpen = () => setIsAdminMenuOpen(!isAdminMenuOpen);
+  const AdminMenuOpen = () => setIsAdminMenuOpen(!isAdminMenuOpen);
 
-  const token=localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-const handleFile = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+  const handleFile = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-  const reader = new FileReader();
+    const reader = new FileReader();
 
-  reader.onload = async (evt) => {
-    const data = new Uint8Array(evt.target.result);
-    const workbook = XLSX.read(data, { type: "array" });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+    reader.onload = async (evt) => {
+      const data = new Uint8Array(evt.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-    const picklistsForBackend = {};
-    const newPicklistsForFrontend = {};
-    const managementLabels = [];
+      const picklistsForBackend = {};
+      const newPicklistsForFrontend = {};
+      const managementLabels = [];
 
-    if (jsonData.length > 0) {
-      Object.keys(jsonData[0]).forEach((field) => {
-        managementLabels.push(field);
+      if (jsonData.length > 0) {
+        Object.keys(jsonData[0]).forEach((field) => {
+          managementLabels.push(field);
 
-        const values = jsonData
-          .map((row) => row[field])
-          .filter((v) => v !== undefined && v !== null);
+          const values = jsonData
+            .map((row) => row[field])
+            .filter((v) => v !== undefined && v !== null);
 
-        const uniqueValues = Array.from(new Set(values));
+          const uniqueValues = Array.from(new Set(values));
 
-        // ✅ For frontend
-        newPicklistsForFrontend[field] = uniqueValues.map((val, idx) => ({
-          id: idx + 1,
-          name: val,
-          active: true,
-        }));
+          // ✅ For frontend
+          newPicklistsForFrontend[field] = uniqueValues.map((val, idx) => ({
+            id: idx + 1,
+            name: val,
+            active: true,
+          }));
 
-        // ✅ For backend
-        picklistsForBackend[field] = uniqueValues;
-      });
-    }
-
-    // ✅ Send to backend
-    try {
-      const response = await fetch(
-        "https://bizplorers-backend.onrender.com/api/picklist/multiple_add_value",
-        {
-          method: "POST",
-          body: JSON.stringify({ picklists: picklistsForBackend }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // make sure token is defined
-          },
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok) {
-        console.log("Picklists added successfully:", result);
-        alert("Picklists uploaded successfully!");
-      } else {
-        console.error("Error adding picklists:", result.message);
+          // ✅ For backend
+          picklistsForBackend[field] = uniqueValues;
+        });
       }
-    } catch (error) {
-      console.error("Request failed:", error);
-    }
 
-    // ✅ Set frontend state
-    setPicklists(newPicklistsForFrontend);
-    setManagement(managementLabels);
-    setSelectedCategory(managementLabels[0] || "");
+      // ✅ Send to backend
+      try {
+        const response = await fetch(
+          "https://bizplorers-backend.onrender.com/api/picklist/multiple_add_value",
+          {
+            method: "POST",
+            body: JSON.stringify({ picklists: picklistsForBackend }),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`, // make sure token is defined
+            },
+          }
+        );
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log("Picklists added successfully:", result);
+          alert("Picklists uploaded successfully!");
+        } else {
+          console.error("Error adding picklists:", result.message);
+        }
+      } catch (error) {
+        console.error("Request failed:", error);
+      }
+
+      // ✅ Set frontend state
+      setPicklists(newPicklistsForFrontend);
+      setManagement(managementLabels);
+      setSelectedCategory(managementLabels[0] || "");
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
-  reader.readAsArrayBuffer(file);
-};
-
-  const AdminData=[{
-    name:'User',
-    component:<AdminUserTable/>
-  },{
-    name:'Role',
-    component:<AdminUserTable/>
-  }]
+  const AdminData = [
+    {
+      name: "User",
+      component: <AdminUserTable />,
+    },
+    {
+      name: "Role",
+      component: <AdminUserTable />,
+    },
+  ];
 
   useEffect(() => {
-  const fetchPicklists = async () => {
-    try {
-      const response = await axios.get("https://bizplorers-backend.onrender.com/api/picklist/get_all", {
-        headers: { Authorization: `Bearer ${token}` } // if protected
-      });
+    const fetchPicklists = async () => {
+      try {
+        const response = await axios.get(
+          "https://bizplorers-backend.onrender.com/api/picklist/get_all",
+          {
+            headers: { Authorization: `Bearer ${token}` }, // if protected
+          }
+        );
 
-      const backendData = response.data.data;
+        const backendData = response.data.data;
 
-      setPicklists(backendData);
-      setManagement(Object.keys(backendData));
-      setSelectedCategory(Object.keys(backendData)[0] || "");
-    } catch (err) {
-      console.error("Failed to load picklists:", err);
-    }
-  };
+        setPicklists(backendData);
+        setManagement(Object.keys(backendData));
+        setSelectedCategory(Object.keys(backendData)[0] || "");
+      } catch (err) {
+        console.error("Failed to load picklists:", err);
+      }
+    };
 
-  fetchPicklists();
-  // setFetchData( fetchPicklists());
-}, []);
-
+    fetchPicklists();
+    // setFetchData( fetchPicklists());
+  }, []);
 
   return (
     <>
@@ -180,7 +191,7 @@ const handleFile = async (event) => {
         </div>
 
         <div className="flex items-center gap-3 p-3 border-2 border-slate-300 shadow-lg rounded-md w-[90%] mx-3 my-3">
-          <img  src={pic} alt="profile" className="rounded-full w-10" />
+          <img src={pic} alt="profile" className="rounded-full w-10" />
           <div className="flex flex-col">
             <h1 className="font-semibold">Hi! Admin</h1>
           </div>
@@ -199,50 +210,54 @@ const handleFile = async (event) => {
 
         {/**Admin */}
         <div className="px-[5%]">
-             <div className="flex justify-between">
-              <div className="font-semibold text-slate-400 text-lg">Admin</div>
-              <Button onClick={AdminMenuOpen} className="!text-slate-400">
-                {isAdminMenuOpen ? <ArrowDropUp /> : <ArrowDropDown />}
-              </Button>
-              </div>
-              {isAdminMenuOpen && (
-                <div className="mt-2 space-y-2 max-h-60 overflow-auto px-2">
-                {/* { ['User','Role'].map((item,index)=>( */}
-                 { ['User'].map((item,index)=>(
-                    <div 
-                    key={index}
-                      onClick={() => setSelectedCategory(item)}
-                      className={`cursor-pointer p-2 rounded ${
-                        selectedCategory=== item ? "bg-blue-200" : "hover:bg-gray-200"
-                      }`}>
-{item}
-                    </div>
-                ))}
-                       
-            
+          <div className="flex justify-between">
+            <div className="font-semibold text-slate-400 text-lg">Admin</div>
+            <Button onClick={AdminMenuOpen} className="!text-slate-400">
+              {isAdminMenuOpen ? <ArrowDropUp /> : <ArrowDropDown />}
+            </Button>
+          </div>
+          {isAdminMenuOpen && (
+            <div className="mt-2 space-y-2 max-h-60 overflow-auto px-2">
+              {/* { ['User','Role'].map((item,index)=>( */}
+              {["User"].map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => setSelectedCategory(item)}
+                  className={`cursor-pointer p-2 rounded ${
+                    selectedCategory === item
+                      ? "bg-blue-200"
+                      : "hover:bg-gray-200"
+                  }`}
+                >
+                  {item}
+                </div>
+              ))}
             </div>
-              )}
-        
-</div>
+          )}
+        </div>
         {/* Management Menu */}
         <div className="flex-grow px-4 overflow-hidden">
           <div className="mt-4">
             <div className="flex justify-between">
-              <div className="font-semibold text-slate-400 text-lg">Management</div>
+              <div className="font-semibold text-slate-400 text-lg">
+                Management
+              </div>
               <Button onClick={MainMenuOpen} className="!text-slate-400">
                 {isMainMenuOpen ? <ArrowDropUp /> : <ArrowDropDown />}
               </Button>
             </div>
 
-            {isMainMenuOpen && (
-              management.length > 0 ? (
+            {isMainMenuOpen &&
+              (management.length > 0 ? (
                 <div className="mt-2 space-y-2 max-h-60 overflow-auto">
                   {management.map((item, index) => (
                     <div
                       key={index}
                       onClick={() => setSelectedCategory(item)}
                       className={`cursor-pointer p-2 rounded ${
-                        selectedCategory === item ? "bg-blue-200" : "hover:bg-gray-200"
+                        selectedCategory === item
+                          ? "bg-blue-200"
+                          : "hover:bg-gray-200"
                       }`}
                     >
                       {item}
@@ -251,8 +266,7 @@ const handleFile = async (event) => {
                 </div>
               ) : (
                 <div>No labels found</div>
-              )
-            )}
+              ))}
           </div>
         </div>
       </div>
@@ -263,11 +277,11 @@ const handleFile = async (event) => {
 function MainContent({ picklists, setPicklists, selectedCategory }) {
   const [editingId, setEditingId] = React.useState(null);
   const [editName, setEditName] = React.useState("");
-  const [userToDelete,setUserToDelete]=useState("");
+  const [userToDelete, setUserToDelete] = useState("");
   const inputRef = React.useRef(null);
   const [open, setOpen] = React.useState(false);
-  const[newValue,setNewValue]=useState('');
-  const[ShowDeleteModal,setShowDeleteModal]=useState(false);
+  const [newValue, setNewValue] = useState("");
+  const [ShowDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -277,50 +291,48 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
     setOpen(false);
   };
 
- const token=localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
-  const handleDelete =async (category, id) => {
-    
-  try {
-    const response = await axios.delete(
-      `https://bizplorers-backend.onrender.com/api/picklist/delete/${id}`,
-     
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      }
-    );
-    // alert(response.data.message);
-    notifySuccess();
-    const updatedValue = response.data.data;
-    setPicklists((prev) => ({
-      ...prev,
-      [category]: prev[category].filter((item) => item.id !== id),
-    }));
-    setShowDeleteModal(false);
+  const handleDelete = async (category, id) => {
+    try {
+      const response = await axios.delete(
+        `https://bizplorers-backend.onrender.com/api/picklist/delete/${id}`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // alert(response.data.message);
+      notifySuccess();
+      const updatedValue = response.data.data;
+      setPicklists((prev) => ({
+        ...prev,
+        [category]: prev[category].filter((item) => item.id !== id),
+      }));
+      setShowDeleteModal(false);
     } catch (error) {
-    console.error("Deletion failed:", error);
-    alert("Failed to delete value. Please try again.");
-  }
-
+      console.error("Deletion failed:", error);
+      alert("Failed to delete value. Please try again.");
+    }
   };
 
-  const handleAdd = async(category,value) => {
-    console.log("category---",category);
-    console.log("value--",value);
+  const handleAdd = async (category, value) => {
+    console.log("category---", category);
+    console.log("value--", value);
     // const newItem = { id: Date.now(), name: "New Value", active: true };
     // setPicklists((prev) => ({
     //   ...prev,
     //   [category]: [...prev[category], newItem],
     // }));
 
-    const dataToAdd={
+    const dataToAdd = {
       category: category,
-  value: value
-    }
-     try {
+      value: value,
+    };
+    try {
       const response = await fetch(
         "https://bizplorers-backend.onrender.com/api/picklist/add_value",
         {
@@ -337,22 +349,20 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
 
       if (response.ok) {
         console.log("Picklists added successfully:", result);
-      notifyAdded();
-      // await setFetchData;
-      window.location.reload();
+        notifyAdded();
+        // await setFetchData;
+        window.location.reload();
 
-// setPicklists((prev) => ({
-//       ...prev,
-//       [category]: [...prev[category], newItem],
-//     }));
-      
+        // setPicklists((prev) => ({
+        //       ...prev,
+        //       [category]: [...prev[category], newItem],
+        //     }));
       } else {
         console.error("Error adding picklists:", result.message);
       }
     } catch (error) {
       console.error("Request failed:", error);
     }
-
   };
 
   const startEditing = (category, id, currentName) => {
@@ -360,88 +370,85 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
     setEditName(currentName);
   };
 
-   const handleToggle = async(category, id) => {
-    const token = localStorage.getItem('token');
-  
+  const handleToggle = async (category, id) => {
+    const token = localStorage.getItem("token");
 
-  try {
-    const response = await axios.patch(
-      `https://bizplorers-backend.onrender.com/api/picklist/toggle/${id}`,
-     {},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      }
-    );
+    try {
+      const response = await axios.patch(
+        `https://bizplorers-backend.onrender.com/api/picklist/toggle/${id}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    // alert(response.data.message);
-    // const updatedValue = response.data;
+      // alert(response.data.message);
+      // const updatedValue = response.data;
 
-    // setPicklists((prev) => ({
-    //   ...prev,
-    //   [category]: prev[category].map((item) =>
-    //     item.id === id ? { ...item, name: updatedValue.value } : item
-    //   ),
-    // }));
-    alert(response.data.message);
-    const updatedValue = response.data.data;
+      // setPicklists((prev) => ({
+      //   ...prev,
+      //   [category]: prev[category].map((item) =>
+      //     item.id === id ? { ...item, name: updatedValue.value } : item
+      //   ),
+      // }));
+      alert(response.data.message);
+      const updatedValue = response.data.data;
 
-    setPicklists((prev) => ({
-      ...prev,
-      [category]: prev[category].map((item) =>
-        item.id === id ? { ...item, active: updatedValue.is_active } : item
-      ),
-    }));
+      setPicklists((prev) => ({
+        ...prev,
+        [category]: prev[category].map((item) =>
+          item.id === id ? { ...item, active: updatedValue.is_active } : item
+        ),
+      }));
     } catch (error) {
-    console.error("Status Update failed:", error);
-    alert("Failed to update status. Please try again.");
-  }
-   
+      console.error("Status Update failed:", error);
+      alert("Failed to update status. Please try again.");
+    }
   };
 
+  const saveEdit = async (category, id) => {
+    if (editName.trim() === "") {
+      alert("Name cannot be empty");
+      return;
+    }
 
-const saveEdit = async (category, id) => {
-  if (editName.trim() === "") {
-    alert("Name cannot be empty");
-    return;
-  }
+    const token = localStorage.getItem("token");
+    const data = {
+      id: id,
+      new_value: editName,
+    };
 
-  const token = localStorage.getItem('token');
-  const data = {
-    id: id,
-    new_value: editName,
+    try {
+      const response = await axios.put(
+        "https://bizplorers-backend.onrender.com/api/picklist/update_value",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(response.data.message);
+      const updatedValue = response.data.value;
+
+      setPicklists((prev) => ({
+        ...prev,
+        [category]: prev[category].map((item) =>
+          item.id === id ? { ...item, name: updatedValue.value } : item
+        ),
+      }));
+
+      setEditingId(null);
+    } catch (error) {
+      console.error("Update failed:", error);
+      alert("Failed to update value. Please try again.");
+    }
   };
-
-  try {
-    const response = await axios.put(
-      "https://bizplorers-backend.onrender.com/api/picklist/update_value",
-      data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      }
-    );
-
-    alert(response.data.message);
-    const updatedValue = response.data.value;
-
-    setPicklists((prev) => ({
-      ...prev,
-      [category]: prev[category].map((item) =>
-        item.id === id ? { ...item, name: updatedValue.value } : item
-      ),
-    }));
-
-    setEditingId(null);
-  } catch (error) {
-    console.error("Update failed:", error);
-    alert("Failed to update value. Please try again.");
-  }
-};
 
   const cancelEdit = () => {
     setEditingId(null);
@@ -492,7 +499,6 @@ const saveEdit = async (category, id) => {
                       type="text"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                     
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
                           saveEdit(selectedCategory, item.id);
@@ -533,72 +539,86 @@ const saveEdit = async (category, id) => {
                     </>
                   ) : (
                     <>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() =>
-                          startEditing(selectedCategory, item.id, item.name)
-                        }
-                        className="text-blue-600 hover:underline"
-                      >
-                        <EditIcon/>
-                      </button>
-                      <button
-                        // onClick={() => handleDelete(selectedCategory, item.id)}
-                        onClick={()=>setShowDeleteModal(true)}
-                        className="text-red-600 hover:underline "
-                      >
-                        <DeleteIcon/>
-                      </button>
-                                <Dialog
-                        open={ShowDeleteModal}
-                        slots={{
-                          transition: Transition,
-                        }}
-                        keepMounted
-                        onClose={() => setShowDeleteModal(false)}
-                        aria-describedby="alert-dialog-slide-description"
-                        PaperProps={{
-                          elevation: 0, // 
-                          style: {
-                        width: "400px",
-                        padding: "20px",
-                        borderRadius: "12px",
-                        border: "2px solid grey",  // full border property
-                        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // light grey shadow
-                      },
-                        }}
-                        BackdropProps={{
-                          sx: {
-                            backgroundColor: "transparent",
-                          },
-                        }}
-                      >
-                        <DialogTitle>Are you sure you want to delete this user?</DialogTitle>
-                      
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-slide-description">
-                            This action cannot be undone.
-                          </DialogContentText>
-                        </DialogContent>
-                      
-                        <DialogActions style={{ justifyContent: "space-between", padding: "16px" }}>
-                          <Button onClick={()=>handleDelete(selectedCategory, item.id)} color="error" variant="contained">
-                            Yes, Delete
-                          </Button>
-                          <Button onClick={() => setShowDeleteModal(false)} variant="outlined">
-                            Cancel
-                          </Button>
-                        </DialogActions>
-                      
-                        {/* <DialogActions className="absolute top-0 right-2">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            startEditing(selectedCategory, item.id, item.name)
+                          }
+                          className="text-blue-600 hover:underline"
+                        >
+                          <EditIcon />
+                        </button>
+                        <button
+                          // onClick={() => handleDelete(selectedCategory, item.id)}
+                          onClick={() => setShowDeleteModal(true)}
+                          className="text-red-600 hover:underline "
+                        >
+                          <DeleteIcon />
+                        </button>
+                        <Dialog
+                          open={ShowDeleteModal}
+                          slots={{
+                            transition: Transition,
+                          }}
+                          keepMounted
+                          onClose={() => setShowDeleteModal(false)}
+                          aria-describedby="alert-dialog-slide-description"
+                          PaperProps={{
+                            elevation: 0, //
+                            style: {
+                              width: "400px",
+                              padding: "20px",
+                              borderRadius: "12px",
+                              border: "2px solid grey", // full border property
+                              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // light grey shadow
+                            },
+                          }}
+                          BackdropProps={{
+                            sx: {
+                              backgroundColor: "transparent",
+                            },
+                          }}
+                        >
+                          <DialogTitle>
+                            Are you sure you want to delete this user?
+                          </DialogTitle>
+
+                          <DialogContent>
+                            <DialogContentText id="alert-dialog-slide-description">
+                              This action cannot be undone.
+                            </DialogContentText>
+                          </DialogContent>
+
+                          <DialogActions
+                            style={{
+                              justifyContent: "space-between",
+                              padding: "16px",
+                            }}
+                          >
+                            <Button
+                              onClick={() =>
+                                handleDelete(selectedCategory, item.id)
+                              }
+                              color="error"
+                              variant="contained"
+                            >
+                              Yes, Delete
+                            </Button>
+                            <Button
+                              onClick={() => setShowDeleteModal(false)}
+                              variant="outlined"
+                            >
+                              Cancel
+                            </Button>
+                          </DialogActions>
+
+                          {/* <DialogActions className="absolute top-0 right-2">
                           <Button onClick={handleDialogClose}>
                             <X size={24} color="black" />
                           </Button>
                         </DialogActions> */}
-                      </Dialog>
-                    </div>
-                    
-                      
+                        </Dialog>
+                      </div>
                     </>
                   )}
                 </td>
@@ -620,7 +640,7 @@ const saveEdit = async (category, id) => {
         onClose={handleClose}
         slotProps={{
           paper: {
-            component: 'form',
+            component: "form",
             onSubmit: (event) => {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
@@ -628,7 +648,7 @@ const saveEdit = async (category, id) => {
               const value = formJson.value;
               console.log(value);
               // setNewValue(value);
-              handleAdd(selectedCategory,value)
+              handleAdd(selectedCategory, value);
               handleClose();
             },
           },
@@ -636,7 +656,6 @@ const saveEdit = async (category, id) => {
       >
         <DialogTitle>Add Value</DialogTitle>
         <DialogContent>
-         
           <TextField
             autoFocus
             required
@@ -650,47 +669,49 @@ const saveEdit = async (category, id) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="error">Cancel</Button>
-          <Button type="submit" color="success" variant="contained">Add</Button>
+          <Button onClick={handleClose} color="error">
+            Cancel
+          </Button>
+          <Button type="submit" color="success" variant="contained">
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
-   
-
     </main>
   );
 }
 
- const notifySuccess = (msg = "Item deleted successfully!") => {
-     toast.success(msg, {
-       position: "top-right",
-       autoClose: 3000,
-       hideProgressBar: false,
-       pauseOnHover: true,
-       draggable: true,
-       theme: "colored",
-     });
-   };
+const notifySuccess = (msg = "Item deleted successfully!") => {
+  toast.success(msg, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "colored",
+  });
+};
 
-    const notifyAdded = (msg = "Item Added successfully!") => {
-     toast.success(msg, {
-       position: "top-right",
-       autoClose: 3000,
-       hideProgressBar: false,
-       pauseOnHover: true,
-       draggable: true,
-       theme: "colored",
-     });
-   };
+const notifyAdded = (msg = "Item Added successfully!") => {
+  toast.success(msg, {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "colored",
+  });
+};
 export default function AdminWithSidebar() {
   const [picklists, setPicklists] = useState({});
   const [management, setManagement] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-   const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
-      localStorage.removeItem('token');
-       localStorage.removeItem('user');
-       navigate('/');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
   };
   // const handleSignup = () => {
   //   navigate('/signUp');
@@ -698,38 +719,46 @@ export default function AdminWithSidebar() {
 
   return (
     <>
-           <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-                    {/* <img alt="logo" width={50} className="object-contain" /> */}
-                     <Link to="/">
-                      <img alt="logo" width={50} className="object-contain cursor-pointer" />
-                    </Link>
-                    
-                     <div className="hidden md:flex gap-2">
-                        {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-                        <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogOut}>
-                          Log Out
-                        </button>
-                    </div>
-                  </header>
-   
-    <div className="flex h-screen">
-      <Sidebar
-        picklists={picklists}
-        setPicklists={setPicklists}
-        management={management}
-        setManagement={setManagement}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
-      <MainContent
-        picklists={picklists}
-        setPicklists={setPicklists}
-        selectedCategory={selectedCategory}
-        // setFetchData={setFetchData}
-        // fetchPicklists={fetchPicklists}
-        // setShowDeleteModal={setShowDeleteModal}
-      />
-    </div>
-     </>
+      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+        {/* <img alt="logo" width={50} className="object-contain" /> */}
+        <Link to="/">
+          <img
+            alt="logo"
+            width={50}
+            className="object-contain cursor-pointer"
+          />
+        </Link>
+
+        <div className="hidden md:flex gap-2">
+          {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
+          <button
+            className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
+            onClick={handleLogOut}
+          >
+            Log Out
+          </button>
+        </div>
+      </header>
+
+      <div className="flex h-screen">
+        <Sidebar
+          picklists={picklists}
+          setPicklists={setPicklists}
+          management={management}
+          setManagement={setManagement}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+        <MainContent
+          picklists={picklists}
+          setPicklists={setPicklists}
+          selectedCategory={selectedCategory}
+          // setFetchData={setFetchData}
+          // fetchPicklists={fetchPicklists}
+          // setShowDeleteModal={setShowDeleteModal}
+        />
+      </div>
+      <Footer />
+    </>
   );
 }

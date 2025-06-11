@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 import { Menu, X } from "lucide-react";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Link } from 'react-router-dom';
+import Footer from '../../component/Footer';
 
 // Reusable row component for input or display
 const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
@@ -194,8 +195,11 @@ const handleLogout = () => {
                          </header>
              
 
-      <div className='flex justify-center'>
-        <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%]'>
+      {/* <div className='flex justify-center pb-10'>
+        <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%]'> */}
+        {/**Added Margin */}
+         <div className='flex justify-center items-center'>
+  <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-6 w-full m-4  max-w-screen-md'>
           <div className='flex justify-between w-full mt-[2%]'>
             <div className='text-2xl font-bold'>BUYER DETAILS</div>
             <Button variant='contained' onClick={handleEditToggle}>
@@ -265,6 +269,7 @@ const handleLogout = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

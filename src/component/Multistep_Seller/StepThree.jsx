@@ -17,7 +17,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
   
   <div className="space-y-4">
       <h1 className="text-2xl font-semibold ">TRANSACTION DETAILS</h1>
-    <div className="flex gap-[5%] w-full">
+    <div className="flex justify-between w-full">
       
     <div className="w-[550px]">
         <h1>Reason For Sale</h1>
@@ -35,7 +35,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
       /> */}
 
        
-         <FormControl className={`${type==='modal'?'w-[350px]':'w-[600px]'}`} error={!!errors.salereason} size='small'>
+         <FormControl className={`${type==='modal'?'w-[350px]':'w-[500px]'}`} error={!!errors.salereason} size='small'>
          <InputLabel>Reason for Sale</InputLabel>
           <Select
             labelId="salereason"
@@ -66,7 +66,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
       value={formData.askingPrice}
       onChange={handleChange}
       // className="w-[550px] px-3 py-2 border rounded"
-      className={`w-[550px] px-3 py-2 border rounded ${
+      className={`w-[450px] px-3 py-2 border rounded ${
           errors.askingPrice ? 'border-red-500 ' : 'border-gray-300'
         }`}
     />

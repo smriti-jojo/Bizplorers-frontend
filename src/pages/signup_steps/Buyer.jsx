@@ -8,6 +8,7 @@ import SignUp from "../Signup";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import OTPVerification from "../OTPVerification";
+import Footer from "../../component/Footer";
 
 const RegisterBuyer = ({ type }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -297,9 +298,9 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
                                                Signup
                                              </button> */}
 
-            <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
+            {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
               Post A Business
-            </button>
+            </button> */}
           </div>
           {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
           {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
@@ -308,7 +309,7 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
 
       <div
         className={`flex justify-center max-h-screen ${
-          type === "modal" ? "pt-0" : "pt-[7%]"
+          type === "modal" ? "pt-0" : "pt-[7%] pb-[5%]"
         }`}
       >
         <div
@@ -431,6 +432,7 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
           )}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
