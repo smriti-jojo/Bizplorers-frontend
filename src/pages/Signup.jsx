@@ -10,6 +10,7 @@ import "react-phone-input-2/lib/style.css";
 import { toast } from "react-toastify";
 import instance from "../instance";
 import Footer from "../component/Footer";
+import Header from "../component/Header";
 
 const SignUp = ({ type }) => {
   const [formData, setFormData] = useState({
@@ -344,8 +345,8 @@ const SignUp = ({ type }) => {
         </>
       ) : (
         <>
-          <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-            {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+          {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+           
             <Link to="/">
               <img
                 alt="logo"
@@ -372,16 +373,11 @@ const SignUp = ({ type }) => {
               <Link to="/signUp" className="text-xl hover:text-blue-600">
                 Register
               </Link>
-              {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
+              
             </nav>
-            <div className="hidden md:flex gap-2">
-              {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
-                Post A Business
-              </button> */}
-            </div>
-            {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-            {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-          </header>
+           
+          </header> */}
+          <Header/>
 
           <div className="flex justify-center items-center pt-[7%] pb-[3%] bg-gray-100 px-4">
             <form

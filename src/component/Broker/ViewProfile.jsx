@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Header from '../Header';
 
 const ViewProfile= () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,28 +108,13 @@ const ViewProfile= () => {
 
   return (
     <div>
-      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
-        <img alt='logo' width={50} className="object-contain" />
-        <div className="hidden md:flex gap-2">
-          <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Login</button>
-          <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Sign Up</button>
-        </div>
-        <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        {menuOpen && (
-          <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
-            <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Login</button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Sign Up</button>
-          </div>
-        )}
-      </header> */}
+     
 
       {/* <div className='flex justify-center'>
         <div className='flex flex-col border-2 border-slate-500 rounded-md px-[5%] w-[80%] '> */}
         {/**Added Margin */}
-         <div className='flex justify-center items-center'>
-  <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-6 w-full m-4  max-w-screen-md'>
+         <div className='flex justify-center'>
+  <div className='flex flex-col border-2 border-slate-500 rounded-md  px-6 w-full m-4  max-w-screen-md'>
           <div className='flex justify-between w-full mt-[1%]'>
             <div className='text-2xl font-bold'>BROKER DETAILS</div>
             <div>

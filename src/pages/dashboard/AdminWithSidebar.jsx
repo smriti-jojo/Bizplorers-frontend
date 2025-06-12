@@ -34,6 +34,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../component/Footer";
+import Header from "../../component/Header";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -719,8 +720,8 @@ export default function AdminWithSidebar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-        {/* <img alt="logo" width={50} className="object-contain" /> */}
+      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+   
         <Link to="/">
           <img
             alt="logo"
@@ -730,7 +731,7 @@ export default function AdminWithSidebar() {
         </Link>
 
         <div className="hidden md:flex gap-2">
-          {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
+         
           <button
             className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
             onClick={handleLogOut}
@@ -738,7 +739,8 @@ export default function AdminWithSidebar() {
             Log Out
           </button>
         </div>
-      </header>
+      </header> */}
+      <Header/>
 
       <div className="flex h-screen">
         <Sidebar

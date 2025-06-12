@@ -7,14 +7,15 @@ import team from "../assests/services/team.jpg";
 import support from "../assests/services/support.jpg";
 import dilligence from "../assests/services/dilligence.jpg";
 import legal from "../assests/services/legal.jpg";
+import Header from "../component/Header";
 
 const OurServices = () => {
   const navigate = useNavigate();
   return (
     <div>
       <div className="min-h-screen bg-blue-50 text-gray-900 font-sans">
-        <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-          {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+        {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+         
           <Link to="/">
             <img
               alt="logo"
@@ -41,31 +42,20 @@ const OurServices = () => {
             <Link to="/signUp" className="text-xl hover:text-blue-600">
               Register
             </Link>
-            {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
-          </nav>
+                   </nav>
           <div className="hidden md:flex gap-2">
-            {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-            {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                      Log In
-                    </button>
-                     <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                      Signup
-                    </button> */}
-
-            <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
-              Post A Business
-            </button>
+          
           </div>
-          {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-          {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-        </header>
+          
+        </header> */}
+        <Header/>
         <h1 className="pt-[5rem] font-bold text-4xl flex justify-center">
           Our Services
         </h1>
         <section className="flex flex-col-reverse md:flex-row justify-between items-center px-10 py-20 space-y-10 md:space-y-0 md:space-x-10">
           {/* Text Content */}
           <div className="flex-1">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+            <h2 className="text-xl md:text-3xl font-bold mb-4 ">
               Pre-Sales Advisory
             </h2>
             <h3 className="text-xl font-semibold pb-2">
@@ -107,7 +97,7 @@ const OurServices = () => {
 
           {/* Text Content */}
           <div className="flex-1">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+            <h2 className="text-xl md:text-3xl font-bold mb-4 ">
               Due Diligence Support
             </h2>
             <h3 className="text-xl font-semibold pb-2">
@@ -131,7 +121,7 @@ const OurServices = () => {
         <section className="flex flex-col-reverse md:flex-row justify-between items-center px-10 py-20 space-y-10 md:space-y-0 md:space-x-10">
           {/* Text Content */}
           <div className="flex-1">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+            <h2 className="text-xl md:text-3xl font-bold mb-4">
               Commercial Support
             </h2>
             {/* <h3 className='text-xl font-semibold pb-2'>Sale Readiness, Pitch Creation, Inquiry Handling, Buyer Vetting, Offer Evaluation</h3> */}
@@ -170,7 +160,7 @@ const OurServices = () => {
 
           {/* Text Content */}
           <div className="flex-1">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+            <h2 className="text-xl md:text-3xl font-bold mb-4">
               Legal and Secretarial
             </h2>
             <h3 className="text-xl font-semibold pb-2">

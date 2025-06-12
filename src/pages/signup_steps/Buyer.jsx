@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import OTPVerification from "../OTPVerification";
 import Footer from "../../component/Footer";
+import Header from "../../component/Header";
 
 const RegisterBuyer = ({ type }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -233,78 +234,41 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
   return (
     <div className="bg-gray-100 min-h-screen">
       {type !== "modal" && (
-        // <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
-        //   <img alt='logo' width={50} className="object-contain" />
-        //   <nav className="hidden md:flex gap-8 text-sm font-medium">
-        //     <Link to="/homepage" className="hover:text-blue-600 text-xl">About Us</Link>
-        //     <Link to="/dashboard" className="hover:text-blue-600 text-xl">Services</Link>
-        //     <Link to="/ask-ai" className="hover:text-blue-600 text-xl">Seller</Link>
-        //     <Link to="/homepage" className="hover:text-blue-600 text-xl">Buyer</Link>
-        //     <Link to="/homepage" className="hover:text-blue-600 text-xl">How It Work?</Link>
+     
+        // <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+         
+        //   <Link to="/">
+        //     <img
+        //       alt="logo"
+        //       width={50}
+        //       className="object-contain cursor-pointer"
+        //     />
+        //   </Link>
+        //   <nav className="hidden md:flex gap-8">
+        //     <Link to="/aboutUs" className="text-xl hover:text-blue-600">
+        //       About Us
+        //     </Link>
+        //     <Link to="/services" className="text-xl hover:text-blue-600">
+        //       Services
+        //     </Link>
+        //     <Link to="/seller" className="text-xl hover:text-blue-600">
+        //       Seller
+        //     </Link>
+        //     <Link to="/buyer" className="text-xl hover:text-blue-600">
+        //       Buyer
+        //     </Link>
+            
+        //     <Link to="/signUp" className="text-xl hover:text-blue-600">
+        //       Register
+        //     </Link>
+          
         //   </nav>
         //   <div className="hidden md:flex gap-2">
-        //     <button className="text-blue-600 hover:text-slate-400 text-sm md:text-lg font-semibold">Log In</button>
-        //     <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
+          
         //   </div>
-        //   <button className="md:hidden" onClick={() => setMenuOpen((prev) => !prev)}>
-        //     {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        //   </button>
-        //   {menuOpen && (
-        //     <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
-        //       <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Log In</button>
-        //       <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
-        //     </div>
-        //   )}
+         
         // </header>
-        <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-          {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
-          <Link to="/">
-            <img
-              alt="logo"
-              width={50}
-              className="object-contain cursor-pointer"
-            />
-          </Link>
-          <nav className="hidden md:flex gap-8">
-            <Link to="/aboutUs" className="text-xl hover:text-blue-600">
-              About Us
-            </Link>
-            <Link to="/services" className="text-xl hover:text-blue-600">
-              Services
-            </Link>
-            <Link to="/seller" className="text-xl hover:text-blue-600">
-              Seller
-            </Link>
-            <Link to="/buyer" className="text-xl hover:text-blue-600">
-              Buyer
-            </Link>
-            {/* <Link to="/login" className="text-xl hover:text-blue-600">
-                                       Log In
-                                     </Link> */}
-            <Link to="/signUp" className="text-xl hover:text-blue-600">
-              Register
-            </Link>
-            {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
-          </nav>
-          <div className="hidden md:flex gap-2">
-            {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-            {/* <button
-              className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
-              
-            >
-              Log Out
-            </button> */}
-            {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                                               Signup
-                                             </button> */}
-
-            {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
-              Post A Business
-            </button> */}
-          </div>
-          {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-          {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-        </header>
+        <Header/>
       )}
 
       <div

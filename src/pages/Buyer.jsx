@@ -659,6 +659,7 @@ import avatar from '../assests/pic.jpg';
 // import BuyerCard from "../component/BuyerCard";
 import { Link } from "react-router-dom";
 import Footer from "../component/Footer";
+import Header from "../component/Header";
 
 
 // const BuyerCard = ({ buyer }) => {
@@ -1008,8 +1009,8 @@ const matchesMaxTicket = filters.maxTicketSize ? Number(buyer.ticketMax.replace(
 
   return (
     <div>
-       <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-                {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+       {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+               
                 <Link to="/">
                   <img
                     alt="logo"
@@ -1036,24 +1037,9 @@ const matchesMaxTicket = filters.maxTicketSize ? Number(buyer.ticketMax.replace(
                   <Link to="/signUp" className="text-xl hover:text-blue-600">
                     Register
                   </Link>
-                  {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
-                </nav>
-                <div className="hidden md:flex gap-2">
-                  {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-                  {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                            Log In
-                          </button>
-                           <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                            Signup
-                          </button> */}
-      
-                  <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
-                    Post A Business
-                  </button>
-                </div>
-                {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-                {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-              </header>
+                </nav>    
+              </header> */}
+              <Header/>
     
     <div className="flex flex-col md:flex-row p-6 bg-gray-50 min-h-screen gap-6 pt-[5rem]">
         

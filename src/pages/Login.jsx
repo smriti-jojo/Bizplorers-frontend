@@ -7,6 +7,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Footer from "../component/Footer";
+import Header from "../component/Header";
 
 
 const Login = () => {
@@ -147,34 +148,9 @@ const handleSignup=()=>{
 }
   return (
     <div className="min-h-screen bg-slate-100 ">
-        {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-[5%] py-3 bg-white shadow-md z-10">
-        <Link to="/">
-        <img alt='logo' width={50} className="object-contain" />
-        </Link>
-        <nav className="hidden md:flex gap-8 text-sm font-medium">
-          <Link to="/aboutUs" className="hover:text-blue-600 text-xl">About Us</Link>
-          <Link to="/services" className="hover:text-blue-600 text-xl">Services</Link>
-          <Link to="/seller" className="hover:text-blue-600 text-xl">Seller</Link>
-          <Link to="/buyer" className="hover:text-blue-600 text-xl">Buyer</Link>
-      
-        </nav>
-        <div className="hidden md:flex gap-2">
-       <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleSignup}>Sign Up</button>
-          <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">Post A Business</button>
-        </div>
-        <button className="md:hidden" onClick={() => setMenuOpen(prev => !prev)}>
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        {menuOpen && (
-          <div className="absolute top-full right-4 mt-2 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2 md:hidden z-20">
-            <button className="text-blue-600 hover:text-slate-400 text-sm font-semibold">Sign Up</button>
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-2xl text-sm hover:bg-blue-700">Post A Business</button>
-          </div>
-        )}
-      </header> */}
-          <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-                {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
-                <Link to="/">
+     
+          {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+               <Link to="/">
                   <img
                     alt="logo"
                     width={50}
@@ -200,24 +176,11 @@ const handleSignup=()=>{
                   <Link to="/signUp" className="text-xl hover:text-blue-600">
                     Register
                   </Link>
-                  {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
+                
                 </nav>
-                <div className="hidden md:flex gap-2">
-                  {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-                  {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                            Log In
-                          </button>
-                           <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                            Signup
-                          </button> */}
-      
-                  <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
-                    Post A Business
-                  </button>
-                </div>
-                {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-                {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-              </header>
+            
+              </header> */}
+              <Header/>
 
     <div className="flex  justify-center items-center pt-[10%] pb-[5%] ">
     <div className=" bg-gray-100 w-[400px]">

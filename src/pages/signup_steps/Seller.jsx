@@ -10,6 +10,7 @@ import SignUp from "../Signup";
 import OTPVerification from "../OTPVerification";
 import { Link } from "react-router-dom";
 import Footer from "../../component/Footer";
+import Header from "../../component/Header";
 
 const RegisterSeller = ({ type }) => {
   const [step, setStep] = useState(1);
@@ -879,8 +880,8 @@ const RegisterSeller = ({ type }) => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-        {/* <img alt="logo" width={50} className="object-contain"  onClick={() => navigate('/')}/> */}
+      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+       
         <Link to="/">
           <img
             alt="logo"
@@ -901,33 +902,16 @@ const RegisterSeller = ({ type }) => {
           <Link to="/buyer" className="text-xl hover:text-blue-600">
             Buyer
           </Link>
-          {/* <Link to="/login" className="text-xl hover:text-blue-600">
-                                   Log In
-                                 </Link> */}
+         
           <Link to="/signUp" className="text-xl hover:text-blue-600">
             Register
           </Link>
-          {/* <Link to="/homepage" className="text-xl hover:text-blue-600">How It Works?</Link> */}
-        </nav>
+                 </nav>
         <div className="hidden md:flex gap-2">
-          {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" onClick={handleLogin}> */}
-          {/* <button
-            className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
-            onCli
-          >
-            Log Out
-          </button> */}
-          {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700" >
-                                           Signup
-                                         </button> */}
-
-          {/* <button className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700">
-            Post A Business
-          </button> */}
         </div>
-        {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-        {/* <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={24} /> : <Menu size={24} />}</button> */}
-      </header>
+        
+      </header> */}
+      <Header/>
      <div
         className={`flex justify-center min-h-screen bg-slate-100 ${
           type === "modal" ? "pt-[3%]" : "pt-[7%] pb-[5%]"
