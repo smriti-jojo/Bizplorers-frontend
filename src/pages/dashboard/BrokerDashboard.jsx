@@ -127,36 +127,7 @@ const BrokerDashboard = () => {
                 <Buyer type={"modal"} />
               </DialogContentText>
             </DialogContent>
-            {/* <DialogActions>
-           
-            <div className="flex gap-5 mt-3">
-              {step > 1 && (
-                <button
-                  onClick={prevStep}
-                  className="px-4 py-2 bg-gray-300 rounded"
-                >
-                  Back
-                </button>
-              )}
-              {step < 3 && (
-                <button
-                  onClick={handleNext}
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
-                >
-                  Next
-                </button>
-              )}
-              {step == 3 && (
-                <button
-            
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
-                >
-                  Submit
-                </button>
-              )}
-            </div>
-          
-          </DialogActions> */}
+        
             <DialogActions className="absolute top-0 right-2 z-10">
               <Button onClick={handleDialogClose}>
                 <X size={40} color="black" />
@@ -256,36 +227,7 @@ useEffect(()=>{
                 <Seller type={"modal"} />
               </DialogContentText>
             </DialogContent>
-            {/* <DialogActions>
            
-            <div className="flex gap-5 mt-3">
-              {step > 1 && (
-                <button
-                  onClick={prevStep}
-                  className="px-4 py-2 bg-gray-300 rounded"
-                >
-                  Back
-                </button>
-              )}
-              {step < 3 && (
-                <button
-                  onClick={handleNext}
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
-                >
-                  Next
-                </button>
-              )}
-              {step == 3 && (
-                <button
-            
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
-                >
-                  Submit
-                </button>
-              )}
-            </div>
-          
-          </DialogActions> */}
             <DialogActions className="absolute top-0 right-2">
               <Button onClick={handleDialogClose}>
                 <X size={40} color="black" />

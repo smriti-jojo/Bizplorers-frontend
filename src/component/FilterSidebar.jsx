@@ -1,94 +1,4 @@
-// import React from "react";
 
-// const FilterSidebar = ({ onFilterChange }) => {
-//   return (
-//     <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-[280px]">
-//       <h2 className="font-semibold text-lg mb-4">Business</h2>
-//       <div className="space-y-4 text-sm">
-//         <select className="w-full border rounded p-2" onChange={onFilterChange}>
-//           <option>Select Category of business</option>
-//         </select>
-//         <select className="w-full border rounded p-2" onChange={onFilterChange}>
-//           <option>Select Preferred Arrangements</option>
-//         </select>
-//         <div className="flex gap-2">
-//           <input className="w-1/2 border rounded p-2" placeholder="Year" />
-//           <input className="w-1/2 border rounded p-2" placeholder="Month" />
-//         </div>
-//         <div>
-//           <input className="w-full border rounded p-2" placeholder="Min Revenue (₹)" />
-//           <input className="w-full border rounded p-2 mt-1" placeholder="Max Revenue (₹)" />
-//         </div>
-//         <div>
-//           <input className="w-full border rounded p-2" placeholder="Min Profit (₹)" />
-//           <input className="w-full border rounded p-2 mt-1" placeholder="Max Profit (₹)" />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default FilterSidebar;
-
-// import React from "react";
-
-// const FilterSidebar = ({ filters, setFilters }) => {
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFilters((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
-
-//   return (
-//     <div className="bg-white p-4 rounded-lg shadow-md w-full max-w-[280px]">
-//       <h2 className="font-semibold text-lg mb-4">Business</h2>
-//       <div className="space-y-4 text-sm">
-//         <select
-//           name="category"
-//           className="w-full border rounded p-2"
-//           value={filters.category}
-//           onChange={handleChange}
-//         >
-//           <option value="">Select Category</option>
-//           <option value="tech">Tech</option>
-//           <option value="education">Education</option>
-//         </select>
-
-//         <select
-//           name="arrangement"
-//           className="w-full border rounded p-2"
-//           value={filters.arrangement}
-//           onChange={handleChange}
-//         >
-//           <option value="">Preferred Arrangement</option>
-//           <option value="full">Full Buyout</option>
-//           <option value="partial">Partial Buyout</option>
-//         </select>
-
-//         <input
-//           type="number"
-//           name="minRevenue"
-//           placeholder="Min Revenue (₹)"
-//           value={filters.minRevenue}
-//           onChange={handleChange}
-//           className="w-full border rounded p-2"
-//         />
-//         <input
-//           type="number"
-//           name="maxRevenue"
-//           placeholder="Max Revenue (₹)"
-//           value={filters.maxRevenue}
-//           onChange={handleChange}
-//           className="w-full border rounded p-2"
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default FilterSidebar;
 import React, { useState } from "react";
 import { useEffect } from "react";
 
@@ -104,12 +14,7 @@ const SellerFilterSidebar = ({ filters, setFilters, onReset }) => {
     }));
   };
 
-  // const SavedData=JSON.parse(localStorage.getItem("picklists"));
-  // console.log("localstorage--data",SavedData);
-  // setpicklistData([SavedData.data]);
-//   setTimeout(()=>{
-// console.log("picklistsDattttaaaa--",picklistData);
-//   },1000)
+  
 useEffect(() => {
     const SavedData = JSON.parse(localStorage.getItem("picklists"));
     console.log("localstorage--data", SavedData);
@@ -135,53 +40,38 @@ useEffect(() => {
       {showFilters && (
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-4">Business Filters</h2>
-          {/* {picklistData.map((item,index)=>(
-            <div key={index}>
- <label className="block text-sm font-medium mb-1">Select Category of Business</label>
-          <select name="category" value={filters.item.BusinessCategoriesInterest} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
-            <option value="">Select</option>
-            {item.BusinessCategoriesInterest((data,index)=>(
-              <option value={data}>{data}</option>
-            ))}
-         
-          </select>
-          </div>
-          ))} */}
-     {/* {Object.entries(picklistData).map(([categoryKey, options], index) => (
-  <div key={index}>
-    <label className="block text-sm font-medium mb-1">
-      Select {categoryKey.replace(/([A-Z])/g, ' $1').trim()}
-    </label>
-    <select
-      name={categoryKey}
-      value={filters[categoryKey] || ""}
-      onChange={handleChange}
-      className="w-full p-2 mb-3 border rounded"
-    >
-      <option value="">Select</option>
-      {options.map((option) => (
-        <option key={option.id} value={option.name}>
-          {option.name}
-        </option>
-      ))}
-    </select>
-  </div>
-))} */}
-
-          {/* Category */}
+    
           <label className="block text-sm font-medium mb-1">Select Category of Business</label>
-          <select name="category" value={filters.category} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
-            <option value="">Select</option>
-            <option value="tech">Tech</option>
-            <option value="education">Education</option>
-          </select>
+<select name="category" value={filters.category} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
+  <option value="">Select</option>
+  {[
+    "E-commerce",
+    "Offline Retail",
+    "Fintech",
+    "Edtech",
+    "Saas",
+    "Education & training",
+    "Restaurant/café",
+    "Mobile App",
+  ].map((item, index) => (
+    <option key={index} value={item}>{item}</option>
+  ))}
+ 
+</select>
+
 
           {/* Preferred Management */}
           <label className="block text-sm font-medium mb-1">Preferred Management</label>
           <select name="preferredManagement" value={filters.preferredManagement} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
             <option value="">Select</option>
-            <option value="active">Active</option>
-            <option value="passive">Passive</option>
+            {/* <option value="active">Active</option>
+            <option value="passive">Passive</option> */}
+            {[
+    "Cash", "Stock", "Royalty","Acquihire"
+  ].map((item, index) => (
+    <option key={index} value={item}>{item}</option>
+  ))}
+ 
           </select>
 
           {/* Period in Business */}
@@ -213,12 +103,12 @@ useEffect(() => {
           </div>
 
           {/* Status */}
-          <label className="block text-sm font-medium mb-1">Current Status</label>
+          {/* <label className="block text-sm font-medium mb-1">Current Status</label>
           <select name="status" value={filters.status} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
             <option value="">Select</option>
             <option value="operational">Operational</option>
             <option value="paused">Paused</option>
-          </select>
+          </select> */}
 
           {/* Country */}
           <label className="block text-sm font-medium mb-1">Select Country</label>
@@ -230,11 +120,15 @@ useEffect(() => {
 
           {/* Entity Structure */}
           <label className="block text-sm font-medium mb-1">Entity Structure</label>
+          {/**'partnership, LLP,Private LTd, Public Ltd */}
+         
           <select name="entityStructure" value={filters.entityStructure} onChange={handleChange} className="w-full p-2 mb-4 border rounded">
             <option value="">Select</option>
-            <option value="llp">LLP</option>
-            <option value="private">Private Ltd</option>
-            <option value="proprietorship">Proprietorship</option>
+       {["PartnerShip", "LLP", "Private Ltd", "Public Ltd"]
+  .map((item, index) => (
+    <option key={index} value={item}>{item}</option>
+  ))}
+           
           </select>
 
           {/* Buttons */}

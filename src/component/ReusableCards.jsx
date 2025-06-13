@@ -8,11 +8,11 @@ import LocationPinIcon from '@mui/icons-material/LocationPin';
 import InfoIcon from '@mui/icons-material/Info';
 import { Button } from '@mui/material';
 import place from '../assests/place.jpg';
-const ReusableCards = ({description_business,company_name,city,askingPrice,EBITDA}) => {
+const ReusableCards = ({description_business,company_name,city,askingPrice,EBITDA,type}) => {
   const token=localStorage.getItem('token');
   return (
-    <div className='relative'>
-      <div className='w-[350px] border-2 border-slate-300 rounded-md p-4 '>
+    <div className='relative bg-slate-100'>
+      <div className='w-[350px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400'>
         <div><CircleIcon fontSize='5px' className='!text-green-600 mr-2'/>Newly Established Restaurant for Sale</div>
         <h1 className='font-semibold text-lg py-1'>For Sale:<span className={token?'':'blur-sm'}>{company_name?company_name:'Profitable Business '}</span> </h1>
      <div className='flex gap-3 py-1'>
@@ -56,10 +56,15 @@ const ReusableCards = ({description_business,company_name,city,askingPrice,EBITD
       </div>
      </div>
       </div>
+      {type==='home'?(
+         <span class=" absolute top-5 right-10 z-10 inline-block bg-green-400 rotate-45 text-white text-xs font-semibold px-2.5 py-0.5  shadow">
+  Premium
+</span>):(
+      
       <span class=" absolute top-5 -right-2 z-10 inline-block bg-green-400 rotate-45 text-white text-xs font-semibold px-2.5 py-0.5  shadow">
   Premium
-</span>
-
+</span>)
+      }
     </div>
   )
 }

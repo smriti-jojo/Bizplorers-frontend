@@ -10,6 +10,7 @@ import { Menu, X } from "lucide-react";
 import OTPVerification from "../OTPVerification";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
+import { useLayoutEffect } from "react";
 
 const RegisterBuyer = ({ type }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -92,8 +93,9 @@ const RegisterBuyer = ({ type }) => {
         // if (!formData.revenueSizeMax.trim())
         //   newErrors.revenueSizeMax = "Maximum Revenue is required";
         if (formData.revenueSizeMin === "") formData.revenueSizeMin = null;
-if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
-if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
+        if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
+        if (formData.openToPreBreakeven === "")
+          formData.openToPreBreakeven = null;
       }
 
       if (step === 5) {
@@ -143,8 +145,9 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
         // if (openToPreRevenue === "No" && !formData.revenueSizeMax.trim())
         //   newErrors.revenueSizeMax = "Maximum Revenue is required";
         if (formData.revenueSizeMin === "") formData.revenueSizeMin = null;
-if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
-if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
+        if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
+        if (formData.openToPreBreakeven === "")
+          formData.openToPreBreakeven = null;
       }
 
       if (step === 3) {
@@ -160,8 +163,20 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
   };
 
   const handleNext = () => {
-    if (validateStep()) setStep((prev) => prev + 1);
+    if (validateStep()) {
+      setStep((prev) => prev + 1);
+      //  window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
+
+  const handleBack=()=>{
+setStep((prev) => prev - 1);
+    // window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+   useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]); // works for both next and back
 
   const token = localStorage.getItem("token");
 
@@ -197,14 +212,14 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
       //     : alert("Data submitted successfully!");
       //   navigate("/buyer/dashboard");
       // }
-       if (type === "modal") {
-  alert("Buyer Created Successfully!");
-  
-  // don't navigate
-} else {
-  alert("Data submitted successfully!");
-  navigate("/buyer/dashboard");
-}
+      if (type === "modal") {
+        alert("Buyer Created Successfully!");
+
+        // don't navigate
+      } else {
+        alert("Data submitted successfully!");
+        navigate("/buyer/dashboard");
+      }
       console.log("buyerData----", data);
       //  navigate('/buyer/dashboard');
     } catch (error) {
@@ -234,9 +249,8 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
   return (
     <div className="bg-gray-100 min-h-screen">
       {type !== "modal" && (
-     
         // <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-         
+
         //   <Link to="/">
         //     <img
         //       alt="logo"
@@ -257,18 +271,18 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
         //     <Link to="/buyer" className="text-xl hover:text-blue-600">
         //       Buyer
         //     </Link>
-            
+
         //     <Link to="/signUp" className="text-xl hover:text-blue-600">
         //       Register
         //     </Link>
-          
+
         //   </nav>
         //   <div className="hidden md:flex gap-2">
-          
+
         //   </div>
-         
+
         // </header>
-        <Header/>
+        <Header />
       )}
 
       <div
@@ -340,7 +354,7 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
               <div className="flex gap-5 mt-6">
                 {step > 1 && (
                   <button
-                    onClick={() => setStep((prev) => prev - 1)}
+                    onClick={handleBack}
                     className="px-4 py-2 bg-gray-300 rounded"
                   >
                     Back
@@ -396,7 +410,7 @@ if (formData.openToPreBreakeven === "") formData.openToPreBreakeven = null;
           )}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

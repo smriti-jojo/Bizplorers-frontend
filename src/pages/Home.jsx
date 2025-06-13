@@ -5,6 +5,10 @@ import { Briefcase } from "lucide-react";
 import { Store } from "lucide-react";
 import { Banknote } from "lucide-react";
 import { Book } from "lucide-react";
+import { Laptop } from 'lucide-react';
+import { BookOpenText } from 'lucide-react';
+import { ChefHat } from 'lucide-react';
+import { Smartphone } from 'lucide-react';
 import Footer from "../component/Footer";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -14,12 +18,23 @@ import pitch from "../assests/Main/pitching.jpg";
 import startup from "../assests/Main/startup.png";
 import support from "../assests/Main/support.jpg";
 import Header from "../component/Header";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { BuyerCard } from "./Buyer";
 
 const categories = [
   { name: "E-commerce", icon: <Briefcase size={"50px"} /> }, // Replace with an actual image if needed
   { name: "Offline Retail", icon: <Store size={"50px"} /> }, // Replace with an actual image if needed
   { name: "Fintech", icon: <Banknote size={"50px"} /> }, // Replace with an actual image if needed
   { name: "Edtech", icon: <Book size={"50px"} /> }, // Replace with an actual image if needed
+
+  { name: "Saas", icon: <Laptop size={"50px"} /> },
+  { name: "Education  & training", icon: <BookOpenText size={"50px"} /> },
+  { name: "Restaurant/café", icon: <ChefHat size={"50px"} /> },
+  { name: "Mobile App", icon: <Smartphone size={"50px"} /> },
+  { name: "Content", icon: <Book size={"50px"} /> },
+  { name: "Agency", icon: <Book size={"50px"} /> },
 ];
 
 const Home = () => {
@@ -55,6 +70,62 @@ const Home = () => {
     fetchAllPicklists();
   }, []);
 
+   const Mentorsettings = {
+    // dots: true,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    cssEase: "linear",
+    responsive: [
+      // {
+      //   breakpoint: 1024,
+      //   settings: {
+      //     slidesToShow: 3,
+      //     slidesToScroll: 3,
+      //     infinite: true,
+      //   },
+      // },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+    ],
+  };
+
+  {
+    /**Mentor Slider Next Arrow */
+  }
+  const NextArrow = (props: any) => {
+    const { onClick } = props;
+    return (
+      <div
+        onClick={onClick}
+        className="custom-next absolute bottom-[50%] right-[0%] cursor-pointer"
+      >
+        ▶
+      </div>
+    );
+  };
+
+const handleGetStarted=()=>{
+  navigate('/signUp');
+}
   return (
     <div>
       <div className="min-h-screen bg-blue-50 text-gray-900 font-sans">
@@ -92,12 +163,14 @@ const Home = () => {
               <li>✅ Monetization opportunities for business sellers</li>
             </ul>
             <div className="space-x-4">
-              <button className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 text-sm">
+              <button className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 text-sm" 
+              onClick={
+    handleGetStarted}>
                 Get Started. It’s Free!
               </button>
-              <button className="bg-blue-100 text-blue-600 px-5 py-2 rounded hover:bg-blue-200 text-sm">
+              {/* <button className="bg-blue-100 text-blue-600 px-5 py-2 rounded hover:bg-blue-200 text-sm">
                 Get Expert Advice
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -130,7 +203,8 @@ const Home = () => {
               providing you the opportunity to get the best price in a much
               quicker ‘money-in-the-bank’.
             </p>
-            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm" onClick={
+    handleGetStarted}>
               Get Started. It’s Free!
             </button>
           </div>
@@ -171,7 +245,8 @@ const Home = () => {
               providing you the opportunity to get the best price in a much
               quicker ‘money-in-the-bank’.
             </p>
-            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm" onClick={
+    handleGetStarted}>
               Get Started. It’s Free!
             </button>
           </div>

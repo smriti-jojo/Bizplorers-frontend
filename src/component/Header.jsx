@@ -39,12 +39,21 @@ const Header = () => {
           </Link>
           {!token?(
             <>
-          <Link to="/login" className="text-xl hover:text-blue-600">
+          {/* <Link to="/login" className="text-xl hover:text-blue-600">
             Log In
-          </Link>
+          </Link> */}
           <Link to="/signUp" className="text-xl hover:text-blue-600">
             Register
           </Link>
+          <button
+            className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
+            onClick={()=>navigate('/login')}
+          >  Log In</button>
+
+          {/* <button
+            className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
+            onClick={()=>navigate('/signUp')}
+          > Register</button> */}
           </>
           ):''}
         </nav>

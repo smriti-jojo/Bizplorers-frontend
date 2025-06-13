@@ -22,11 +22,13 @@ import AboutUs from "./pages/AboutUs";
 import OurServices from "./pages/OurServices";
 import Seller from "./pages/Seller";
 import PrivateRoute from "./Route/PrivateRoute";
+import ScrollToTop from "./component/ScrollToTop";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+      <ScrollToTop/>
         <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
 

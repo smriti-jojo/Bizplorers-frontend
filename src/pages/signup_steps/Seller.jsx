@@ -11,6 +11,8 @@ import OTPVerification from "../OTPVerification";
 import { Link } from "react-router-dom";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
+import { useLayoutEffect } from "react";
+
 
 const RegisterSeller = ({ type }) => {
   const [step, setStep] = useState(1);
@@ -804,15 +806,28 @@ const RegisterSeller = ({ type }) => {
   try {
     const isValid = await validateStep();
     if (!isValid) {
+      alert("Validation error");
       console.log("Validation failed");
       return;
     }
     setStep((prev) => prev + 1);
+    //  window.scrollTo({ top: 0, behavior: "smooth" }); 
   } catch (e) {
     console.log("error found", e);
   }
 };
 
+const handleBack=()=>{
+setStep((prev) => prev - 1);
+    // window.scrollTo({ top: 0, behavior: "smooth" });
+  //   setTimeout(() => {
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  // }, 100); // Delay ensures DOM has updated
+  }
+
+  useLayoutEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [step]); // works for both next and back
 
   const token = localStorage.getItem("token");
   const handleSubmit = async () => {
@@ -923,7 +938,7 @@ const RegisterSeller = ({ type }) => {
           <div
           className={`bg-white px-4 py-4 rounded shadow-md  h-full  ${
           
-            type === "modal" ? "w-full px-5" : "w-[90%] px-20"
+            type === "modal" ? "w-full px-5" : "w-[90%] px-[3%]"
           }`}
         >
           <Stepper step={step} steps={stepsList} />
@@ -985,7 +1000,7 @@ const RegisterSeller = ({ type }) => {
               <div className="flex gap-5 mt-6">
                 {step > 1 && (
                   <button
-                    onClick={() => setStep((prev) => prev - 1)}
+                    onClick={handleBack}
                     className="px-4 py-2 bg-gray-300 rounded"
                   >
                     Back

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image } from "lucide-react";
 import { MapPin } from "lucide-react";
 import { Boxes } from "lucide-react";
@@ -8,6 +8,8 @@ import { Award } from "lucide-react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ReusableCards from "../ReusableCards";
+import { useEffect } from "react";
 
 const businesses = [
   {
@@ -33,6 +35,28 @@ const businesses = [
     CIN: "10002",
   },
   {
+    category: "Content",
+    ttmRevenue: "₹103.00",
+    ttmProfit: "TTM Profit",
+    askingPrice: "₹103.00",
+    location: "Margao, India",
+    teamSize: 103,
+    businessSince: "January 2024",
+    businessType: "Proprietary",
+    CIN: "10002",
+  },
+    {
+    category: "Content",
+    ttmRevenue: "₹103.00",
+    ttmProfit: "TTM Profit",
+    askingPrice: "₹103.00",
+    location: "Margao, India",
+    teamSize: 103,
+    businessSince: "January 2024",
+    businessType: "Proprietary",
+    CIN: "10002",
+  },
+    {
     category: "Content",
     ttmRevenue: "₹103.00",
     ttmProfit: "TTM Profit",
@@ -94,11 +118,38 @@ const Mentorsettings = {
   ],
 };
 
+ 
 const TrendingBusinesses = () => {
+  const [allBusinesses,setAllBusinesses]=useState([]);
+
+   const fetchSellerData = async () => {
+
+    try {
+      const response = await fetch('https://bizplorers-backend.onrender.com/api/seller/getAllSeller', {
+        method: 'GET'
+      
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      const data = await response.json();
+      
+      setAllBusinesses(data);
+    } catch (error) {
+      console.error(error);
+      // alert('Getting Data failed.');
+    }
+    
+  };
+
+   useEffect(() => {
+           fetchSellerData();
+        }, []);
+
   return (
     <div className="container mx-auto p-4 ">
       {/* <h1 className="text-4xl font-bold mb-6 flex justify-center ">Trending Businesses</h1> */}
-      <h1 className="text-xl md:text-3xl font-bold mb-4 flex justify-center ">
+      <h1 className="text-xl md:text-3xl font-bold mb-6 flex justify-center ">
         Trending Businesses
       </h1>
 
@@ -117,77 +168,18 @@ const TrendingBusinesses = () => {
           nextArrow={<NextArrow />}
           className="bg-slate-100"
         >
-          {businesses.map((business, index) => (
+          {allBusinesses.map((card, index) => (
             // <div key={index} className="bg-white shadow-md rounded-lg p-4 ">
-            <div
-              key={index}
-              className="bg-white shadow-md rounded-lg p-4 w-[200px]"
-            >
-              {/* <Image/>  */}
-              <div className="flex gap-5 ">
-                <Image size={"50px"} className="!text-blue-600" />
-                <span className="blur-sm text-2xl">Name</span>
-              </div>
-              <div className="text-md font-semibold mt-3 py-1  rounded bg-green-100 text-green-700 w-[100px] flex justify-center">
-                {business.category}
-              </div>
-
-              <div className="flex gap-2 pt-3">
-                <div className="mt-2">
-                  <p>
-                    <strong>TTM Revenue:</strong>{" "}
-                    <span className="blur-sm">{business.ttmRevenue}</span>
-                  </p>
-                </div>{" "}
-                <div>
-                  <p>
-                    <strong>TTM Profit:</strong> {business.ttmProfit}
-                  </p>{" "}
-                </div>
-                <div>
-                  <p>
-                    <strong>Asking Price:</strong> {business.askingPrice}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-4 text-sm">
-                {" "}
-                <div className="flex justify-between">
-                  <p className="flex gap-1 mt-1">
-                    <strong className="flex gap-1">
-                      <MapPin size={"20px"} />
-                    </strong>{" "}
-                    {business.location}
-                  </p>
-                  <p className="flex gap-1 mt-1">
-                    <strong className="flex gap-1">
-                      <Award size={"20px"} />
-                    </strong>{" "}
-                    <span className="blur-sm">{business.CIN}</span>
-                  </p>
-                </div>
-                <p className="flex gap-1 mt-1">
-                  <strong className="flex gap-1">
-                    <Boxes /> Team Size:
-                  </strong>{" "}
-                  {business.teamSize}
-                </p>
-                <p className="flex gap-1 mt-1">
-                  <strong className="flex gap-1">
-                    <Clock />
-                    Business Since:
-                  </strong>{" "}
-                  {business.businessSince}
-                </p>
-                <p className="flex gap-1 mt-1">
-                  <strong className="flex gap-1">
-                    <Building2 />
-                    Business Type:
-                  </strong>{" "}
-                  {business.businessType}
-                </p>
-              </div>
-            </div>
+         <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
+               <ReusableCards
+                 description_business={card.description_business}
+                 company_name={card.company_name}
+                 city={card.city}
+                 askingPrice={card.askingPrice}
+                 EBITDA={card.EBITDA}
+                 type={'home'}
+               />
+             </div>
           ))}
         </Slider>
       </div>

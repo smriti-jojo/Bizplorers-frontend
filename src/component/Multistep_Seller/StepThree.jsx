@@ -66,7 +66,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
       value={formData.askingPrice}
       onChange={handleChange}
       // className="w-[550px] px-3 py-2 border rounded"
-      className={`w-[450px] px-3 py-2 border rounded ${
+      className={`${type==='modal'?'w-[350px]':'w-[500px]'} px-3 py-2 border rounded ${
           errors.askingPrice ? 'border-red-500 ' : 'border-gray-300'
         }`}
     />

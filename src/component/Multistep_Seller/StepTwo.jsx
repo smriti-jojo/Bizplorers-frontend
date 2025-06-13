@@ -9,8 +9,11 @@ const countryCityMap = {
 };
 
 const StepTwo = ({ formData, handleChange, errors }) => (
+
+  
   <div className="space-y-4">
     <div className="rounded-md ">
+       <h1 className="text-2xl font-semibold pb-4">REVENUES</h1>
       <div className="flex gap-5 w-full ">
         <div className="w-1/2">
           <h1> Last Financial year(Rs) </h1>
