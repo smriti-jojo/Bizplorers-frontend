@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ProfileDropdown from "./ProfileDropdown";
 
  const notifySuccess = (msg = "Logged out successfully!") => {
     toast.success(msg, {
@@ -67,6 +68,7 @@ const Header = () => {
             className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
             onClick={()=>navigate('/signUp')}
           > Register</button> */}
+        
           </>
           ):''}
         </nav>
@@ -76,12 +78,15 @@ const Header = () => {
           Post A Business
         </button> */}
 {token?(
+  <>
          <button
             className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
             onClick={handleLogOut}
           >
             Log Out
           </button>
+            <ProfileDropdown/>
+            </>
 ):''}
       </div>
     </header>

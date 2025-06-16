@@ -71,6 +71,18 @@ const Login = () => {
     theme: "colored",
   });
 };
+
+const notifyError=(msg)=>{
+toast.error(msg, {
+  position: "top-right",
+  autoClose: 3000, // 3 seconds
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  theme: "colored",
+});
+}
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -151,7 +163,8 @@ notifySuccess();
    
   } catch (error) {
     console.error(error);
-    alert("Login failed: " + error.message);
+    // alert("Login failed: " + error.message);
+    notifyError(error.message);
   } finally {
     setLoading(false);
   }

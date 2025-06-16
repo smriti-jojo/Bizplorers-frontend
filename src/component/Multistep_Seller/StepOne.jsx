@@ -89,7 +89,7 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
         </FormControl>
     
          <FormControl className={`${type==='modal'?'w-[550px]':'w-[600px]'}`} error={!!errors.businessCategory} size="small">
-         <InputLabel>businessCategory</InputLabel>
+         <InputLabel>Business Category</InputLabel>
           <Select
             labelId="businessCategory"
             label="Select businessCategory"

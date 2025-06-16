@@ -77,14 +77,14 @@ const RegisterBuyer = ({ type }) => {
         const linkedinRegex =
           /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9_-]+\/?$/;
 
-        if (!formData.linkedinProfile.trim()) {
-          newErrors.linkedinProfile = "Linkedin profile is required";
-        } else if (!linkedinRegex.test(formData.linkedinProfile.trim())) {
-          newErrors.linkedinProfile =
-            "Enter a valid LinkedIn URL (e.g. https://linkedin.com/in/username)";
-        }
+      //   if (!formData.linkedinProfile.trim()) {
+      //     newErrors.linkedinProfile = "Linkedin profile is required";
+      //   } else if (!linkedinRegex.test(formData.linkedinProfile.trim())) {
+      //     newErrors.linkedinProfile =
+      //       "Enter a valid LinkedIn URL (e.g. https://linkedin.com/in/username)";
+      //   }
+      // }
       }
-
       if (step === 4) {
         if (!formData.businessCategories.length)
           newErrors.businessCategories = "Business Category is required";
@@ -129,12 +129,12 @@ const RegisterBuyer = ({ type }) => {
         const linkedinRegex =
           /^https:\/\/(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9_-]+\/?$/;
 
-        if (!formData.linkedinProfile.trim()) {
-          newErrors.linkedinProfile = "Linkedin profile is required";
-        } else if (!linkedinRegex.test(formData.linkedinProfile.trim())) {
-          newErrors.linkedinProfile =
-            "Enter a valid LinkedIn URL (e.g. https://linkedin.com/in/username)";
-        }
+        // if (!formData.linkedinProfile.trim()) {
+        //   newErrors.linkedinProfile = "Linkedin profile is required";
+        // } else if (!linkedinRegex.test(formData.linkedinProfile.trim())) {
+        //   newErrors.linkedinProfile =
+        //     "Enter a valid LinkedIn URL (e.g. https://linkedin.com/in/username)";
+        // }
       }
 
       if (step === 2) {
