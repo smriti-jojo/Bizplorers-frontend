@@ -122,16 +122,30 @@ const onSubmit = async (e) => {
 
     const data = await response.json();
 
- 
+ const userData=data.user;
 
     // Save token and user data as needed
     document.cookie = `token=${data.token}; path=/`;
-    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("user",JSON.stringify(userData));
     localStorage.setItem("token", data.token);
   // setTimeout(() => {
   //   console.log("Triggering success notification...");
-       notifySuccess();
+  
+  if(userData.dataFilled){
+notifySuccess();
   navigate(`/${data.user.role}/dashboard`);
+  }
+  else{
+    if (userData.role === "buyer") {
+  navigate(`/buyer_step`);
+} else if (userData.role === "seller") {
+  navigate(`/seller_step`);
+} else {
+  navigate(`/${userData.role}`); // use user.role here
+}
+  }
+  //      notifySuccess();
+  // navigate(`/${data.user.role}/dashboard`);
 // }, 1000);
 
    

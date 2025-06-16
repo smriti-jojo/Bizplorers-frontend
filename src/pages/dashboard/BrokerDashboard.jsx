@@ -25,6 +25,7 @@ import Seller from "../../pages/signup_steps/Seller";
 import Buyer from "../../pages/signup_steps/Buyer";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
+import { toast } from "react-toastify";
 
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -79,9 +80,23 @@ const BrokerDashboard = () => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
+
+  
+       const notifyLogOut = (msg = "Logged out successfully!") => {
+          toast.success(msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+          });
+        };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
      localStorage.removeItem("user");
+     notifyLogOut();
     window.location.href = "/login"; // or your login route
   };
  ;

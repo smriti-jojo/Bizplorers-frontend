@@ -1,5 +1,17 @@
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+ const notifySuccess = (msg = "Logged out successfully!") => {
+    toast.success(msg, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+    });
+  };
 
 const Header = () => {
     const navigate=useNavigate();
@@ -7,6 +19,7 @@ const Header = () => {
  const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    notifySuccess();
     navigate("/");
   };
 

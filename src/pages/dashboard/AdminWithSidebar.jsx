@@ -36,6 +36,7 @@ import { toast } from "react-toastify";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -709,9 +710,33 @@ export default function AdminWithSidebar() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
 
+   const notifySuccess = (msg = "Logged out successfully!") => {
+      toast.success(msg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
+    };
+  
+     const notifyLogOut = (msg = "Logged out successfully!") => {
+        toast.success(msg, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+        });
+      };
+    
+
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    notifyLogOut();
     navigate("/");
   };
   // const handleSignup = () => {

@@ -5,6 +5,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Link } from 'react-router-dom';
 import Footer from '../../component/Footer';
 import Header from '../../component/Header';
+import { toast } from 'react-toastify';
 
 // Reusable row component for input or display
 const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
@@ -55,9 +56,23 @@ const BuyerDashboard = () => {
     newArray[index] = value;
     setBuyerData(prev => ({ ...prev, [key]: newArray }));
   };
+
+  
+       const notifyLogOut = (msg = "Logged out successfully!") => {
+          toast.success(msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+          });
+        };
+
 const handleLogout = () => {
     localStorage.removeItem("token");
      localStorage.removeItem("user");
+     notifyLogOut();
     window.location.href = "/login"; // or your login route
   };
 

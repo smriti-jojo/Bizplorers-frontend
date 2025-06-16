@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Footer from "../../component/Footer";
 import { Menu, X } from "lucide-react";
 import Header from "../../component/Header";
+import { toast } from "react-toastify";
 
 const countryStateCityMap = {
   India: {
@@ -123,8 +124,22 @@ const Broker = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  
+   const notifyLogOut = (msg = "Logged out successfully!") => {
+            toast.success(msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "colored",
+            });
+          };
+
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
+    notifyLogOut();
     window.location.href = "/login"; // or your login route
   };
   const handleSubmit1 = () => {
@@ -136,8 +151,10 @@ const Broker = () => {
   const handleSubmit = async () => {
     if (!validateStep()) return;
 
+    const dataToSend =
+       { ...formData ,dataFilled:true};
     try {
-      console.log("data------formdata ", formData);
+      console.log("data------formdata ", dataToSend);
       const response = await fetch(
         "https://bizplorers-backend.onrender.com/api/broker/add_detail",
         {

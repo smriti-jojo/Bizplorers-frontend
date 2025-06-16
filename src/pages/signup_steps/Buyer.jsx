@@ -11,6 +11,7 @@ import OTPVerification from "../OTPVerification";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 import { useLayoutEffect } from "react";
+import { toast } from "react-toastify";
 
 const RegisterBuyer = ({ type }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -46,6 +47,17 @@ const RegisterBuyer = ({ type }) => {
     setFormData((prev) => ({ ...prev, [name]: actualValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+   const notifyLogOut = (msg = "Logged out successfully!") => {
+            toast.success(msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "colored",
+            });
+          };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -187,7 +199,7 @@ setStep((prev) => prev - 1);
 
     console.log("id----", id);
     const dataToSend =
-      type === "modal" ? { ...formData, brokerId: id } : { ...formData };
+      type === "modal" ? { ...formData, brokerId: id ,dataFilled:true} : { ...formData ,dataFilled:true};
 
     try {
       console.log("data------formdata ", dataToSend);
@@ -410,7 +422,7 @@ setStep((prev) => prev - 1);
           )}
         </div>
       </div>
-      <Footer />
+      <Footer /> 
     </div>
   );
 };

@@ -40,9 +40,7 @@ useEffect(() => {
   console.log("Email:", email);
     console.log("Role:", role);
 
-  const handleSubmit1=()=>{
-navigate(`/${role}`);
-  }
+ 
 
  const handleChange = (e) => {
   setOtp(e.target.value);
@@ -114,6 +112,7 @@ if (storedUser.role === "buyer") {
     } 
   };
 
+ 
   return (
     <div>
       {type==='modal'?<><div className='w-full  flex justify-center '>
@@ -187,7 +186,7 @@ if (storedUser.role === "buyer") {
   onChange={handleChange}
 />
              <Button className="!w-[90%]" variant='contained' onClick={handleSubmit}>Submit</Button>
-             <h1>Already have an account?<span className='text-blue-600 ml-1'>Log In</span></h1>
+             <h1>Already have an account?<Link to='/login' className='text-blue-600 ml-1'>Log In</Link></h1>
             </div>
            
            

@@ -837,7 +837,7 @@ setStep((prev) => prev - 1);
 
     console.log("id----", id);
     const dataToSend =
-      type === "modal" ? { ...formData, brokerId: id } : { ...formData };
+      type === "modal" ? { ...formData, brokerId: id,dataFilled:true } : { ...formData ,dataFilled:true};
 
     try {
       console.log("data------formdata ", dataToSend);

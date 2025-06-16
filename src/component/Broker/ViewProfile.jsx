@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Header from '../Header';
 
+
 const ViewProfile= () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -34,7 +35,7 @@ const ViewProfile= () => {
 
    const token = localStorage.getItem('token');
   
-    const notifySuccess = (msg = "Data Updated Successfully!") => {
+    const notifyDataUpdatedSuccess = (msg = "Data Updated Successfully!") => {
      toast.success(msg, {
        position: "top-right",
        autoClose: 3000,
@@ -82,7 +83,7 @@ const ViewProfile= () => {
   
         const updated = await response.json();
         // alert('Details updated successfully!');
-        notifySuccess();
+        notifyDataUpdatedSuccess();
         console.log(updated);
       } catch (error) {
         console.error(error);
@@ -100,9 +101,22 @@ const ViewProfile= () => {
     useEffect(() => {
       fetchBrokerData();
     }, []);
+
+    const notifySuccess = (msg = "Logged out successfully!") => {
+    toast.success(msg, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+    });
+  };
+
   
     const handleLogout=()=>{
     localStorage.removeItem('token');
+    notifySuccess();
     window.location.href = '/login'; // or your login route
   };
 

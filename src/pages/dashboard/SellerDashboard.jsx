@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 
+
 const SellerDashboard = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -170,9 +171,22 @@ const SellerDashboard = () => {
     fetchSellerData();
   }, []);
 
+  
+       const notifyLogOut = (msg = "Logged out successfully!") => {
+          toast.success(msg, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+          });
+        };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    notifyLogOut();
     window.location.href = "/login"; // or your login route
   };
 

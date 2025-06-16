@@ -231,6 +231,10 @@ const SignUp = ({ type }) => {
     }
   };
 
+
+
+  
+
   //    const notifySuccess = (msg = "Saved successfully!") => {
   //   toast.success(msg, {
   //     position: "top-right",
@@ -248,6 +252,7 @@ const SignUp = ({ type }) => {
         <>
           <div className="flex justify-center">
             <form
+              // onSubmit={handleSubmit}
               onSubmit={handleSubmit}
               className="bg-slate-100 p-6 rounded-lg shadow-md w-full max-w-md"
             >
@@ -381,6 +386,7 @@ const SignUp = ({ type }) => {
 
           <div className="flex justify-center items-center pt-[7%] pb-[3%] bg-gray-100 px-4">
             <form
+              // onSubmit={handleSubmit}
               onSubmit={handleSubmit}
               className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
             >
