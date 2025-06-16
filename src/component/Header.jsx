@@ -45,10 +45,10 @@ const Header = () => {
             Services
           </Link>
           <Link to="/seller" className="text-xl hover:text-blue-600">
-            Seller
+            Businesses
           </Link>
           <Link to="/buyer" className="text-xl hover:text-blue-600">
-            Buyer
+            Buyers
           </Link>
           {!token?(
             <>
