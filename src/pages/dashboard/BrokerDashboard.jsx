@@ -662,7 +662,9 @@ const BrokerDashboard = () => {
                      </div>
                    </header> */}
        
+    
      <Header/>
+     
       <div className="py-[5%]  ">
         <ReusableTabs
           tabs={tabs}

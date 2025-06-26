@@ -120,7 +120,7 @@ const Transition = React.forwardRef((props, ref) => {
           <ReusableCards  key={index} type="buyer" buyer={card} 
       id={card.userId}
       
-      location="dashboard"
+      // location="dashboard"
        />
         ))}
       </div>

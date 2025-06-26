@@ -6,11 +6,16 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Header from '../Header';
+import {CircularProgress } from "@mui/material";
+
+
+ 
 
 
 const ViewProfile= () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+   const [loading, setLoading] = useState(false);
 
   const [brokerData, setBrokerData] = useState({
       firstName: '',
@@ -48,6 +53,7 @@ const ViewProfile= () => {
  
   
     const fetchBrokerData = async () => {
+      setLoading(true);
       try {
         const response = await fetch('https://bizplorers-backend.onrender.com/api/broker/getBroker', {
           method: 'GET',
@@ -62,6 +68,7 @@ const ViewProfile= () => {
         const data = await response.json();
         // alert('Data fetched successfully!');
         setBrokerData(data);
+        setLoading(false);
       } catch (error) {
         console.error(error);
         // alert('Getting Data failed.');
@@ -127,9 +134,9 @@ const ViewProfile= () => {
       {/* <div className='flex justify-center'>
         <div className='flex flex-col border-2 border-slate-500 rounded-md px-[5%] w-[80%] '> */}
         {/**Added Margin */}
-         <div className='flex justify-center'>
-  <div className='flex flex-col border-2 border-slate-500 rounded-md  px-6 w-full m-4  max-w-screen-md'>
-          <div className='flex justify-between w-full mt-[1%]'>
+         <div className="flex justify-center items-center  ">
+        <div className="flex flex-col border rounded-md  px-6 w-full m-4 max-w-screen-md bg-white shadow-lg shadow-slate-100">
+          <div className="flex justify-between w-full my-4">
             <div className='text-2xl font-bold'>BROKER DETAILS</div>
             <div>
               <Button variant='contained' onClick={handleEditToggle}>
@@ -139,17 +146,18 @@ const ViewProfile= () => {
           </div>
 
           {/* Personal Details */}
+         
           <div className='flex flex-col text-black my-[2%]'>
-            <h1 className='text-xl font-bold'>Company Details</h1>
-            {/* <EditableRow label="First Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.firstName} editable={isEditing} onChange={(val) => handleChange('firstName', val)} />
-            <EditableRow label="Last Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.lastName} editable={isEditing} onChange={(val) => handleChange('lastName', val)} /> */}
+            <h1 className='text-xl font-bold'>Personal Details</h1>
+           {loading?<div className='flex justify-center'><CircularProgress/></div>:(
+            <>
             <EditableRow label="Address" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.address} editable={isEditing} onChange={(val) => handleChange('address', val)} textarea />
-            {/* <EditableRow label="Mobile No" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.mobileNumber} editable={isEditing} onChange={(val) => handleChange('mobileNumber', val)} /> */}
+           
          <EditableRow label="Country" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.country} editable={isEditing} onChange={(val) => handleChange('country', val)} />
           <EditableRow label="State" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.state} editable={isEditing} onChange={(val) => handleChange('state', val)} />
           <EditableRow label="City" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.city} editable={isEditing} onChange={(val) => handleChange('city', val)} />
         <EditableRow label="Zip Code" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.zipcode} editable={isEditing} onChange={(val) => handleChange('zipcode', val)} />
-        
+         </>  )}
           </div>
 
 

@@ -4,11 +4,11 @@ import  {showSuccess,showError ,showInfo,showWarning} from '../component/utils/t
 
 const SendInterestButton = ({ senderId, receiverId, type }) => {
   const [loading, setLoading] = useState(false);
-
+const token=localStorage.getItem('token');
   const handleClick = async () => {
     setLoading(true);
   
-    if(!senderId || !receiverId){
+    if(!token){
 showError('Please Login to further send Invite');
 setLoading(false);
     }
@@ -22,7 +22,7 @@ setLoading(false);
 // console.log("data------formdata ", dataToSend);
 const dataToSend={
   senderId:senderId,
-  receiverId:2,
+  receiverId:receiverId,
   type:'invite'
 }
       const response = await fetch(
