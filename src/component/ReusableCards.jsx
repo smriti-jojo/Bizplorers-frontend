@@ -41,7 +41,7 @@ const ReusableCards = ({
   return (
     <>
       {type === "buyer" ? (
-        <div className="relative bg-slate-100">
+        <div className="relative ">
           {token && user?.role === "broker" && location === "dashboard" && (
             <button
               className={`absolute -top-3 -left-3 p-2 rounded-full border ${
@@ -158,7 +158,7 @@ const ReusableCards = ({
       ) : (
         // fallback for non-buyer cards (if applicable)
         
-        <div className="relative bg-slate-100">
+        <div className="relative">
           {token && user?.role === "broker" && location === "dashboard" && (
             <button
               className={`absolute -top-3 -left-3 p-2 rounded-full border ${
