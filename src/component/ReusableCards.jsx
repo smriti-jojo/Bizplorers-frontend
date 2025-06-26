@@ -14,7 +14,7 @@ const ReusableCards = ({
   description_business,
   company_name,
   city,
-  id,
+  userId,
   askingPrice,
   EBITDA,
   type,
@@ -28,6 +28,7 @@ const ReusableCards = ({
     
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
+  const senderId=user?.id;
 
   const isTruthy = (val) => {
     if (typeof val === "boolean") return val;
@@ -112,7 +113,8 @@ const ReusableCards = ({
                 >
                   Contact Buyer
                 </Button> */}
-                <SendInterestButton />
+                {/* <SendInterestButton /> */}
+                 {senderId ?<SendInterestButton senderId={senderId} receiverId={buyer.userId} type={'buyer'}/>:<SendInterestButton type={'buyer'}/>}
                  <Button
                 variant="contained"
                 className="!bg-blue-400 !text-black !w-[150px] !text-[0.7rem] !py-3"
@@ -212,7 +214,8 @@ const ReusableCards = ({
               >
                 Contact Business
               </Button> */}
-              <SendInterestButton />
+              {senderId ?<SendInterestButton senderId={senderId} receiverId={userId} type={'seller'}/>:<SendInterestButton type={'seller'}/>}
+             
               <Button
                 variant="contained"
                 className="!bg-blue-400 !text-black !w-[150px] !text-[0.7rem] !py-3"

@@ -20,11 +20,16 @@ setLoading(false);
       //   body: JSON.stringify({ senderId, receiverId, type })
       // });
 // console.log("data------formdata ", dataToSend);
+const dataToSend={
+  senderId:senderId,
+  receiverId:2,
+  type:'invite'
+}
       const response = await fetch(
         "https://bizplorers-backend.onrender.com/api/interests/send",
         {
           method: "POST",
-          body: JSON.stringify({ senderId, receiverId, type }),
+          body: JSON.stringify(dataToSend),
           headers: {
             "Content-Type": "application/json",
             // Authorization: `Bearer ${token}`,
@@ -53,7 +58,9 @@ setLoading(false);
       disabled={loading}
       className="bg-yellow-400 text-black px-4 py-2 rounded hover:bg-blue-700"
     >
-      {loading ? 'Sending...' : type === 'buyer' ? 'Send Invite' : 'Send Interest'}
+     {loading
+  ? 'Sending...'
+  : (type === 'buyer' ? 'Send Invite' : 'Send Interest')}
     </button>
   );
 };

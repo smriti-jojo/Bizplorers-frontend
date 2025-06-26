@@ -397,6 +397,7 @@ setLoading(true);
   filteredBusinesses.map((card, index) => (
     <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
       <ReusableCards
+      userId={card.userId}
         description_business={card.description_business}
         company_name={card.company_name}
         city={card.city}
