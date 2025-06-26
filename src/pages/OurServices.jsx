@@ -9,8 +9,13 @@ import dilligence from "../assests/services/dilligence.jpg";
 import legal from "../assests/services/legal.jpg";
 import Header from "../component/Header";
 
+
 const OurServices = () => {
   const navigate = useNavigate();
+
+  const Quote=()=>{
+    navigate(`/signUp`);
+  }
   return (
     <div>
       <div className="min-h-screen bg-blue-50 text-gray-900 font-sans">
@@ -71,7 +76,7 @@ const OurServices = () => {
               providing you the opportunity to get the best price in a much
               quicker ‘money-in-the-bank’.
             </p>
-            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm" onClick={Quote}>
               Get a Quote
             </button>
           </div>
@@ -113,7 +118,7 @@ const OurServices = () => {
               providing you the opportunity to get the best price in a much
               quicker ‘money-in-the-bank’.
             </p>
-            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm" onClick={Quote}>
               Get a Quote
             </button>
           </div>
@@ -134,7 +139,7 @@ const OurServices = () => {
               providing you the opportunity to get the best price in a much
               quicker ‘money-in-the-bank’.
             </p>
-            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm" onClick={Quote}>
               Get a Quote
             </button>
           </div>
@@ -176,7 +181,7 @@ const OurServices = () => {
               providing you the opportunity to get the best price in a much
               quicker ‘money-in-the-bank’.
             </p>
-            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm">
+            <button className="bg-blue-600 text-white px-5 py-3 rounded hover:bg-blue-700 text-sm" onClick={Quote}>
               Get a Quote
             </button>
           </div>
