@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
+import  {showSuccess,showError ,showInfo,showWarning} from '../component/utils/toast';
 
 const SendInterestButton = ({ senderId, receiverId, type }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     setLoading(true);
+  
+    if(!senderId || !receiverId){
+showError('Please Login to further send Invite');
+setLoading(false);
+    }
+    else{
     try {
       // const response = await fetch('/api/interests/send', {
       //   method: 'POST',
@@ -24,6 +31,7 @@ const SendInterestButton = ({ senderId, receiverId, type }) => {
           },
         }
       );
+
       const data = await response.json();
 
       if (response.ok) {
@@ -36,6 +44,7 @@ const SendInterestButton = ({ senderId, receiverId, type }) => {
     } finally {
       setLoading(false);
     }
+  }
   };
 
   return (

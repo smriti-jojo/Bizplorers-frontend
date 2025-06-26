@@ -222,7 +222,7 @@ const SellerDashboard = () => {
                     <CircularProgress />
                   </div>
                 ) : (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center mb-[10%]">
         <div className="flex flex-col border rounded-md mt-[7%] px-6 w-full m-4 max-w-screen-md bg-white shadow-md">
           <div className="flex justify-between w-full my-4">
             <h1 className="text-2xl font-bold">SELLER DETAILS</h1>
