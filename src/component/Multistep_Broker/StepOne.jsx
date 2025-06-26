@@ -31,7 +31,7 @@ const StepOne = ({ formData, handleChange,errors }) => {
   return(
   
   <div className="space-y-4">
-    <div className='flex gap-5'>
+  { /* <div className='flex gap-5'>
          <div className='w-full'>
          <h1>First Name</h1>
     <input
@@ -56,8 +56,8 @@ const StepOne = ({ formData, handleChange,errors }) => {
        error={errors.lastName}
     />
     </div>
-    </div>
-    <div>
+    </div>*/}
+    {/* <div>
         <h1>Mobile Number</h1>
          <input
       type="tel"
@@ -68,7 +68,7 @@ const StepOne = ({ formData, handleChange,errors }) => {
       className="w-full px-3 py-2 border rounded"
       error={errors.mobileNumber}
     />
-    </div>
+    </div> */}
      {/* <input
       type="text"
       name="lastName"

@@ -76,6 +76,7 @@ const ReusableTabs = ({
             borderRadius: '8px',
             width: '600px',
             marginLeft: '14px',
+            marginTop:'20px'
           }}
         >
           <Tabs
@@ -140,7 +141,7 @@ const ReusableTabs = ({
       </Box>
 
       {/* Tab Panels */}
-      <Box sx={{ flexGrow: 1, width: '100%', marginTop: '16px' }}>
+      <Box sx={{ flexGrow: 1, width: '100%', marginTop: '10px' }}>
         {tabs.map((tab, index) => (
           <TabPanel key={index} value={value} index={index}>
             {typeof tab.component === 'string' ? tab.component : <tab.component />}

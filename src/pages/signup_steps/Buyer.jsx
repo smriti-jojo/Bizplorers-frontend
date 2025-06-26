@@ -12,6 +12,7 @@ import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 import { useLayoutEffect } from "react";
 import { toast } from "react-toastify";
+import  {showSuccess,showError ,showInfo,showWarning} from '../../component/utils/toast';
 
 const RegisterBuyer = ({ type }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,8 +30,8 @@ const RegisterBuyer = ({ type }) => {
     businesslocationCities: [],
     openToPreRevenue: "",
     openToPreBreakeven: "",
-    revenueSizeMin: "",
-    revenueSizeMax: "",
+    // revenueSizeMin: "",
+    // revenueSizeMax: "",
     metric: "",
     maxMultiple: "",
     preferredArrangement: [],
@@ -104,8 +105,8 @@ const RegisterBuyer = ({ type }) => {
         //   newErrors.revenueSizeMin = "Minimum Revenue is required";
         // if (!formData.revenueSizeMax.trim())
         //   newErrors.revenueSizeMax = "Maximum Revenue is required";
-        if (formData.revenueSizeMin === "") formData.revenueSizeMin = null;
-        if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
+        // if (formData.revenueSizeMin === "") formData.revenueSizeMin = null;
+        // if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
         if (formData.openToPreBreakeven === "")
           formData.openToPreBreakeven = null;
       }
@@ -156,8 +157,8 @@ const RegisterBuyer = ({ type }) => {
         //   newErrors.revenueSizeMin = "Minimum Revenue is required";
         // if (openToPreRevenue === "No" && !formData.revenueSizeMax.trim())
         //   newErrors.revenueSizeMax = "Maximum Revenue is required";
-        if (formData.revenueSizeMin === "") formData.revenueSizeMin = null;
-        if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
+        // if (formData.revenueSizeMin === "") formData.revenueSizeMin = null;
+        // if (formData.revenueSizeMax === "") formData.revenueSizeMax = null;
         if (formData.openToPreBreakeven === "")
           formData.openToPreBreakeven = null;
       }
@@ -225,18 +226,21 @@ setStep((prev) => prev - 1);
       //   navigate("/buyer/dashboard");
       // }
       if (type === "modal") {
-        alert("Buyer Created Successfully!");
-
+        // alert("Buyer Created Successfully!");
+        //  showSuccess("Buyer Created Successfully!");
+ showSuccess("Your Registration is Successful");
         // don't navigate
       } else {
-        alert("Data submitted successfully!");
+        // alert("Data submitted successfully!");
+        showSuccess("Your Registration is Successful");
         navigate("/buyer/dashboard");
       }
       console.log("buyerData----", data);
       //  navigate('/buyer/dashboard');
     } catch (error) {
       console.error(error);
-      alert("Submission failed.");
+      // alert("Submission failed.");
+      showError("Submission failed.")
     }
   };
 
@@ -360,10 +364,10 @@ setStep((prev) => prev - 1);
               )}
             </>
           )}
-
+<div className="mt-[10%]">
           {type === "modal" ? (
             <>
-              <div className="flex gap-5 mt-6">
+              <div className="flex gap-5 mt-6 px-[5%] py-3 ">
                 {step > 1 && (
                   <button
                     onClick={handleBack}
@@ -392,7 +396,7 @@ setStep((prev) => prev - 1);
             </>
           ) : (
             <>
-              <div className="flex gap-5 mt-6">
+              <div className="flex gap-5 mt-6 px-[5%] py-3 ">
                 {step > 1 && (
                   <button
                     onClick={() => setStep((prev) => prev - 1)}
@@ -420,9 +424,13 @@ setStep((prev) => prev - 1);
               </div>
             </>
           )}
+          </div>
         </div>
       </div>
-      <Footer /> 
+      <div className="mt-[20%]">
+        <Footer /> 
+      </div>
+      
     </div>
   );
 };

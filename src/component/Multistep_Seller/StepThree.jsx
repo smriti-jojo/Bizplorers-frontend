@@ -15,9 +15,9 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
 
   return(
   
-  <div className="space-y-4">
+  <div className="space-y-4 px-[5%]">
       <h1 className="text-2xl font-semibold ">TRANSACTION DETAILS</h1>
-    <div className="flex justify-between w-full">
+    <div className="flex justify-between w-full ">
       
     <div className="w-[550px]">
         <h1>Reason For Sale</h1>

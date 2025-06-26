@@ -141,10 +141,10 @@ const ViewProfile= () => {
           {/* Personal Details */}
           <div className='flex flex-col text-black my-[2%]'>
             <h1 className='text-xl font-bold'>Company Details</h1>
-            <EditableRow label="First Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.firstName} editable={isEditing} onChange={(val) => handleChange('firstName', val)} />
-            <EditableRow label="Last Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.lastName} editable={isEditing} onChange={(val) => handleChange('lastName', val)} />
+            {/* <EditableRow label="First Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.firstName} editable={isEditing} onChange={(val) => handleChange('firstName', val)} />
+            <EditableRow label="Last Name" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.lastName} editable={isEditing} onChange={(val) => handleChange('lastName', val)} /> */}
             <EditableRow label="Address" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.address} editable={isEditing} onChange={(val) => handleChange('address', val)} textarea />
-            <EditableRow label="Mobile No" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.mobileNumber} editable={isEditing} onChange={(val) => handleChange('mobileNumber', val)} />
+            {/* <EditableRow label="Mobile No" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.mobileNumber} editable={isEditing} onChange={(val) => handleChange('mobileNumber', val)} /> */}
          <EditableRow label="Country" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.country} editable={isEditing} onChange={(val) => handleChange('country', val)} />
           <EditableRow label="State" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.state} editable={isEditing} onChange={(val) => handleChange('state', val)} />
           <EditableRow label="City" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={brokerData.city} editable={isEditing} onChange={(val) => handleChange('city', val)} />

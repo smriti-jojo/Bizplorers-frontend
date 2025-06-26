@@ -30,9 +30,7 @@ const Broker = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    mobileNumber: "",
+   
     address: "",
     country: "",
     state: "",
@@ -94,15 +92,15 @@ const Broker = () => {
   const validateStep = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First Name is required";
-    }
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "LastName is required";
-    }
-    if (!formData.mobileNumber.trim()) {
-      newErrors.mobileNumber = "Mobile Number is required";
-    }
+    // if (!formData.firstName.trim()) {
+    //   newErrors.firstName = "First Name is required";
+    // }
+    // if (!formData.lastName.trim()) {
+    //   newErrors.lastName = "LastName is required";
+    // }
+    // if (!formData.mobileNumber.trim()) {
+    //   newErrors.mobileNumber = "Mobile Number is required";
+    // }
     if (!formData.address.trim()) {
       newErrors.address = " Address is required";
     }
@@ -136,6 +134,16 @@ const Broker = () => {
             });
           };
 
+          const notifySuccess=(msg = "Data Submitted successfully!") => {
+            toast.success(msg, {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "colored",
+            });
+          };
   
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -148,6 +156,7 @@ const Broker = () => {
   };
 
   const token = localStorage.getItem("token");
+
   const handleSubmit = async () => {
     if (!validateStep()) return;
 
@@ -159,7 +168,7 @@ const Broker = () => {
         "https://bizplorers-backend.onrender.com/api/broker/add_detail",
         {
           method: "POST",
-          body: JSON.stringify(formData),
+          body: JSON.stringify(dataToSend),
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -170,7 +179,7 @@ const Broker = () => {
       if (!response.ok) throw new Error("Something went wrong!");
       console.log("formdata", formData);
       const data = await response.json();
-      alert("Data submitted successfully!");
+      notifySuccess();
       console.log("brokerData----", data);
       navigate("/broker/dashboard");
     } catch (error) {

@@ -30,7 +30,14 @@ const user = storedUser ? JSON.parse(storedUser) : null;
 console.log(user);
 
 const handleDashboard=()=>{
-    navigate(`/${user.role}/dashboard`)
+  if(user.role==='admin')
+  {
+     navigate(`/${user.role}`)
+  }
+  else{
+     navigate(`/${user.role}/dashboard`)
+  }
+   
 }
 
   return (

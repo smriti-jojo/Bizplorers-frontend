@@ -7,7 +7,7 @@ const StepOne = ({ formData, handleChange,errors,type }) => {
 
   return(
   
-  <div className="space-y-4 ">
+  <div className="space-y-4 px-[5%]">
     {/* <input
       type="text"
       name="firstName"
@@ -36,7 +36,7 @@ const StepOne = ({ formData, handleChange,errors,type }) => {
     <div className={`flex gap-[5%] w-full `}>
     <div>
 <h1>Type of Buyer</h1>
-       <div className="w-[550px]">
+       <div className="w-1/2">
       <ReusableSelect
       hiddenLabel
   id="filled-hidden-label-small"
@@ -53,7 +53,7 @@ const StepOne = ({ formData, handleChange,errors,type }) => {
     </div>
     </div>
    
-    <div className='pt-1'>
+    <div className='pt-1 w-full'>
       <h1 className='pb-1'>Designation</h1>
      <input
       type="text"
@@ -62,7 +62,7 @@ const StepOne = ({ formData, handleChange,errors,type }) => {
       value={formData.designation}
       onChange={handleChange}
       // className="w-[550px] px-3 py-2 border rounded"
-      className={`w-[550px] px-3 py-2 border rounded ${
+      className={`w-full px-3 py-2 border rounded ${
           errors.designation ? 'border-red-500 ' : 'border-gray-300'
         }`}
     />

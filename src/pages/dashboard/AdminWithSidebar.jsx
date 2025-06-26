@@ -6,15 +6,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   ArrowDropDown,
   ArrowDropUp,
-  GridView as GridViewIcon,
-  LocalShipping as LocalShippingIcon,
-  ShoppingCart as ShoppingCartIcon,
-  Message as MessageIcon,
-  Diversity3 as Diversity3Icon,
-  Info as InfoIcon,
-  Settings as SettingsIcon,
-  Assignment as AssignmentIcon,
-  Paid as PaidIcon,
+  
 } from "@mui/icons-material";
 import * as XLSX from "xlsx";
 import AdminUserTable from "../../component/AdminTable";
@@ -35,6 +27,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
+import BrokersVerticalTabs from "../../component/Admin/Broker/VerticalTabs";
+import  {showSuccess,showError ,showInfo,showWarning} from '../../component/utils/toast';
+import BrokerRegistrationsTable from '../../component/Admin/Broker/BrokerRegistrationTable';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -53,6 +48,7 @@ function Sidebar({
   const [isMainMenuOpen, setIsMainMenuOpen] = useState(true);
   const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [brokerData,setBrokerData]=useState([]);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const MainMenuOpen = () => setIsMainMenuOpen(!isMainMenuOpen);
@@ -117,11 +113,14 @@ function Sidebar({
 
         if (response.ok) {
           console.log("Picklists added successfully:", result);
-          alert("Picklists uploaded successfully!");
+          showSuccess("Picklists uploaded successfully!");
+          // alert("Picklists uploaded successfully!");
         } else {
+          showError(result.message);
           console.error("Error adding picklists:", result.message);
         }
       } catch (error) {
+        showError(error);
         console.error("Request failed:", error);
       }
 
@@ -134,16 +133,29 @@ function Sidebar({
     reader.readAsArrayBuffer(file);
   };
 
-  const AdminData = [
-    {
-      name: "User",
-      component: <AdminUserTable />,
-    },
-    {
-      name: "Role",
-      component: <AdminUserTable />,
-    },
-  ];
+
+
+    //  const fetchSellerBuyerUnderBroker = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       "https://bizplorers-backend.onrender.com/api/users/brokers-with-buyers-and-sellers",
+    //       {
+    //         headers: { Authorization: `Bearer ${token}` }, // if protected
+    //       }
+    //     );
+
+    //     const brokerData1 = response.data.data;
+
+    //     // setPicklists(backendData);
+    //     // alert("data fetched successfully");
+        
+    //     setBrokerData(brokerData1);
+    //     // setManagement(Object.keys(backendData));
+    //     // setSelectedCategory(Object.keys(backendData)[0] || "");
+    //   } catch (err) {
+    //     console.error("Failed to load picklists:", err);
+    //   }
+    // };
 
   useEffect(() => {
     const fetchPicklists = async () => {
@@ -166,6 +178,7 @@ function Sidebar({
     };
 
     fetchPicklists();
+    
     // setFetchData( fetchPicklists());
   }, []);
 
@@ -221,7 +234,7 @@ function Sidebar({
           {isAdminMenuOpen && (
             <div className="mt-2 space-y-2 max-h-60 overflow-auto px-2">
               {/* { ['User','Role'].map((item,index)=>( */}
-              {["User"].map((item, index) => (
+              {["User","Broker"].map((item, index) => (
                 <div
                   key={index}
                   onClick={() => setSelectedCategory(item)}
@@ -284,6 +297,7 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
   const [open, setOpen] = React.useState(false);
   const [newValue, setNewValue] = useState("");
   const [ShowDeleteModal, setShowDeleteModal] = useState(false);
+  const [brokerData,setBrokerData]=useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -294,6 +308,28 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
   };
 
   const token = localStorage.getItem("token");
+
+   const fetchSellerBuyerUnderBroker = async () => {
+      try {
+        const response = await axios.get(
+          "https://bizplorers-backend.onrender.com/api/users/brokers-with-buyers-and-sellers",
+          {
+            headers: { Authorization: `Bearer ${token}` }, // if protected
+          }
+        );
+
+        const brokerData1 = response.data;
+console.log("apibrokerData1----",brokerData1);
+        // setPicklists(backendData);
+        // alert("data fetched successfully");
+        
+        setBrokerData(brokerData1);
+        // setManagement(Object.keys(backendData));
+        // setSelectedCategory(Object.keys(backendData)[0] || "");
+      } catch (err) {
+        console.error("Failed to load picklists:", err);
+      }
+    };
 
   const handleDelete = async (category, id) => {
     try {
@@ -317,7 +353,8 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
       setShowDeleteModal(false);
     } catch (error) {
       console.error("Deletion failed:", error);
-      alert("Failed to delete value. Please try again.");
+      showError("Failed to delete value. Please try again.");
+      // alert("Failed to delete value. Please try again.");
     }
   };
 
@@ -396,7 +433,8 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
       //     item.id === id ? { ...item, name: updatedValue.value } : item
       //   ),
       // }));
-      alert(response.data.message);
+      showSuccess(response.data.message);
+      // alert(response.data.message);
       const updatedValue = response.data.data;
 
       setPicklists((prev) => ({
@@ -407,13 +445,15 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
       }));
     } catch (error) {
       console.error("Status Update failed:", error);
-      alert("Failed to update status. Please try again.");
+      showError("Failed to update status. Please try again.");
+      // alert("Failed to update status. Please try again.");
     }
   };
 
   const saveEdit = async (category, id) => {
     if (editName.trim() === "") {
-      alert("Name cannot be empty");
+      showInfo("Name cannot be empty");
+      // alert("Name cannot be empty");
       return;
     }
 
@@ -434,8 +474,8 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
           },
         }
       );
-
-      alert(response.data.message);
+      showSuccess(response.data.message);
+      // alert(response.data.message);
       const updatedValue = response.data.value;
 
       setPicklists((prev) => ({
@@ -448,7 +488,8 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
       setEditingId(null);
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Failed to update value. Please try again.");
+      showError("Failed to update value. Please try again.");
+      // alert("Failed to update value. Please try again.");
     }
   };
 
@@ -462,9 +503,45 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
     }
   }, [editingId]);
 
+  useEffect(()=>{
+    fetchSellerBuyerUnderBroker();
+  },[]);
+
   if (selectedCategory === "User" && !picklists[selectedCategory]) {
     return <AdminUserTable />;
   }
+
+  //  if (selectedCategory === "Broker" && !picklists[selectedCategory]) {
+  //   return <BrokerRegistrationsTable broker={brokerData}/>;
+      
+  // }
+//   if (selectedCategory === "Broker" && !picklists[selectedCategory]) {
+//   return (
+//     <div className="p-4 space-y-6">
+//       {brokerData.length > 0 ? (
+//         brokerData.map((broker, idx) => (
+//           <BrokerRegistrationsTable key={broker.id || idx} broker={broker} />
+//         ))
+//       ) : (
+//         <p className="text-center text-gray-500">No broker data found.</p>
+//       )}
+//     </div>
+//   );
+// }
+
+if (selectedCategory === "Broker" && !picklists[selectedCategory]) {
+  return (
+    <div className="p-6 mt-20 mx-20">
+      {brokerData.length > 0 ? (
+        brokerData.map((broker) => (
+          <BrokerRegistrationsTable key={broker.id} broker={broker} />
+        ))
+      ) : (
+        <p>No brokers found.</p>
+      )}
+    </div>
+  );
+}
 
   if (!selectedCategory || !picklists[selectedCategory]) {
     return (

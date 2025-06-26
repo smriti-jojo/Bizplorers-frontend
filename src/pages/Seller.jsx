@@ -199,49 +199,115 @@ setLoading(true);
   //   },
   // ];
 
+  // const filteredBusinesses = allBusinesses.filter((biz) => {
+  //   const {
+  //     category,
+  //     preferredManagement,
+  //     year,
+  //     month,
+  //     minRevenue,
+  //     maxRevenue,
+  //     minProfit,
+  //     maxProfit,
+  //     minPrice,
+  //     maxPrice,
+  //     status,
+  //     country,
+  //     entityStructure,
+  //   } = filters;
+
+  //   const matchesCategory = category ? biz.category === category : true;
+  //   const matchesArrangement = preferredManagement ? biz.arrangement === preferredManagement : true;
+  //   const matchesMinRev = minRevenue ? biz.monthlyRevenue >= Number(minRevenue) : true;
+  //   const matchesMaxRev = maxRevenue ? biz.monthlyRevenue <= Number(maxRevenue) : true;
+  //   const matchesMinProfit = minProfit ? biz.monthlyProfit >= Number(minProfit) : true;
+  //   const matchesMaxProfit = maxProfit ? biz.monthlyProfit <= Number(maxProfit) : true;
+  //   const matchesMinPrice = minPrice ? biz.price >= Number(minPrice) : true;
+  //   const matchesMaxPrice = maxPrice ? biz.price <= Number(maxPrice) : true;
+  //   const matchesStatus = status ? biz.status === status : true;
+  //   const matchesCountry = country ? biz.country === country : true;
+  //   const matchesEntity = entityStructure ? biz.entityStructure === entityStructure : true;
+
+  //   return (
+  //     matchesCategory &&
+  //     matchesArrangement &&
+  //     matchesMinRev &&
+  //     matchesMaxRev &&
+  //     matchesMinProfit &&
+  //     matchesMaxProfit &&
+  //     matchesMinPrice &&
+  //     matchesMaxPrice &&
+  //     matchesStatus &&
+  //     matchesCountry &&
+  //     matchesEntity
+  //   );
+  // });
   const filteredBusinesses = allBusinesses.filter((biz) => {
-    const {
-      category,
-      preferredManagement,
-      year,
-      month,
-      minRevenue,
-      maxRevenue,
-      minProfit,
-      maxProfit,
-      minPrice,
-      maxPrice,
-      status,
-      country,
-      entityStructure,
-    } = filters;
+  const {
+    category,
+    preferredManagement,
+    year,
+    month,
+    minRevenue,
+    maxRevenue,
+    minProfit,
+    maxProfit,
+    minPrice,
+    maxPrice,
+    status,
+    country,
+    entityStructure,
+  } = filters;
 
-    const matchesCategory = category ? biz.category === category : true;
-    const matchesArrangement = preferredManagement ? biz.arrangement === preferredManagement : true;
-    const matchesMinRev = minRevenue ? biz.monthlyRevenue >= Number(minRevenue) : true;
-    const matchesMaxRev = maxRevenue ? biz.monthlyRevenue <= Number(maxRevenue) : true;
-    const matchesMinProfit = minProfit ? biz.monthlyProfit >= Number(minProfit) : true;
-    const matchesMaxProfit = maxProfit ? biz.monthlyProfit <= Number(maxProfit) : true;
-    const matchesMinPrice = minPrice ? biz.price >= Number(minPrice) : true;
-    const matchesMaxPrice = maxPrice ? biz.price <= Number(maxPrice) : true;
-    const matchesStatus = status ? biz.status === status : true;
-    const matchesCountry = country ? biz.country === country : true;
-    const matchesEntity = entityStructure ? biz.entityStructure === entityStructure : true;
+  const matchesCategory = category ? biz.businessCategory === category : true;
+  const matchesArrangement = preferredManagement
+    ? biz.preferredArrangement?.includes(preferredManagement)
+    : true;
+  const matchesYear = year ? Number(biz.year) === Number(year) : true;
+  const matchesMonth = month ? Number(biz.month) === Number(month) : true;
+  const matchesMinRev = minRevenue
+    ? Number(biz.trail12months) >= Number(minRevenue)
+    : true;
+  const matchesMaxRev = maxRevenue
+    ? Number(biz.trail12months) <= Number(maxRevenue)
+    : true;
+  const matchesMinProfit = minProfit
+    ? Number(biz.PATtrailing12months) >= Number(minProfit)
+    : true;
+  const matchesMaxProfit = maxProfit
+    ? Number(biz.PATtrailing12months) <= Number(maxProfit)
+    : true;
+  const matchesMinPrice = minPrice
+    ? Number(biz.askingPrice) >= Number(minPrice)
+    : true;
+  const matchesMaxPrice = maxPrice
+    ? Number(biz.askingPrice) <= Number(maxPrice)
+    : true;
+  const matchesStatus = status ? biz.status === status : true;
+  const matchesCountry = country
+    ? biz.country.toLowerCase() === country.toLowerCase()
+    : true;
+  const matchesEntity =
+    entityStructure && biz.entityStructure
+      ? biz.entityStructure.toLowerCase() === entityStructure.toLowerCase()
+      : true;
 
-    return (
-      matchesCategory &&
-      matchesArrangement &&
-      matchesMinRev &&
-      matchesMaxRev &&
-      matchesMinProfit &&
-      matchesMaxProfit &&
-      matchesMinPrice &&
-      matchesMaxPrice &&
-      matchesStatus &&
-      matchesCountry &&
-      matchesEntity
-    );
-  });
+  return (
+    matchesCategory &&
+    matchesArrangement &&
+    matchesYear &&
+    matchesMonth &&
+    matchesMinRev &&
+    matchesMaxRev &&
+    matchesMinProfit &&
+    matchesMaxProfit &&
+    matchesMinPrice &&
+    matchesMaxPrice &&
+    matchesStatus &&
+    matchesCountry &&
+    matchesEntity
+  );
+});
 
   const onReset = () => {
     setFilters({
@@ -322,11 +388,12 @@ setLoading(true);
             EBITDA={card.EBITDA}
             />
         ))} */}
-        <div className="flex flex-wrap  gap-y-3 w-full">
+        <div className="flex flex-wrap  gap-6 w-full">
           {loading?
           <div className="flex justify-center w-full min-h-screen">
       <CircularProgress />
     </div>:(
+      
   filteredBusinesses.map((card, index) => (
     <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
       <ReusableCards
@@ -337,7 +404,8 @@ setLoading(true);
         EBITDA={card.EBITDA}
       />
     </div>
-  )))
+  ))
+)
 }
 </div>
 

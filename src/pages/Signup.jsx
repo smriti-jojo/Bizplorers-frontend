@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import instance from "../instance";
 import Footer from "../component/Footer";
 import Header from "../component/Header";
+import  {showSuccess,showError ,showInfo,showWarning} from '../component/utils/toast';
 
 const SignUp = ({ type }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const SignUp = ({ type }) => {
     password: "",
     confirmPassword: "",
     role: "",
+  
   });
   const [errors, setErrors] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
@@ -222,12 +224,19 @@ const SignUp = ({ type }) => {
               state: { email: formData.email, role: formData.role },
             });
           }
-        } else alert(data.error || "Error signing up");
+        } else 
+        {
+          showError(data.error);
+          setLoading(false);
+        }
       } catch (error) {
-        alert("Network error, please try again");
+       
+        showError("Network error, please try again");
+        setLoading(false);
       }
     } else {
-      alert("Please fix the errors first.");
+      showError("Please fix the errors first.");
+      setLoading(false);
     }
   };
 
@@ -338,6 +347,7 @@ const SignUp = ({ type }) => {
                   </button>
                 ))}
               </div>
+<a href="/nre-register" className="text-blue-600 underline">NRE Registration?</a>
 
               <button
                 type="submit"
@@ -484,6 +494,7 @@ const SignUp = ({ type }) => {
                   </button>
                 ))}
               </div>
+              <div className="flex justify-end pb-2"><a href="/nre-signup" className="text-teal-600 hover:text-teal-800 underline">NRE Registration?</a></div>
 
               <button
                 type="submit"

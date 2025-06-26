@@ -26,7 +26,7 @@ useEffect(() => {
   console.log("savedpicklistdata---",picklistData);
 
   return (
-    <div className="w-full md:w-56">
+    <div className="w-full md:w-60">
       {/* Mobile Toggle */}
       <div className="md:hidden mb-4">
         <button
@@ -43,7 +43,7 @@ useEffect(() => {
     
           <label className="block text-sm font-medium mb-1">Select Category of Business</label>
 <select name="category" value={filters.category} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
-  <option value="">Select</option>
+  <option value="">All</option>
   {[
     "E-commerce",
     "Offline Retail",
@@ -63,7 +63,7 @@ useEffect(() => {
           {/* Preferred Management */}
           <label className="block text-sm font-medium mb-1">Preferred Management</label>
           <select name="preferredManagement" value={filters.preferredManagement} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
-            <option value="">Select</option>
+            <option value="">All</option>
             {/* <option value="active">Active</option>
             <option value="passive">Passive</option> */}
             {[
@@ -113,7 +113,7 @@ useEffect(() => {
           {/* Country */}
           <label className="block text-sm font-medium mb-1">Select Country</label>
           <select name="country" value={filters.country} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
-            <option value="">Select</option>
+            <option value="">All</option>
             <option value="india">India</option>
             <option value="usa">USA</option>
           </select>
@@ -123,7 +123,7 @@ useEffect(() => {
           {/**'partnership, LLP,Private LTd, Public Ltd */}
          
           <select name="entityStructure" value={filters.entityStructure} onChange={handleChange} className="w-full p-2 mb-4 border rounded">
-            <option value="">Select</option>
+            <option value="">All</option>
        {["PartnerShip", "LLP", "Private Ltd", "Public Ltd"]
   .map((item, index) => (
     <option key={index} value={item}>{item}</option>

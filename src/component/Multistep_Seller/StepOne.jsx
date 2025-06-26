@@ -39,8 +39,8 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
     handleChange({ target: { name: "cofounderLinks", value: cofounderLinks } });
   }, [cofounderLinks]);
   return (
-    <div className="space-y-4">
-      <div>
+    <div className="space-y-4 px-[5%]">
+      <div className="py-2">
         <h1>Company Name</h1>
         <TextField
           name="company_name"
@@ -54,7 +54,7 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
         />
       </div>
 
-      <div className="flex gap-8 w-full">
+      <div className="flex gap-5 w-full pb-2">
         {/* <div className="w-1/2">
           <h1>Entity Structure</h1>
           <ReusableSelect
@@ -69,7 +69,8 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
             width={"100%"}
           />
         </div> */}
-         <FormControl className={`${type==='modal'?'w-[550px]':'w-[600px]'}`} error={!!errors.entityStructure} size="small">
+        <div className="w-1/2">
+         <FormControl className={`${type==='modal'?'w-[550px]':'w-full'}`} error={!!errors.entityStructure} size="small">
          <InputLabel>Entity Structure</InputLabel>
           <Select
             labelId="entityStructure"
@@ -87,8 +88,9 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
            
           {errors.entityStructure && <FormHelperText>{errors.entityStructure}</FormHelperText>}
         </FormControl>
-    
-         <FormControl className={`${type==='modal'?'w-[550px]':'w-[600px]'}`} error={!!errors.businessCategory} size="small">
+    </div>
+    <div className="w-1/2">
+         <FormControl className={`${type==='modal'?'w-[550px]':'w-full'}`} error={!!errors.businessCategory} size="small">
          <InputLabel>Business Category</InputLabel>
           <Select
             labelId="businessCategory"
@@ -115,9 +117,10 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
           </Select>
           {errors.businessCategory && <FormHelperText>{errors.businessCategory}</FormHelperText>}
         </FormControl>
+        </div>
       </div>
 
-      <div className="flex gap-5 w-full">
+      <div className="flex gap-5 w-full pb-2">
         <div className="w-1/2">
           <h1>Website Url</h1>
           <TextField
@@ -225,7 +228,7 @@ const StepOne = ({ formData, handleChange, errors ,type}) => {
 
       </div>
 
-      <div>
+      <div className="pb-2">
         <h1>Description about business</h1>
         <TextField
           name="description_business"
@@ -352,7 +355,7 @@ width={350}
   </div> */}
 
 
-       <div className="flex justify-between w-full gap-4">
+       <div className="flex justify-between w-full gap-4 py-2">
         <div className="w-[350px]">
           <h1>Number of co-founders</h1>
           <TextField
@@ -395,8 +398,7 @@ width={350}
       </div> 
    
 
-      <div className="flex gap-[3.5%]">
-        <div>
+        <div className="w-full">
           <h1>Commencement of business </h1>
           <div className="flex gap-5">
             {/* <div>
@@ -459,7 +461,8 @@ width={350}
           </Select>
           {errors.month && <FormHelperText>{errors.month}</FormHelperText>}
         </FormControl> */}
-        <FormControl className="w-[350px]" error={!!errors.year} size="small">
+        <div className="w-1/2">
+        <FormControl className="w-full" error={!!errors.year} size="small">
   <InputLabel id="year-label">Select Year</InputLabel>
   <Select
     labelId="year-label"
@@ -477,8 +480,10 @@ width={350}
   </Select>
   {errors.year && <FormHelperText>{errors.year}</FormHelperText>}
 </FormControl>
+</div>
 
-<FormControl className="w-[350px]" error={!!errors.month} size="small">
+<div className="w-1/2">
+<FormControl className="w-full" error={!!errors.month} size="small">
   <InputLabel id="month-label">Select Month</InputLabel>
   <Select
     labelId="month-label"
@@ -498,11 +503,12 @@ width={350}
   </Select>
   {errors.month && <FormHelperText>{errors.month}</FormHelperText>}
 </FormControl>
+</div>
 
           </div>
         </div>
       </div>
-    </div>
+    
   );
 };
 

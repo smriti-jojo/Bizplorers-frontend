@@ -1,715 +1,1456 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@mui/material";
-import { Menu, X } from "lucide-react";
+import { Button, MenuItem, Select, Checkbox, ListItemText } from "@mui/material";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
+import {CircularProgress} from "@mui/material";
 
+const countryStateCityMap = {
+  India: {
+    Delhi: ["New Delhi", "Dwarka", "Rohini"],
+    Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+    Karnataka: ["Bangalore", "Mysore", "Mangalore"],
+  },
+  USA: {
+    NewYork: ["New York City", "Buffalo", "Rochester"],
+    California: ["Los Angeles", "San Francisco", "San Diego"],
+    Illinois: ["Chicago", "Springfield", "Naperville"],
+  },
+  Germany: {
+    Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
+    Bavaria: ["Munich", "Nuremberg", "Augsburg"],
+    Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
+  },
+};
+
+const dropdownOptions = {
+  businessCategory: [
+              "E-commerce",
+              "Offline Retail",
+              "Fintech",
+              "Edtech",
+              "Saas",
+              "Education & training",
+              "Restaurant/café",
+              "Mobile App",
+            ],
+  entityStructure: ["PartnerShip", "LLP", "Private Ltd", "Public Ltd"],
+  salereason: ['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation'],
+  preferredArrangement: ["Cash", "Stock", "Royalty", "Acquihire"],
+};
+
+const Section = ({ title, isOpen, toggleOpen, children }) => (
+  <div className="border-t pt-4">
+    <div
+      className="flex justify-between items-center cursor-pointer"
+      onClick={toggleOpen}
+    >
+      <h2 className="text-lg font-semibold">{title}</h2>
+      <span>{isOpen ? "▲" : "▼"}</span>
+    </div>
+    {isOpen && <div className="mt-4">{children}</div>}
+  </div>
+);
+
+const EditableRow = ({ label, value, editable, onChange, type = "text", options = [], multiple = false }) => {
+  const renderView = () => <p>{Array.isArray(value) ? value.join(", ") : value || "—"}</p>;
+
+  const renderEdit = () => {
+    if (options.length > 0) {
+      return multiple ? (
+        <Select
+          multiple
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          renderValue={(selected) => selected.join(", ")}
+          className="min-w-[200px]"
+        >
+          {options.map((opt) => (
+            <MenuItem key={opt} value={opt}>
+              <Checkbox checked={value.includes(opt)} />
+              <ListItemText primary={opt} />
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        <Select value={value} onChange={(e) => onChange(e.target.value)} className="min-w-[200px]">
+          {options.map((opt) => (
+            <MenuItem key={opt} value={opt}>
+              {opt}
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    }
+
+    if (type === "textarea") {
+      return (
+        <textarea
+          className="border rounded px-2 py-1 w-full md:w-[60%]"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      );
+    }
+
+    return (
+      <input
+        className="border rounded px-2 py-1"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    );
+  };
+
+  return (
+    <div className="flex gap-5 items-start flex-wrap my-2">
+      <h1 className="font-semibold flex items-center">
+        <CheckBoxIcon className="!text-green-600 mr-1" />
+        {label}:
+      </h1>
+      {editable ? renderEdit() : renderView()}
+    </div>
+  );
+};
 
 const SellerDashboard = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const[loading,setLoading]=useState(false);
+  const [openSections, setOpenSections] = useState({
+    company: true,
+    finance: false,
+    location: false,
+    ownership: false,
+    exit: false,
+  });
 
-  const [sellerData, setSellerData] = useState({
+  const [formData, setFormData] = useState({
     company_name: "",
     website_url: "",
     CIN: "",
     company_linkedin: "",
     description_business: "",
     numcofounder: "",
-    cofounder: "",
     teamSize: "",
     numLocation: "",
     year: "",
     month: "",
     cofounderLinks: [],
-    businessCategory: [],
-    businessLocation: "",
-    entityStructure: [],
+    businessCategory: "",
+    entityStructure: "",
     country: "",
-    state: [],
-    city: [],
-    status: "",
+    state: "",
+    city: "",
     lastFinancialYear: "",
-    prevFinancialYear: "",
-    prePrevFinancialYear: "",
-    trail12months: "",
-    lastmonth: "",
+    trailing12months: "",
     prevMonth: "",
-    prePrevMonth: "",
-    PATlastFinancialYear: "",
-    PATprevFinancialYear: "",
-    PATprePrevFinancialYear: "",
-    PATtrailing12months: "",
-    PATlastmonth: "",
-    PATprevMonth: "",
-    PATprePrevMonth: "",
-    EBITDA: "",
-    OCFlastFinancialYear: "",
+    NETlastFinancialYear: "",
+    NETtrailing12months: "",
+    NETprevMonth: "",
+    positiveCashFlow: "",
     assestDesc: "",
     equity: "",
     debt: "",
-    OCFprevFinancialYear: "",
-    OCFprePrevFinancialYear: "",
     salereason: "",
     askingPrice: "",
     preferredArrangement: [],
   });
 
-  const EditableRow = ({
-    label,
-    icon,
-    value,
-    editable,
-    onChange,
-    textarea,
-  }) => (
-    <div className="flex items-start gap-2 my-2">
-      <span className="font-semibold flex items-center">
-        {icon}
-        {label}:
-      </span>
-      {editable ? (
-        textarea ? (
-          <textarea
-            className="border p-2 rounded-md w-full"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        ) : (
-          <input
-            className="border p-2 rounded-md w-full"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        )
-      ) : (
-        <span>{value}</span>
-      )}
-    </div>
-  );
   const handleChange = (key, value) => {
-    setSellerData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleArrayChange = (key, index, value) => {
-    const newArray = [...sellerData[key]];
-    newArray[index] = value;
-    setSellerData((prev) => ({ ...prev, [key]: newArray }));
-  };
-
-  const notifySuccess = (msg = "Data Updated Successfully!") => {
-    toast.success(msg, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "colored",
-    });
+    setFormData((prev) => ({ ...prev, [key]: value }));
+    if (key === "country") setFormData((prev) => ({ ...prev, state: "", city: "" }));
+    if (key === "state") setFormData((prev) => ({ ...prev, city: "" }));
   };
 
   const token = localStorage.getItem("token");
+
   const fetchSellerData = async () => {
+    setLoading(true);
     try {
-      const response = await fetch(
-        "https://bizplorers-backend.onrender.com/api/seller/get_detail",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to fetch");
-
-      const data = await response.json();
-
-      setSellerData(data);
-    } catch (error) {
-      console.error(error);
-      alert("Getting Data failed.");
+      const res = await fetch("https://bizplorers-backend.onrender.com/api/seller/get_detail", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setFormData(data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      toast.error("Error loading data");
     }
   };
 
   const updateData = async () => {
     try {
-      const response = await fetch(
-        "https://bizplorers-backend.onrender.com/api/seller/update_detail",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(sellerData),
-        }
-      );
-
-      if (!response.ok) throw new Error("Update failed");
-
-      const updated = await response.json();
-      notifySuccess();
-      console.log(updated);
-    } catch (error) {
-      console.error(error);
-      alert("Update failed");
+      const res = await fetch("https://bizplorers-backend.onrender.com/api/seller/update_detail", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+      await res.json();
+      toast.success("Data updated!");
+    } catch (err) {
+      toast.error("Update failed");
     }
   };
+
+  const handleCancel=()=>{
+    setIsEditing(!isEditing);
+  }
 
   const handleEditToggle = () => {
-    if (isEditing) {
-      updateData();
-    }
+    if (isEditing) updateData();
     setIsEditing(!isEditing);
   };
+
   useEffect(() => {
     fetchSellerData();
   }, []);
 
-  
-       const notifyLogOut = (msg = "Logged out successfully!") => {
-          toast.success(msg, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            pauseOnHover: true,
-            draggable: true,
-            theme: "colored",
-          });
-        };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    notifyLogOut();
-    window.location.href = "/login"; // or your login route
-  };
+  const countries = Object.keys(countryStateCityMap);
+  const states = formData.country ? Object.keys(countryStateCityMap[formData.country]) : [];
+  const cities = formData.country && formData.state ? countryStateCityMap[formData.country][formData.state] : [];
 
   return (
     <div>
-     
-      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-       
-        <Link to="/">
-          <img
-            alt="logo"
-            width={50}
-            className="object-contain cursor-pointer"
-          />
-        </Link>
-        <nav className="hidden md:flex gap-8">
-          <Link to="/aboutUs" className="text-xl hover:text-blue-600">
-            About Us
-          </Link>
-          <Link to="/services" className="text-xl hover:text-blue-600">
-            Services
-          </Link>
-          <Link to="/seller" className="text-xl hover:text-blue-600">
-            Seller
-          </Link>
-          <Link to="/buyer" className="text-xl hover:text-blue-600">
-            Buyer
-          </Link>
-         
-          <Link to="/signUp" className="text-xl hover:text-blue-600">
-            Register
-          </Link>
-         
-        </nav>
-        <div className="hidden md:flex gap-2">
-        
-          <button
-            className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
-            onClick={handleLogout}
-          >
-            Log Out
-          </button>
-         
-        </div>
-        
-      </header> */}
-      <Header/>
-      {/* 
-      <div className='flex justify-center pb-10'>
-        <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%] '> */}
-      {/* <div className='flex justify-center pb-10'>
-  <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%] mx-4 md:mx-10'> */}
-
-      {/**Added Margin */}
+      <Header />
+       {loading ? (
+                  <div className="flex justify-center w-full min-h-screen">
+                    <CircularProgress />
+                  </div>
+                ) : (
       <div className="flex justify-center items-center">
-        <div className="flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-6 w-full m-4  max-w-screen-md">
-          <div className="flex justify-between w-full mt-[2%]">
-            <div className="text-2xl font-bold">SELLER DETAILS</div>
-            <div>
-              <Button variant="contained" onClick={handleEditToggle}>
-                {isEditing ? "Save" : "Edit Details"}
-              </Button>
-            </div>
+        <div className="flex flex-col border rounded-md mt-[7%] px-6 w-full m-4 max-w-screen-md bg-white shadow-md">
+          <div className="flex justify-between w-full my-4">
+            <h1 className="text-2xl font-bold">SELLER DETAILS</h1>
+            {isEditing ? 
+            <div className="flex gap-3">
+            <Button variant="contained" onClick={handleEditToggle} className="!bg-green-500">
+        Save
+            </Button>
+             <Button variant="contained" onClick={handleCancel} className="!bg-red-500">
+        Cancel
+            </Button>
+            </div>:( <Button variant="contained" onClick={handleEditToggle}>
+        Edit Details
+            </Button>)
+}
           </div>
 
-          {/* Personal Details */}
-          <div className="flex flex-col text-black my-[2%]">
-            <h1 className="text-xl font-bold">Company Details</h1>
-            <EditableRow
-              label="Company Name"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.company_name}
-              editable={isEditing}
-              onChange={(val) => handleChange("company_name", val)}
-            />
-            <EditableRow
-              label="Entity Structure"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.entityStructure}
-              editable={isEditing}
-              onChange={(val) => handleChange("entityStructure", val)}
-            />
-            <EditableRow
-              label="Business Category"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.businessCategory}
-              editable={isEditing}
-              onChange={(val) => handleChange("businessCategory", val)}
-              textarea
-            />
-            <EditableRow
-              label="Website Url"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.website_url}
-              editable={isEditing}
-              onChange={(val) => handleChange("website_url", val)}
-            />
-            <EditableRow
-              label="CIN"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.CIN}
-              editable={isEditing}
-              onChange={(val) => handleChange("CIN", val)}
-            />
-            <EditableRow
-              label="Company Linkedin"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.company_linkedin}
-              editable={isEditing}
-              onChange={(val) => handleChange("company_linkedin", val)}
-            />
-            {/* <EditableRow
-              label="Co-founder Linkedin"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.cofounder_linkedin}
-              editable={isEditing}
-              onChange={(val) => handleChange("cofounder_linkedin", val)}
-            /> */}
-                 <div className="flex gap-3 flex-wrap">
-              <h1 className="font-semibold flex items-center">
-                <CheckBoxIcon className="!text-green-600 mr-1" />
-                Co-Founder Linkedin:
-              </h1>
-              {sellerData.cofounderLinks.map((arr, i) =>
-                isEditing ? (
-                  <input
-                    key={i}
-                    className="border px-2 py-1 rounded-md"
-                    value={arr}
-                    onChange={(e) =>
-                      handleArrayChange("cofounderLinks", i, e.target.value)
-                    }
-                  />
-                ) : (
-                  <p key={i} className="mr-2">
-                    {arr},
-                  </p>
-                )
-              )}
-            </div>
-            <EditableRow
-              label="Description about Business"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.description_business}
-              editable={isEditing}
-              onChange={(val) => handleChange("description_business", val)}
-            />
-            <EditableRow
-              label="Country"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.country}
-              editable={isEditing}
-              onChange={(val) => handleChange("country", val)}
-            />
-            <EditableRow
-              label="State"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.state}
-              editable={isEditing}
-              onChange={(val) => handleChange("state", val)}
-            />
-            <EditableRow
-              label="City"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.city}
-              editable={isEditing}
-              onChange={(val) => handleChange("city", val)}
-            />
-            <EditableRow
-              label="Number of Co-founder"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.numcofounder}
-              editable={isEditing}
-              onChange={(val) => handleChange("numcofounder", val)}
-            />
-            <EditableRow
-              label="Team Size"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.teamSize}
-              editable={isEditing}
-              onChange={(val) => handleChange("teamSize", val)}
-            />
-            <EditableRow
-              label="Number of Locations"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.numLocation}
-              editable={isEditing}
-              onChange={(val) => handleChange("numLocation", val)}
-            />
-            <EditableRow
-              label="Commencement of Business Year"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.year}
-              editable={isEditing}
-              onChange={(val) => handleChange("year", val)}
-            />
-            <EditableRow
-              label="Commencement of Business Month"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.month}
-              editable={isEditing}
-              onChange={(val) => handleChange("month", val)}
-            />
-            <EditableRow
-              label="Status"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.status}
-              editable={isEditing}
-              onChange={(val) => handleChange("status", val)}
-            />
-            {/* <EditableRow label="Website Url" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={sellerData.website_url} editable={isEditing} onChange={(val) => handleChange('website_url', val)} />
-         <EditableRow label="Website Url" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={sellerData.website_url} editable={isEditing} onChange={(val) => handleChange('website_url', val)} /> */}
-          </div>
+          {/* Section 1 */}
+          <Section
+            title="Company Details"
+            isOpen={openSections.company}
+            toggleOpen={() => setOpenSections((p) => ({ ...p, company: !p.company }))}
+          >
+            <EditableRow label="Company Name" value={formData.company_name} editable={isEditing} onChange={(v) => handleChange("company_name", v)} />
+            <EditableRow label="Website" value={formData.website_url} editable={isEditing} onChange={(v) => handleChange("website_url", v)} />
+            <EditableRow label="CIN" value={formData.CIN} editable={isEditing} onChange={(v) => handleChange("CIN", v)} />
+            <EditableRow label="Company LinkedIn" value={formData.company_linkedin} editable={isEditing} onChange={(v) => handleChange("company_linkedin", v)} />
+            <EditableRow label="No. of Cofounders" value={formData.numcofounder} editable={isEditing} onChange={(v) => handleChange("numcofounder", v)} />
+            <EditableRow label="Team Size" value={formData.teamSize} editable={isEditing} onChange={(v) => handleChange("teamSize", v)} />
+            <EditableRow label="Locations Count" value={formData.numLocation} editable={isEditing} onChange={(v) => handleChange("numLocation", v)} />
+            <EditableRow label="Founded Year" value={formData.year} editable={isEditing} onChange={(v) => handleChange("year", v)} />
+            <EditableRow label="Founded Month" value={formData.month} editable={isEditing} onChange={(v) => handleChange("month", v)} />
+            <EditableRow label="Business Description" value={formData.description_business} editable={isEditing} onChange={(v) => handleChange("description_business", v)} type="textarea" />
+            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={dropdownOptions.businessCategory} />
+            <EditableRow label="Entity Structure" value={formData.entityStructure} editable={isEditing} onChange={(v) => handleChange("entityStructure", v)} options={dropdownOptions.entityStructure} />
+          </Section>
 
-          {/* Preferences Details */}
-          <div className="flex flex-col text-black my-[2%]">
-            <h1 className="text-xl font-bold">Financial Details</h1>
-            {/* <div className='flex gap-3 flex-wrap'>
-              <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Business Categories:</h1>
-              {buyerData.businessCategory.map((cat, i) =>
-                isEditing ? (
-                  <input key={i} className="border px-2 py-1 rounded-md" value={cat} onChange={e => handleArrayChange('businessCategory', i, e.target.value)} />
-                ) : (
-                  <p key={i} className='mr-2'>{cat},</p>
-                )
-              )}
-            </div> */}
+          {/* Location Section */}
+          <Section
+            title="Location Details"
+            isOpen={openSections.location}
+            toggleOpen={() => setOpenSections((p) => ({ ...p, location: !p.location }))}
+          >
+            <EditableRow label="Country" value={formData.country} editable={isEditing} onChange={(v) => handleChange("country", v)} options={countries} />
+            <EditableRow label="State" value={formData.state} editable={isEditing} onChange={(v) => handleChange("state", v)} options={states} />
+            <EditableRow label="City" value={formData.city} editable={isEditing} onChange={(v) => handleChange("city", v)} options={cities} />
+          </Section>
 
-            <EditableRow
-              label="Last Financial year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.lastFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("lastFinancialYear", val)}
-            />
-            <EditableRow
-              label="Previous Financial Year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.prevFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("prevFinancialYear", val)}
-            />
-            <EditableRow
-              label="Pre-previous Financial Year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.prePrevFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("prePrevFinancialYear", val)}
-            />
-            <EditableRow
-              label="Trailing 12 months(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.trail12months}
-              editable={isEditing}
-              onChange={(val) => handleChange("trail12months", val)}
-            />
-            <EditableRow
-              label="Last month(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.lastmonth}
-              editable={isEditing}
-              onChange={(val) => handleChange("lastmonth", val)}
-            />
-            <EditableRow
-              label="Previous month(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.prevMonth}
-              editable={isEditing}
-              onChange={(val) => handleChange("prevMonth", val)}
-            />
-            <EditableRow
-              label="Pre-previous month(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.prePrevMonth}
-              editable={isEditing}
-              onChange={(val) => handleChange("prePrevMonth", val)}
-            />
-            <h1 className="text-2xl font-semibold ">PROFITS(PAT)</h1>
+          {/* Financial Section */}
+          <Section
+            title="Financial Performance"
+            isOpen={openSections.finance}
+            toggleOpen={() => setOpenSections((p) => ({ ...p, finance: !p.finance }))}
+          >
+            <EditableRow label="Last FY Revenue" value={formData.lastFinancialYear} editable={isEditing} onChange={(v) => handleChange("lastFinancialYear", v)} />
+            <EditableRow label="Trailing 12 Months Revenue" value={formData.trailing12months} editable={isEditing} onChange={(v) => handleChange("trailing12months", v)} />
+            <EditableRow label="Previous Month Revenue" value={formData.prevMonth} editable={isEditing} onChange={(v) => handleChange("prevMonth", v)} />
+            <EditableRow label="NET Last FY" value={formData.NETlastFinancialYear} editable={isEditing} onChange={(v) => handleChange("NETlastFinancialYear", v)} />
+            <EditableRow label="NET Trailing 12 Months" value={formData.NETtrailing12months} editable={isEditing} onChange={(v) => handleChange("NETtrailing12months", v)} />
+            <EditableRow label="NET Prev Month" value={formData.NETprevMonth} editable={isEditing} onChange={(v) => handleChange("NETprevMonth", v)} />
+            {/* <EditableRow label="Positive Cash Flow" value={formData.positiveCashFlow} editable={isEditing} onChange={(v) => handleChange("positiveCashFlow", v)} /> */}
+          <EditableRow
+  label="Positive Cash Flow"
+  value={formData.positiveCashFlow ? "Yes" : "No"}
+  editable={isEditing}
+  onChange={(v) => handleChange("positiveCashFlow", v === "Yes")}
+  dropdownOptions={["Yes", "No"]}
+/>
 
-            <EditableRow
-              label="Last Financial year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATlastFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATlastFinancialYear", val)}
-            />
-            <EditableRow
-              label="Previous Financial Year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATprevFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATprevFinancialYear", val)}
-            />
-            <EditableRow
-              label="Pre-previous Financial Year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATprePrevFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATprePrevFinancialYear", val)}
-            />
-            <EditableRow
-              label="Trailing 12 months(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATtrailing12months}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATtrailing12months", val)}
-            />
-            <EditableRow
-              label="Last month(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATlastmonth}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATlastmonth", val)}
-            />
-            <EditableRow
-              label="Previous month(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATprevMonth}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATprevMonth", val)}
-            />
-            <EditableRow
-              label="Pre-previous month(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.PATprePrevMonth}
-              editable={isEditing}
-              onChange={(val) => handleChange("PATprePrevMonth", val)}
-            />
-            <EditableRow
-              label="EBITDA Margin (current) %"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.EBITDA}
-              editable={isEditing}
-              onChange={(val) => handleChange("EBITDA", val)}
-            />
-            <h1 className="text-2xl font-semibold ">OPERATING CASH FLOW</h1>
+          </Section>
 
-            <EditableRow
-              label="Last Financial year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.OCFlastFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("OCFlastFinancialYear", val)}
-            />
-            <EditableRow
-              label="Previous Financial Year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.OCFprevFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("OCFprevFinancialYear", val)}
-            />
-            <EditableRow
-              label="Pre-previous Financial Year(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.OCFprePrevFinancialYear}
-              editable={isEditing}
-              onChange={(val) => handleChange("OCFprePrevFinancialYear", val)}
-            />
-            <h1 className="text-2xl font-semibold pt-[5%]">ASSESTS</h1>
+          {/* Ownership Section */}
+          <Section
+            title="Assets & Liabilities"
+            isOpen={openSections.ownership}
+            toggleOpen={() => setOpenSections((p) => ({ ...p, ownership: !p.ownership }))}
+          >
+            <EditableRow label="Assets Description" value={formData.assestDesc} editable={isEditing} onChange={(v) => handleChange("assestDesc", v)} type="textarea" />
+            <EditableRow label="Equity" value={formData.equity} editable={isEditing} onChange={(v) => handleChange("equity", v)} />
+            <EditableRow label="Debt" value={formData.debt} editable={isEditing} onChange={(v) => handleChange("debt", v)} />
+          </Section>
 
-            <EditableRow
-              label="Description of Key Assest/IP"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.assestDesc}
-              editable={isEditing}
-              onChange={(val) => handleChange("assestDesc", val)}
-            />
-            <h1 className="text-2xl font-semibold pt-[5%]">Sources Of Funds</h1>
-            <EditableRow
-              label="Equity(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.equity}
-              editable={isEditing}
-              onChange={(val) => handleChange("equity", val)}
-            />
-            <EditableRow
-              label="Debt(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.debt}
-              editable={isEditing}
-              onChange={(val) => handleChange("debt", val)}
-            />
-            <h1 className="text-2xl font-semibold ">TRANSACTION DETAILS</h1>
-            <EditableRow
-              label="Reason For Sale"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.salereason}
-              editable={isEditing}
-              onChange={(val) => handleChange("salereason", val)}
-            />
-            <EditableRow
-              label="Asking Price(Rs)"
-              icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
-              value={sellerData.askingPrice}
-              editable={isEditing}
-              onChange={(val) => handleChange("askingPrice", val)}
-            />
-            {/* <EditableRow label="Preferred Arrangement" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={sellerData.preferredArrangement} editable={isEditing} onChange={(val) => handleChange('preferredArrangement', val)} /> */}
-            <div className="flex gap-3 flex-wrap">
-              <h1 className="font-semibold flex items-center">
-                <CheckBoxIcon className="!text-green-600 mr-1" />
-                Preferred Arrangement:
-              </h1>
-              {sellerData.preferredArrangement.map((arr, i) =>
-                isEditing ? (
-                  <input
-                    key={i}
-                    className="border px-2 py-1 rounded-md"
-                    value={arr}
-                    onChange={(e) =>
-                      handleArrayChange(
-                        "preferredArrangement",
-                        i,
-                        e.target.value
-                      )
-                    }
-                  />
-                ) : (
-                  <p key={i} className="mr-2">
-                    {arr},
-                  </p>
-                )
-              )}
-            </div>
-            {/* <div className="flex gap-3 flex-wrap">
-              <h1 className="font-semibold flex items-center">
-                <CheckBoxIcon className="!text-green-600 mr-1" />
-                Co-Founder Linkedin:
-              </h1>
-              {sellerData.cofounderLinks.map((arr, i) =>
-                isEditing ? (
-                  <input
-                    key={i}
-                    className="border px-2 py-1 rounded-md"
-                    value={arr}
-                    onChange={(e) =>
-                      handleArrayChange("cofounderLinks", i, e.target.value)
-                    }
-                  />
-                ) : (
-                  <p key={i} className="mr-2">
-                    {arr},
-                  </p>
-                )
-              )}
-            </div> */}
-
-            {/* <div className='flex gap-3 flex-wrap'>
-              <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Cities:</h1>
-              {buyerData.city.map((ct, i) =>
-                isEditing ? (
-                  <input key={i} className="border px-2 py-1 rounded-md" value={ct} onChange={e => handleArrayChange('city', i, e.target.value)} />
-                ) : (
-                  <p key={i} className='mr-2'>{ct},</p>
-                )
-              )}
-            </div> */}
-
-            {/* <EditableRow label="Open to Pre-Revenue" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreRevenue} editable={isEditing} onChange={(val) => handleChange('openToPreRevenue', val)} />
-            {buyerData.openToPreRevenue === "No" && (
-              <>
-                <EditableRow label="Open to Pre-Breakeven" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreBreakeven} editable={isEditing} onChange={(val) => handleChange('openToPreBreakeven', val)} />
-                <EditableRow label="Revenue Min" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueMin} editable={isEditing} onChange={(val) => handleChange('revenueMin', val)} />
-                <EditableRow label="Revenue Max" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueMax} editable={isEditing} onChange={(val) => handleChange('revenueMax', val)} />
-              </>
-            )} */}
-          </div>
-
-          {/* <div className='flex flex-col text-black my-[2%]'>
-            <h1 className='text-xl font-bold'>Preferred Value Multiple</h1>
-            <EditableRow label="Metric" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.metric} editable={isEditing} onChange={(val) => handleChange('metric', val)} />
-            <EditableRow label="Max Multiple" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.maxMultiple} editable={isEditing} onChange={(val) => handleChange('maxMultiple', val)} />
-
-            <div className='flex gap-3 flex-wrap'>
-              <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Preferred Arrangement:</h1>
-              {buyerData.preferredArrangement.map((arr, i) =>
-                isEditing ? (
-                  <input key={i} className="border px-2 py-1 rounded-md" value={arr} onChange={e => handleArrayChange('preferredArrangement', i, e.target.value)} />
-                ) : (
-                  <p key={i} className='mr-2'>{arr},</p>
-                )
-              )}
-            </div>
-          </div> */}
+          {/* Exit Section */}
+          <Section
+            title="Exit Plan"
+            isOpen={openSections.exit}
+            toggleOpen={() => setOpenSections((p) => ({ ...p, exit: !p.exit }))}
+          >
+            <EditableRow label="Reason for Sale" value={formData.salereason} editable={isEditing} onChange={(v) => handleChange("salereason", v)} options={dropdownOptions.salereason} />
+            <EditableRow label="Asking Price" value={formData.askingPrice} editable={isEditing} onChange={(v) => handleChange("askingPrice", v)} />
+            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={isEditing} onChange={(v) => handleChange("preferredArrangement", v)} options={dropdownOptions.preferredArrangement} multiple />
+          </Section>
         </div>
       </div>
+                )}
       <Footer />
     </div>
   );
 };
 
-// Reusable editable row
-const EditableRow = ({
-  label,
-  icon,
-  value,
-  editable,
-  onChange,
-  textarea = false,
-}) => (
-  <div className="flex gap-5 items-start flex-wrap my-2">
-    <h1 className="font-semibold flex items-center">
-      {icon}
-      <span className="ml-1">{label}:</span>
-    </h1>
-    {editable ? (
-      textarea ? (
-        <textarea
-          className="border rounded px-2 py-1 w-full md:w-[60%]"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      ) : (
-        <input
-          className="border rounded px-2 py-1"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      )
-    ) : (
-      <p>{value}</p>
-    )}
-  </div>
-);
-
 export default SellerDashboard;
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import { Button, MenuItem, Select } from "@mui/material";
+// import CheckBoxIcon from "@mui/icons-material/CheckBox";
+// import { toast } from "react-toastify";
+// import Footer from "../../component/Footer";
+// import Header from "../../component/Header";
+
+// const Section = ({ title, isOpen, toggleOpen, children }) => (
+//   <div className="border-t pt-4">
+//     <div
+//       className="flex justify-between items-center cursor-pointer"
+//       onClick={toggleOpen}
+//     >
+//       <h2 className="text-lg font-semibold">{title}</h2>
+//       <span>{isOpen ? "▲" : "▼"}</span>
+//     </div>
+//     {isOpen && <div className="mt-4">{children}</div>}
+//   </div>
+// );
+
+// const EditableRow = ({ label, value, editable, onChange, textarea = false, isArray = false, options = [] }) => (
+//   <div className="flex gap-5 items-start flex-wrap my-2">
+//     <h1 className="font-semibold flex items-center">
+//       <CheckBoxIcon className="!text-green-600 mr-1" />
+//       <span>{label}:</span>
+//     </h1>
+//     {editable ? (
+//       isArray ? (
+//         <Select
+//           multiple
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//           className="border rounded px-2 py-1 w-full md:w-[60%]"
+//         >
+//           {options.map((opt, index) => (
+//             <MenuItem key={index} value={opt}>{opt}</MenuItem>
+//           ))}
+//         </Select>
+//       ) : textarea ? (
+//         <textarea
+//           className="border rounded px-2 py-1 w-full md:w-[60%]"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       ) : (
+//         <input
+//           className="border rounded px-2 py-1"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       )
+//     ) : (
+//       <p>{Array.isArray(value) ? value.join(", ") : value}</p>
+//     )}
+//   </div>
+// );
+
+// const SellerDashboard = () => {
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [openSections, setOpenSections] = useState({ company: true, registration: false, team: false, location: false, finance: false, assets: false, sale: false });
+
+//   const [sellerData, setSellerData] = useState({
+//     company_name: "",
+//     website_url: "",
+//     CIN: "",
+//     company_linkedin: "",
+//     description_business: "",
+//     numcofounder: "",
+//     teamSize: "",
+//     numLocation: "",
+//     year: "",
+//     month: "",
+//     cofounderLinks: [],
+//     businessCategory: "",
+//     entityStructure: "",
+//     country: "",
+//     state: "",
+//     city: "",
+//     lastFinancialYear: "",
+//     trailing12months: "",
+//     prevMonth: "",
+//     NETlastFinancialYear: "",
+//     NETtrailing12months: "",
+//     NETprevMonth: "",
+//     positiveCashFlow: "",
+//     assestDesc: "",
+//     equity: "",
+//     debt: "",
+//     salereason: "",
+//     askingPrice: "",
+//     preferredArrangement: []
+//   });
+
+//   const handleChange = (key, value) => setSellerData((prev) => ({ ...prev, [key]: value }));
+
+//   const notifySuccess = (msg = "Data Updated Successfully!") => toast.success(msg, { position: "top-right", autoClose: 3000, hideProgressBar: false, pauseOnHover: true, draggable: true, theme: "colored" });
+
+//   const token = localStorage.getItem("token");
+
+//   const fetchSellerData = async () => {
+//     try {
+//       const res = await fetch("https://bizplorers-backend.onrender.com/api/seller/get_detail", { headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` } });
+//       const data = await res.json();
+//       setSellerData(data);
+//     } catch (err) {
+//       console.error(err);
+//       alert("Getting Data failed.");
+//     }
+//   };
+
+//   const updateData = async () => {
+//     try {
+//       await fetch("https://bizplorers-backend.onrender.com/api/seller/update_detail", {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+//         body: JSON.stringify(sellerData)
+//       });
+//       notifySuccess();
+//     } catch (err) {
+//       console.error(err);
+//       alert("Update failed");
+//     }
+//   };
+
+//   const handleEditToggle = () => {
+//     if (isEditing) updateData();
+//     setIsEditing(!isEditing);
+//   };
+
+//   useEffect(() => { fetchSellerData(); }, []);
+
+//   return (
+//     <div>
+//       <Header />
+//       <div className="flex justify-center items-center">
+//         <div className="flex flex-col border rounded-md mt-[7%] px-6 w-full m-4 max-w-screen-md bg-white shadow-md">
+//           <div className="flex justify-between w-full my-4">
+//             <h1 className="text-2xl font-bold">SELLER DETAILS</h1>
+//             <Button variant="contained" onClick={handleEditToggle}>{isEditing ? "Save" : "Edit Details"}</Button>
+//           </div>
+
+//           <Section title="Company Details" isOpen={openSections.company} toggleOpen={() => setOpenSections(p => ({ ...p, company: !p.company }))}>
+//             <EditableRow label="Company Name" value={sellerData.company_name} editable={isEditing} onChange={(val) => handleChange("company_name", val)} />
+//             <EditableRow label="Entity Structure" value={sellerData.entityStructure} editable={isEditing} onChange={(val) => handleChange("entityStructure", val)} />
+//             <EditableRow label="Business Category" value={sellerData.businessCategory} editable={isEditing} onChange={(val) => handleChange("businessCategory", val)} />
+//             <EditableRow label="Year Established" value={sellerData.year} editable={isEditing} onChange={(val) => handleChange("year", val)} />
+//             <EditableRow label="Month Established" value={sellerData.month} editable={isEditing} onChange={(val) => handleChange("month", val)} />
+//           </Section>
+
+//           <Section title="Registration & Socials" isOpen={openSections.registration} toggleOpen={() => setOpenSections(p => ({ ...p, registration: !p.registration }))}>
+//             <EditableRow label="Website URL" value={sellerData.website_url} editable={isEditing} onChange={(val) => handleChange("website_url", val)} />
+//             <EditableRow label="CIN" value={sellerData.CIN} editable={isEditing} onChange={(val) => handleChange("CIN", val)} />
+//             <EditableRow label="Company LinkedIn" value={sellerData.company_linkedin} editable={isEditing} onChange={(val) => handleChange("company_linkedin", val)} />
+//           </Section>
+
+//           <Section title="Team & Location" isOpen={openSections.team} toggleOpen={() => setOpenSections(p => ({ ...p, team: !p.team }))}>
+//             <EditableRow label="Number of Co-Founders" value={sellerData.numcofounder} editable={isEditing} onChange={(val) => handleChange("numcofounder", val)} />
+//             <EditableRow label="Team Size" value={sellerData.teamSize} editable={isEditing} onChange={(val) => handleChange("teamSize", val)} />
+//             <EditableRow label="Number of Locations" value={sellerData.numLocation} editable={isEditing} onChange={(val) => handleChange("numLocation", val)} />
+//             <EditableRow label="Co-Founder Links" value={sellerData.cofounderLinks} editable={isEditing} onChange={(val) => handleChange("cofounderLinks", val)} isArray options={["https://linkedin.com/in/example"]} />
+//             <EditableRow label="Country" value={sellerData.country} editable={isEditing} onChange={(val) => handleChange("country", val)} />
+//             <EditableRow label="State" value={sellerData.state} editable={isEditing} onChange={(val) => handleChange("state", val)} />
+//             <EditableRow label="City" value={sellerData.city} editable={isEditing} onChange={(val) => handleChange("city", val)} />
+//           </Section>
+
+//           <Section title="Financials" isOpen={openSections.finance} toggleOpen={() => setOpenSections(p => ({ ...p, finance: !p.finance }))}>
+//             <EditableRow label="Last Financial Year" value={sellerData.lastFinancialYear} editable={isEditing} onChange={(val) => handleChange("lastFinancialYear", val)} />
+//             <EditableRow label="Trailing 12 Months" value={sellerData.trailing12months} editable={isEditing} onChange={(val) => handleChange("trailing12months", val)} />
+//             <EditableRow label="Previous Month" value={sellerData.prevMonth} editable={isEditing} onChange={(val) => handleChange("prevMonth", val)} />
+//             <EditableRow label="NET Last Financial Year" value={sellerData.NETlastFinancialYear} editable={isEditing} onChange={(val) => handleChange("NETlastFinancialYear", val)} />
+//             <EditableRow label="NET Trailing 12 Months" value={sellerData.NETtrailing12months} editable={isEditing} onChange={(val) => handleChange("NETtrailing12months", val)} />
+//             <EditableRow label="NET Previous Month" value={sellerData.NETprevMonth} editable={isEditing} onChange={(val) => handleChange("NETprevMonth", val)} />
+//             <EditableRow label="Positive Cash Flow" value={sellerData.positiveCashFlow} editable={isEditing} onChange={(val) => handleChange("positiveCashFlow", val)} />
+//           </Section>
+
+//           <Section title="Assets & Equity" isOpen={openSections.assets} toggleOpen={() => setOpenSections(p => ({ ...p, assets: !p.assets }))}>
+//             <EditableRow label="Assets Description" value={sellerData.assestDesc} editable={isEditing} onChange={(val) => handleChange("assestDesc", val)} textarea />
+//             <EditableRow label="Equity" value={sellerData.equity} editable={isEditing} onChange={(val) => handleChange("equity", val)} />
+//             <EditableRow label="Debt" value={sellerData.debt} editable={isEditing} onChange={(val) => handleChange("debt", val)} />
+//           </Section>
+
+//           <Section title="Sale Details" isOpen={openSections.sale} toggleOpen={() => setOpenSections(p => ({ ...p, sale: !p.sale }))}>
+//             <EditableRow label="Reason for Sale" value={sellerData.salereason} editable={isEditing} onChange={(val) => handleChange("salereason", val)} textarea />
+//             <EditableRow label="Asking Price" value={sellerData.askingPrice} editable={isEditing} onChange={(val) => handleChange("askingPrice", val)} />
+//             <EditableRow label="Preferred Arrangement" value={sellerData.preferredArrangement} editable={isEditing} onChange={(val) => handleChange("preferredArrangement", val)} isArray options={["Full Sale", "Equity Partnership", "Advisory Only"]} />
+//           </Section>
+//         </div>
+//       </div>
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default SellerDashboard;
+
+
+
+
+// import React, { useState, useEffect } from "react";
+// import { Button } from "@mui/material";
+// import CheckBoxIcon from "@mui/icons-material/CheckBox";
+// import { toast } from "react-toastify";
+// import Footer from "../../component/Footer";
+// import Header from "../../component/Header";
+
+// const Section = ({ title, isOpen, toggleOpen, children }) => (
+//   <div className="border-t pt-4">
+//     <div
+//       className="flex justify-between items-center cursor-pointer"
+//       onClick={toggleOpen}
+//     >
+//       <h2 className="text-lg font-semibold">{title}</h2>
+//       <span>{isOpen ? "▲" : "▼"}</span>
+//     </div>
+//     {isOpen && <div className="mt-4">{children}</div>}
+//   </div>
+// );
+
+// const EditableRow = ({ label, value, editable, onChange, textarea = false }) => (
+//   <div className="flex gap-5 items-start flex-wrap my-2">
+//     <h1 className="font-semibold flex items-center">
+//       <CheckBoxIcon className="!text-green-600 mr-1" />
+//       <span>{label}:</span>
+//     </h1>
+//     {editable ? (
+//       textarea ? (
+//         <textarea
+//           className="border rounded px-2 py-1 w-full md:w-[60%]"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       ) : (
+//         <input
+//           className="border rounded px-2 py-1"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       )
+//     ) : (
+//       <p>{value}</p>
+//     )}
+//   </div>
+// );
+
+// const SellerDashboard = () => {
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [openSections, setOpenSections] = useState({
+//     company: true,
+//     website: false,
+//     linkedin: false,
+//     more: false,
+//   });
+
+//   const [sellerData, setSellerData] = useState({
+//     company_name: "",
+//     website_url: "",
+//     CIN: "",
+//     company_linkedin: "",
+//     cofounderLinks: [],
+//     description_business: "",
+//     businessCategory: "",
+//     entityStructure: "",
+//     country: "",
+//     state: "",
+//     city: "",
+//   });
+
+//   const handleChange = (key, value) => {
+//     setSellerData((prev) => ({ ...prev, [key]: value }));
+//   };
+
+//   const handleArrayChange = (key, index, value) => {
+//     const newArray = [...sellerData[key]];
+//     newArray[index] = value;
+//     setSellerData((prev) => ({ ...prev, [key]: newArray }));
+//   };
+
+//   const notifySuccess = (msg = "Data Updated Successfully!") => {
+//     toast.success(msg, {
+//       position: "top-right",
+//       autoClose: 3000,
+//       hideProgressBar: false,
+//       pauseOnHover: true,
+//       draggable: true,
+//       theme: "colored",
+//     });
+//   };
+
+//   const token = localStorage.getItem("token");
+
+//   const fetchSellerData = async () => {
+//     try {
+//       const response = await fetch(
+//         "https://bizplorers-backend.onrender.com/api/seller/get_detail",
+//         {
+//           method: "GET",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+//       if (!response.ok) throw new Error("Failed to fetch");
+//       const data = await response.json();
+//       setSellerData(data);
+//     } catch (error) {
+//       console.error(error);
+//       alert("Getting Data failed.");
+//     }
+//   };
+
+//   const updateData = async () => {
+//     try {
+//       const response = await fetch(
+//         "https://bizplorers-backend.onrender.com/api/seller/update_detail",
+//         {
+//           method: "PUT",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify(sellerData),
+//         }
+//       );
+//       if (!response.ok) throw new Error("Update failed");
+//       notifySuccess();
+//     } catch (error) {
+//       console.error(error);
+//       alert("Update failed");
+//     }
+//   };
+
+//   const handleEditToggle = () => {
+//     if (isEditing) updateData();
+//     setIsEditing(!isEditing);
+//   };
+
+//   useEffect(() => {
+//     fetchSellerData();
+//   }, []);
+
+//   return (
+//     <div>
+//       <Header />
+//       <div className="flex justify-center items-center">
+//         <div className="flex flex-col border rounded-md mt-[7%] px-6 w-full m-4 max-w-screen-md bg-white shadow-md">
+//           <div className="flex justify-between w-full my-4">
+//             <h1 className="text-2xl font-bold">SELLER DETAILS</h1>
+//             <Button variant="contained" onClick={handleEditToggle}>
+//               {isEditing ? "Save" : "Edit Details"}
+//             </Button>
+//           </div>
+
+//           <Section
+//             title="Company Details"
+//             isOpen={openSections.company}
+//             toggleOpen={() => setOpenSections(prev => ({ ...prev, company: !prev.company }))}
+//           >
+//             <EditableRow label="Company Name" value={sellerData.company_name} editable={isEditing} onChange={(val) => handleChange("company_name", val)} />
+//             <EditableRow label="Entity Structure" value={sellerData.entityStructure} editable={isEditing} onChange={(val) => handleChange("entityStructure", val)} />
+//             <EditableRow label="Business Category" value={sellerData.businessCategory} editable={isEditing} onChange={(val) => handleChange("businessCategory", val)} />
+//           </Section>
+
+//           <Section
+//             title="Website"
+//             isOpen={openSections.website}
+//             toggleOpen={() => setOpenSections(prev => ({ ...prev, website: !prev.website }))}
+//           >
+//             <EditableRow label="Website URL" value={sellerData.website_url} editable={isEditing} onChange={(val) => handleChange("website_url", val)} />
+//             <EditableRow label="CIN" value={sellerData.CIN} editable={isEditing} onChange={(val) => handleChange("CIN", val)} />
+//           </Section>
+
+//           <Section
+//             title="LinkedIn"
+//             isOpen={openSections.linkedin}
+//             toggleOpen={() => setOpenSections(prev => ({ ...prev, linkedin: !prev.linkedin }))}
+//           >
+//             <EditableRow label="Company LinkedIn" value={sellerData.company_linkedin} editable={isEditing} onChange={(val) => handleChange("company_linkedin", val)} />
+//             <div className="flex gap-3 flex-wrap">
+//               <h1 className="font-semibold flex items-center">Co-Founder LinkedIn:</h1>
+//               {sellerData.cofounderLinks.map((link, i) =>
+//                 isEditing ? (
+//                   <input
+//                     key={i}
+//                     className="border px-2 py-1 rounded-md"
+//                     value={link}
+//                     onChange={(e) => handleArrayChange("cofounderLinks", i, e.target.value)}
+//                   />
+//                 ) : (
+//                   <p key={i}>{link}</p>
+//                 )
+//               )}
+//             </div>
+//           </Section>
+
+//           <Section
+//             title="More"
+//             isOpen={openSections.more}
+//             toggleOpen={() => setOpenSections(prev => ({ ...prev, more: !prev.more }))}
+//           >
+//             <EditableRow label="Description about Business" value={sellerData.description_business} editable={isEditing} onChange={(val) => handleChange("description_business", val)} textarea />
+//             <EditableRow label="Country" value={sellerData.country} editable={isEditing} onChange={(val) => handleChange("country", val)} />
+//             <EditableRow label="State" value={sellerData.state} editable={isEditing} onChange={(val) => handleChange("state", val)} />
+//             <EditableRow label="City" value={sellerData.city} editable={isEditing} onChange={(val) => handleChange("city", val)} />
+//           </Section>
+//         </div>
+//       </div>
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// export default SellerDashboard;
+
+
+// import React, { useState, useEffect } from "react";
+// import { Button } from "@mui/material";
+// import { Menu, X } from "lucide-react";
+// import CheckBoxIcon from "@mui/icons-material/CheckBox";
+// import { Link } from "react-router-dom";
+// import { toast } from "react-toastify";
+// import Footer from "../../component/Footer";
+// import Header from "../../component/Header";
+// import  {showSuccess,showError ,showInfo,showWarning} from '../../component/utils/toast';
+
+
+// const SellerDashboard = () => {
+//   const [menuOpen, setMenuOpen] = useState(false);
+//   const [isEditing, setIsEditing] = useState(false);
+
+//  const [sellerData, setSellerData] = useState({
+//      company_name: "",
+//      website_url: "",
+//      CIN: "",
+//      company_linkedin: "",
+//      description_business: "",
+//      numcofounder: "",
+//      teamSize: "",
+//      numLocation: "",
+//      year: "",
+//      month: "",
+//      // cofounder_linkedin: "",
+//      cofounderLinks:[],
+//      businessCategory: "",
+//      // businessLocation:'',
+//      entityStructure: "",
+//      country: "",
+//      state: "",
+//      city: "",
+//      //  status:'',
+//      //Step 2
+//      lastFinancialYear: "",
+//      trailing12months: "",
+//      prevMonth: "",
+//     NETlastFinancialYear: "",
+//      NETtrailing12months: "",
+//      NETprevMonth: "",
+//       positiveCashFlow:"",
+//      assestDesc: "",
+//      equity: "",
+//      debt: "",
+    
+//      //step 3
+//      salereason: "",
+//      askingPrice: "",
+//      preferredArrangement: [],
+    
+//    });
+
+//   const EditableRow = ({
+//     label,
+//     icon,
+//     value,
+//     editable,
+//     onChange,
+//     textarea,
+//   }) => (
+//     <div className="flex items-start gap-2 my-2">
+//       <span className="font-semibold flex items-center">
+//         {icon}
+//         {label}:
+//       </span>
+//       {editable ? (
+//         textarea ? (
+//           <textarea
+//             className="border p-2 rounded-md w-full"
+//             value={value}
+//             onChange={(e) => onChange(e.target.value)}
+//           />
+//         ) : (
+//           <input
+//             className="border p-2 rounded-md w-full"
+//             value={value}
+//             onChange={(e) => onChange(e.target.value)}
+//           />
+//         )
+//       ) : (
+//         <span>{value}</span>
+//       )}
+//     </div>
+//   );
+//   const handleChange = (key, value) => {
+//     setSellerData((prev) => ({ ...prev, [key]: value }));
+//   };
+
+//   const handleArrayChange = (key, index, value) => {
+//     const newArray = [...sellerData[key]];
+//     newArray[index] = value;
+//     setSellerData((prev) => ({ ...prev, [key]: newArray }));
+//   };
+
+//   const notifySuccess = (msg = "Data Updated Successfully!") => {
+//     toast.success(msg, {
+//       position: "top-right",
+//       autoClose: 3000,
+//       hideProgressBar: false,
+//       pauseOnHover: true,
+//       draggable: true,
+//       theme: "colored",
+//     });
+//   };
+
+//   const token = localStorage.getItem("token");
+//   const fetchSellerData = async () => {
+//     try {
+//       const response = await fetch(
+//         "https://bizplorers-backend.onrender.com/api/seller/get_detail",
+//         {
+//           method: "GET",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+
+//       if (!response.ok) throw new Error("Failed to fetch");
+
+//       const data = await response.json();
+// showSuccess("Data fetched successfully");
+//       setSellerData(data);
+//     } catch (error) {
+//       console.error(error);
+//       showError("Getting Data failed.");
+//       // alert("Getting Data failed.");
+//     }
+//   };
+
+//   const updateData = async () => {
+//     try {
+//       const response = await fetch(
+//         "https://bizplorers-backend.onrender.com/api/seller/update_detail",
+//         {
+//           method: "PUT",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify(sellerData),
+//         }
+//       );
+
+//       if (!response.ok) throw new Error("Update failed");
+
+//       const updated = await response.json();
+//       notifySuccess();
+//       console.log(updated);
+//     } catch (error) {
+//       console.error(error);
+//       showError("Update failed");
+//       // alert("Update failed");
+//     }
+//   };
+
+//   const handleEditToggle = () => {
+//     if (isEditing) {
+//       updateData();
+//     }
+//     setIsEditing(!isEditing);
+//   };
+//   useEffect(() => {
+//     fetchSellerData();
+//   }, []);
+
+  
+//        const notifyLogOut = (msg = "Logged out successfully!") => {
+//           toast.success(msg, {
+//             position: "top-right",
+//             autoClose: 3000,
+//             hideProgressBar: false,
+//             pauseOnHover: true,
+//             draggable: true,
+//             theme: "colored",
+//           });
+//         };
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user");
+//     notifyLogOut();
+//     window.location.href = "/login"; // or your login route
+//   };
+
+//   return (
+//     <div>
+     
+//       {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+       
+//         <Link to="/">
+//           <img
+//             alt="logo"
+//             width={50}
+//             className="object-contain cursor-pointer"
+//           />
+//         </Link>
+//         <nav className="hidden md:flex gap-8">
+//           <Link to="/aboutUs" className="text-xl hover:text-blue-600">
+//             About Us
+//           </Link>
+//           <Link to="/services" className="text-xl hover:text-blue-600">
+//             Services
+//           </Link>
+//           <Link to="/seller" className="text-xl hover:text-blue-600">
+//             Seller
+//           </Link>
+//           <Link to="/buyer" className="text-xl hover:text-blue-600">
+//             Buyer
+//           </Link>
+         
+//           <Link to="/signUp" className="text-xl hover:text-blue-600">
+//             Register
+//           </Link>
+         
+//         </nav>
+//         <div className="hidden md:flex gap-2">
+        
+//           <button
+//             className="bg-blue-600 text-white px-3 md:px-4 py-1 md:py-2 rounded-2xl text-xs md:text-sm hover:bg-blue-700"
+//             onClick={handleLogout}
+//           >
+//             Log Out
+//           </button>
+         
+//         </div>
+        
+//       </header> */}
+//       <Header/>
+//       {/* 
+//       <div className='flex justify-center pb-10'>
+//         <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%] '> */}
+//       {/* <div className='flex justify-center pb-10'>
+//   <div className='flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-[5%] w-[80%] mx-4 md:mx-10'> */}
+
+//       {/**Added Margin */}
+//       <div className="flex justify-center items-center">
+//         <div className="flex flex-col border-2 border-slate-500 rounded-md mt-[7%] px-6 w-full m-4  max-w-screen-md">
+//           <div className="flex justify-between w-full mt-[2%]">
+//             <div className="text-2xl font-bold">SELLER DETAILS</div>
+//             <div>
+//               <Button variant="contained" onClick={handleEditToggle}>
+//                 {isEditing ? "Save" : "Edit Details"}
+//               </Button>
+//             </div>
+//           </div>
+
+//           {/* Personal Details */}
+//           <div className="flex flex-col text-black my-[2%]">
+//             <h1 className="text-xl font-bold">Company Details</h1>
+//             <EditableRow
+//               label="Company Name"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.company_name}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("company_name", val)}
+//             />
+//             <EditableRow
+//               label="Entity Structure"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.entityStructure}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("entityStructure", val)}
+//             />
+//             <EditableRow
+//               label="Business Category"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.businessCategory}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("businessCategory", val)}
+//               textarea
+//             />
+//             <EditableRow
+//               label="Website Url"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.website_url}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("website_url", val)}
+//             />
+//             <EditableRow
+//               label="CIN"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.CIN}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("CIN", val)}
+//             />
+//             <EditableRow
+//               label="Company Linkedin"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.company_linkedin}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("company_linkedin", val)}
+//             />
+//             {/* <EditableRow
+//               label="Co-founder Linkedin"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.cofounder_linkedin}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("cofounder_linkedin", val)}
+//             /> */}
+//                  <div className="flex gap-3 flex-wrap">
+//               <h1 className="font-semibold flex items-center">
+//                 <CheckBoxIcon className="!text-green-600 mr-1" />
+//                 Co-Founder Linkedin:
+//               </h1>
+//               {sellerData.cofounderLinks.map((arr, i) =>
+//                 isEditing ? (
+//                   <input
+//                     key={i}
+//                     className="border px-2 py-1 rounded-md"
+//                     value={arr}
+//                     onChange={(e) =>
+//                       handleArrayChange("cofounderLinks", i, e.target.value)
+//                     }
+//                   />
+//                 ) : (
+//                   <p key={i} className="mr-2">
+//                     {arr},
+//                   </p>
+//                 )
+//               )}
+//             </div>
+//             <EditableRow
+//               label="Description about Business"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.description_business}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("description_business", val)}
+//             />
+//             <EditableRow
+//               label="Country"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.country}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("country", val)}
+//             />
+//             <EditableRow
+//               label="State"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.state}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("state", val)}
+//             />
+//             <EditableRow
+//               label="City"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.city}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("city", val)}
+//             />
+//             <EditableRow
+//               label="Number of Co-founder"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.numcofounder}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("numcofounder", val)}
+//             />
+//             <EditableRow
+//               label="Team Size"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.teamSize}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("teamSize", val)}
+//             />
+//             <EditableRow
+//               label="Number of Locations"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.numLocation}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("numLocation", val)}
+//             />
+//             <EditableRow
+//               label="Commencement of Business Year"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.year}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("year", val)}
+//             />
+//             <EditableRow
+//               label="Commencement of Business Month"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.month}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("month", val)}
+//             />
+//             <EditableRow
+//               label="Status"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.status}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("status", val)}
+//             />
+//             {/* <EditableRow label="Website Url" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={sellerData.website_url} editable={isEditing} onChange={(val) => handleChange('website_url', val)} />
+//          <EditableRow label="Website Url" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={sellerData.website_url} editable={isEditing} onChange={(val) => handleChange('website_url', val)} /> */}
+//           </div>
+
+//           {/* Preferences Details */}
+//           <div className="flex flex-col text-black my-[2%]">
+//             <h1 className="text-xl font-bold">Financial Details</h1>
+//             {/* <div className='flex gap-3 flex-wrap'>
+//               <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Business Categories:</h1>
+//               {buyerData.businessCategory.map((cat, i) =>
+//                 isEditing ? (
+//                   <input key={i} className="border px-2 py-1 rounded-md" value={cat} onChange={e => handleArrayChange('businessCategory', i, e.target.value)} />
+//                 ) : (
+//                   <p key={i} className='mr-2'>{cat},</p>
+//                 )
+//               )}
+//             </div> */}
+
+//             <EditableRow
+//               label="Last Financial year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.lastFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("lastFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Previous Financial Year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.prevFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("prevFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Pre-previous Financial Year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.prePrevFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("prePrevFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Trailing 12 months(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.trail12months}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("trail12months", val)}
+//             />
+//             <EditableRow
+//               label="Last month(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.lastmonth}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("lastmonth", val)}
+//             />
+//             <EditableRow
+//               label="Previous month(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.prevMonth}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("prevMonth", val)}
+//             />
+//             <EditableRow
+//               label="Pre-previous month(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.prePrevMonth}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("prePrevMonth", val)}
+//             />
+//             <h1 className="text-2xl font-semibold ">PROFITS(PAT)</h1>
+
+//             <EditableRow
+//               label="Last Financial year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATlastFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATlastFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Previous Financial Year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATprevFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATprevFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Pre-previous Financial Year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATprePrevFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATprePrevFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Trailing 12 months(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATtrailing12months}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATtrailing12months", val)}
+//             />
+//             <EditableRow
+//               label="Last month(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATlastmonth}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATlastmonth", val)}
+//             />
+//             <EditableRow
+//               label="Previous month(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATprevMonth}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATprevMonth", val)}
+//             />
+//             <EditableRow
+//               label="Pre-previous month(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.PATprePrevMonth}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("PATprePrevMonth", val)}
+//             />
+//             <EditableRow
+//               label="EBITDA Margin (current) %"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.EBITDA}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("EBITDA", val)}
+//             />
+//             <h1 className="text-2xl font-semibold ">OPERATING CASH FLOW</h1>
+
+//             <EditableRow
+//               label="Last Financial year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.OCFlastFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("OCFlastFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Previous Financial Year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.OCFprevFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("OCFprevFinancialYear", val)}
+//             />
+//             <EditableRow
+//               label="Pre-previous Financial Year(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.OCFprePrevFinancialYear}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("OCFprePrevFinancialYear", val)}
+//             />
+//             <h1 className="text-2xl font-semibold pt-[5%]">ASSESTS</h1>
+
+//             <EditableRow
+//               label="Description of Key Assest/IP"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.assestDesc}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("assestDesc", val)}
+//             />
+//             <h1 className="text-2xl font-semibold pt-[5%]">Sources Of Funds</h1>
+//             <EditableRow
+//               label="Equity(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.equity}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("equity", val)}
+//             />
+//             <EditableRow
+//               label="Debt(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.debt}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("debt", val)}
+//             />
+//             <h1 className="text-2xl font-semibold ">TRANSACTION DETAILS</h1>
+//             <EditableRow
+//               label="Reason For Sale"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.salereason}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("salereason", val)}
+//             />
+//             <EditableRow
+//               label="Asking Price(Rs)"
+//               icon={<CheckBoxIcon className="!text-green-600 mr-1" />}
+//               value={sellerData.askingPrice}
+//               editable={isEditing}
+//               onChange={(val) => handleChange("askingPrice", val)}
+//             />
+//             {/* <EditableRow label="Preferred Arrangement" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={sellerData.preferredArrangement} editable={isEditing} onChange={(val) => handleChange('preferredArrangement', val)} /> */}
+//             <div className="flex gap-3 flex-wrap">
+//               <h1 className="font-semibold flex items-center">
+//                 <CheckBoxIcon className="!text-green-600 mr-1" />
+//                 Preferred Arrangement:
+//               </h1>
+//               {sellerData.preferredArrangement.map((arr, i) =>
+//                 isEditing ? (
+//                   <input
+//                     key={i}
+//                     className="border px-2 py-1 rounded-md"
+//                     value={arr}
+//                     onChange={(e) =>
+//                       handleArrayChange(
+//                         "preferredArrangement",
+//                         i,
+//                         e.target.value
+//                       )
+//                     }
+//                   />
+//                 ) : (
+//                   <p key={i} className="mr-2">
+//                     {arr},
+//                   </p>
+//                 )
+//               )}
+//             </div>
+//             {/* <div className="flex gap-3 flex-wrap">
+//               <h1 className="font-semibold flex items-center">
+//                 <CheckBoxIcon className="!text-green-600 mr-1" />
+//                 Co-Founder Linkedin:
+//               </h1>
+//               {sellerData.cofounderLinks.map((arr, i) =>
+//                 isEditing ? (
+//                   <input
+//                     key={i}
+//                     className="border px-2 py-1 rounded-md"
+//                     value={arr}
+//                     onChange={(e) =>
+//                       handleArrayChange("cofounderLinks", i, e.target.value)
+//                     }
+//                   />
+//                 ) : (
+//                   <p key={i} className="mr-2">
+//                     {arr},
+//                   </p>
+//                 )
+//               )}
+//             </div> */}
+
+//             {/* <div className='flex gap-3 flex-wrap'>
+//               <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Cities:</h1>
+//               {buyerData.city.map((ct, i) =>
+//                 isEditing ? (
+//                   <input key={i} className="border px-2 py-1 rounded-md" value={ct} onChange={e => handleArrayChange('city', i, e.target.value)} />
+//                 ) : (
+//                   <p key={i} className='mr-2'>{ct},</p>
+//                 )
+//               )}
+//             </div> */}
+
+//             {/* <EditableRow label="Open to Pre-Revenue" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreRevenue} editable={isEditing} onChange={(val) => handleChange('openToPreRevenue', val)} />
+//             {buyerData.openToPreRevenue === "No" && (
+//               <>
+//                 <EditableRow label="Open to Pre-Breakeven" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.openToPreBreakeven} editable={isEditing} onChange={(val) => handleChange('openToPreBreakeven', val)} />
+//                 <EditableRow label="Revenue Min" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueMin} editable={isEditing} onChange={(val) => handleChange('revenueMin', val)} />
+//                 <EditableRow label="Revenue Max" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.revenueMax} editable={isEditing} onChange={(val) => handleChange('revenueMax', val)} />
+//               </>
+//             )} */}
+//           </div>
+
+//           {/* <div className='flex flex-col text-black my-[2%]'>
+//             <h1 className='text-xl font-bold'>Preferred Value Multiple</h1>
+//             <EditableRow label="Metric" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.metric} editable={isEditing} onChange={(val) => handleChange('metric', val)} />
+//             <EditableRow label="Max Multiple" icon={<CheckBoxIcon className='!text-green-600 mr-1' />} value={buyerData.maxMultiple} editable={isEditing} onChange={(val) => handleChange('maxMultiple', val)} />
+
+//             <div className='flex gap-3 flex-wrap'>
+//               <h1 className='font-semibold flex items-center'><CheckBoxIcon className='!text-green-600 mr-1' />Preferred Arrangement:</h1>
+//               {buyerData.preferredArrangement.map((arr, i) =>
+//                 isEditing ? (
+//                   <input key={i} className="border px-2 py-1 rounded-md" value={arr} onChange={e => handleArrayChange('preferredArrangement', i, e.target.value)} />
+//                 ) : (
+//                   <p key={i} className='mr-2'>{arr},</p>
+//                 )
+//               )}
+//             </div>
+//           </div> */}
+//         </div>
+//       </div>
+//       <Footer />
+//     </div>
+//   );
+// };
+
+// // Reusable editable row
+// const EditableRow = ({
+//   label,
+//   icon,
+//   value,
+//   editable,
+//   onChange,
+//   textarea = false,
+// }) => (
+//   <div className="flex gap-5 items-start flex-wrap my-2">
+//     <h1 className="font-semibold flex items-center">
+//       {icon}
+//       <span className="ml-1">{label}:</span>
+//     </h1>
+//     {editable ? (
+//       textarea ? (
+//         <textarea
+//           className="border rounded px-2 py-1 w-full md:w-[60%]"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       ) : (
+//         <input
+//           className="border rounded px-2 py-1"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       )
+//     ) : (
+//       <p>{value}</p>
+//     )}
+//   </div>
+// );
+
+// export default SellerDashboard;

@@ -23,6 +23,8 @@ import OurServices from "./pages/OurServices";
 import Seller from "./pages/Seller";
 import PrivateRoute from "./Route/PrivateRoute";
 import ScrollToTop from "./component/ScrollToTop";
+import ForgotPassword from './component/ForgetPassword';
+import NRESignup from "./pages/NRESignup";
 
 function App() {
   return (
@@ -35,6 +37,7 @@ function App() {
           {/**Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/signUp" element={<SignUp />} />
+           <Route path="/nre-signup" element={<NRESignup />} />
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="/services" element={<OurServices />} />
           {/* <Route path="/" element={<SignUp/>}/> */}
@@ -43,6 +46,7 @@ function App() {
           <Route path="/buyer" element={<Buyer />} />
           <Route path="/seller" element={<Seller />} />
           <Route path="/login" element={<Login />} />
+           <Route path="/forgot-password" element={<ForgotPassword />} />
 
 {/**Private Routes */}
           <Route
@@ -101,7 +105,7 @@ function App() {
           {/* <Route path="/admin/dashboard" element={<AdminWithSidebar/>}/> */}
 
           <Route
-            path="/admin/dashboard"
+            path="/admin"
             element={
               <PrivateRoute allowedRoles={["admin"]}>
                 <AdminWithSidebar />

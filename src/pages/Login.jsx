@@ -173,6 +173,10 @@ notifySuccess();
 const handleSignup=()=>{
   navigate('/');
 }
+
+const handleForgetPassword=()=>{
+  navigate('/forgot-password');
+}
   return (
     <div className="min-h-screen bg-slate-100 ">
      
@@ -251,10 +255,10 @@ const handleSignup=()=>{
             )}
           </div>
 
-          <div>
-            <p className="text-[12px] text-black font-bold flex justify-end cursor-pointer">
+          <div className="flex justify-end">
+            <button className="text-[12px] text-black font-bold cursor-pointer" onClick={handleForgetPassword}>
               Forgot Password?
-            </p>
+            </button>
           </div>
 
           <button

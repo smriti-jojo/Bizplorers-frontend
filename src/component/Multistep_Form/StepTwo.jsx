@@ -9,7 +9,7 @@ const countryCityMap = {
 };
 
 const StepTwo = ({ formData, handleChange ,errors}) => (
-  <div className="space-y-4">
+  <div className="space-y-4 px-[5%]">
    
      <div>
       <h1>Business Categories of Interest</h1>
@@ -124,7 +124,7 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       No
     </label>
   </div>
-   <div className="flex gap-[5%]  py-2">
+   {/* <div className="flex gap-[5%]  py-2">
     <div>
       <h1>Revenue Size(min)*</h1>
          <TextField name="revenueSizeMin" value={formData.revenueSizeMin} onChange={handleChange} id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueSizeMin}/>
@@ -133,7 +133,7 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
       <h1>Revenue Size(min)(max)*</h1>
       <TextField name="revenueSizeMax" value={formData.revenueSizeMax} onChange={handleChange}  id="outlined-basic" label="" variant="outlined" size="small" className="!w-[350px]" error={errors.revenueSizeMax}/>
       </div>
-    </div>
+    </div> */}
       
 
   </>
