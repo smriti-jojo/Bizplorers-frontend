@@ -127,6 +127,10 @@ const ViewProfile= () => {
     window.location.href = '/login'; // or your login route
   };
 
+   const handleCancel=()=>{
+    setIsEditing(!isEditing);
+  }
+
   return (
     <div>
      
@@ -138,11 +142,18 @@ const ViewProfile= () => {
         <div className="flex flex-col border rounded-md  px-6 w-full m-4 max-w-screen-md bg-white shadow-lg shadow-slate-100">
           <div className="flex justify-between w-full my-4">
             <div className='text-2xl font-bold'>BROKER DETAILS</div>
-            <div>
-              <Button variant='contained' onClick={handleEditToggle}>
-                {isEditing ? 'Save' : 'Edit Details'}
-              </Button>
-            </div>
+            {isEditing ? 
+                       <div className="flex gap-3">
+                       <Button variant="contained" onClick={handleEditToggle} className="!bg-green-500">
+                   Save
+                       </Button>
+                        <Button variant="contained" onClick={handleCancel} className="!bg-red-500">
+                   Cancel
+                       </Button>
+                       </div>:( <Button variant="contained" onClick={handleEditToggle}>
+                   Edit Details
+                       </Button>)
+           }
           </div>
 
           {/* Personal Details */}
