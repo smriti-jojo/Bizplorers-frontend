@@ -126,7 +126,8 @@ useEffect(()=>{
             {cardData.map((card, index) => (
               <ReusableCards
               key={index}
-              id={card.userId}
+              // id={card.userId}
+              userId={card.userId}
                 description_business={card.description_business}
                 company_name={card.company_name}
                 city={card.city}
