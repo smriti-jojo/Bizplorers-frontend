@@ -256,7 +256,7 @@ const handleForgetPassword=()=>{
           </div>
 
           <div className="flex justify-end">
-            <button className="text-[12px] text-black font-bold cursor-pointer" onClick={handleForgetPassword}>
+            <button className="text-sm text-black font-bold cursor-pointer" onClick={handleForgetPassword}>
               Forgot Password?
             </button>
           </div>
@@ -268,6 +268,15 @@ const handleForgetPassword=()=>{
           >
             {loading ? "Logging in..." : "Login"}
           </button>
+           <div className="flex justify-center py-2">
+                 Not registered? 
+                <a
+                  href="/signUp"
+                  className="text-teal-600 hover:text-teal-800 underline"
+                >
+                Create an account
+                </a>
+              </div>
         </form>
 
       </div>

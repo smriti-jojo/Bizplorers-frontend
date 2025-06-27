@@ -11,7 +11,12 @@ import { toast } from "react-toastify";
 import instance from "../instance";
 import Footer from "../component/Footer";
 import Header from "../component/Header";
-import  {showSuccess,showError ,showInfo,showWarning} from '../component/utils/toast';
+import {
+  showSuccess,
+  showError,
+  showInfo,
+  showWarning,
+} from "../component/utils/toast";
 
 const SignUp = ({ type }) => {
   const [formData, setFormData] = useState({
@@ -21,7 +26,6 @@ const SignUp = ({ type }) => {
     password: "",
     confirmPassword: "",
     role: "",
-  
   });
   const [errors, setErrors] = useState({});
   const [menuOpen, setMenuOpen] = useState(false);
@@ -224,13 +228,11 @@ const SignUp = ({ type }) => {
               state: { email: formData.email, role: formData.role },
             });
           }
-        } else 
-        {
+        } else {
           showError(data.error);
           setLoading(false);
         }
       } catch (error) {
-       
         showError("Network error, please try again");
         setLoading(false);
       }
@@ -239,10 +241,6 @@ const SignUp = ({ type }) => {
       setLoading(false);
     }
   };
-
-
-
-  
 
   //    const notifySuccess = (msg = "Saved successfully!") => {
   //   toast.success(msg, {
@@ -347,7 +345,9 @@ const SignUp = ({ type }) => {
                   </button>
                 ))}
               </div>
-<a href="/nre-register" className="text-blue-600 underline">NRE Registration?</a>
+              <a href="/nre-register" className="text-blue-600 underline">
+                NRE Registration?
+              </a>
 
               <button
                 type="submit"
@@ -392,7 +392,7 @@ const SignUp = ({ type }) => {
             </nav>
            
           </header> */}
-          <Header/>
+          <Header />
 
           <div className="flex justify-center items-center pt-[7%] pb-[3%] bg-gray-100 px-4">
             <form
@@ -494,7 +494,6 @@ const SignUp = ({ type }) => {
                   </button>
                 ))}
               </div>
-              <div className="flex justify-end pb-2"><a href="/nre-signup" className="text-teal-600 hover:text-teal-800 underline">NRE Registration?</a></div>
 
               <button
                 type="submit"
@@ -502,6 +501,15 @@ const SignUp = ({ type }) => {
               >
                 {loading ? "Signing in..." : "Sign Up"}
               </button>
+              <div className="flex justify-center py-2">
+                Already a member?
+                <a
+                  href="/login"
+                  className="text-teal-600 hover:text-teal-800 underline"
+                >
+                  Log in
+                </a>
+              </div>
             </form>
           </div>
           <Footer />
