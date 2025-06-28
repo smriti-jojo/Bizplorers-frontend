@@ -22,6 +22,7 @@ const ReusableCards = ({
   onSelect,
   isSelected,
   buyer,
+  brokerId
 }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [showSellerPopup, setshowSellerPopup] = useState(false);
@@ -51,6 +52,12 @@ const ReusableCards = ({
             >
               <Check size={20} />
             </button>
+          )}
+
+          {token && user?.role === "broker" && location === "dashboard" && buyer?.brokerId!=null && (
+           <div className="absolute right-0 -top-3 text-green-600 px-1 bg-yellow-100">
+            Assigned Buyer
+            </div>
           )}
 
           <div className="w-[350px] px-5 py-5 h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
@@ -168,6 +175,11 @@ const ReusableCards = ({
             >
               <Check size={20} />
             </button>
+          )}
+           {token && user?.role === "broker" && location === "dashboard" && brokerId!=null && (
+           <div className="absolute right-0 -top-3 text-green-600 px-1 bg-yellow-100">
+            Assigned Seller
+            </div>
           )}
         <div className="w-[350px] px-5 py-5 h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
           <div className="my-2 text-lg text-blue-500 font-semibold">

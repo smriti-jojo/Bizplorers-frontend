@@ -276,6 +276,7 @@ notifySuccess();
       key={index}
       id={card.userId}
       type={card.type}
+      brokerId={card.brokerId}
       company_name={card.company_name}
       city={card.city}
       description_business={card.description_business}
