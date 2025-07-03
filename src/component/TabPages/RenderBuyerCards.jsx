@@ -71,6 +71,15 @@ const Transition = React.forwardRef((props, ref) => {
     }
   }, [cardData]);
 
+  const refresh=localStorage.getItem("refreshBuyerList");
+
+  useEffect(()=>{
+    
+      fetchBuyerByBrokerData();
+    localStorage.removeItem("refreshBuyerList");
+    
+  },[refresh])
+
   return (
     <div className="px-[5%] py-6">
       <div className="flex justify-end pb-4">
@@ -117,8 +126,8 @@ const Transition = React.forwardRef((props, ref) => {
           //   description_business={card.description_business}
           //   buyerInterest={card.buyerInterest}
           // />
-          <ReusableCards  key={index} type="buyer" buyer={card} 
-      id={card.userId}
+          <ReusableCards  key={index} type="buyer" data={card} 
+      // id={card.userId}
       
       // location="dashboard"
        />

@@ -396,14 +396,18 @@ setLoading(true);
       
   filteredBusinesses.map((card, index) => (
     <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
-      <ReusableCards
+      {/* <ReusableCards
+      headline={card.headline}
       userId={card.userId}
         description_business={card.description_business}
         company_name={card.company_name}
         city={card.city}
         askingPrice={card.askingPrice}
-        EBITDA={card.EBITDA}
-      />
+        last12monthsSales={card.trailing12months}
+        profit12months={card.NETtrailing12months}
+      /> */}
+       <ReusableCards type="seller" data={card}  />
+        {/* <ReusableCards type="buyer" buyer={buyer} location="home" /> */}
     </div>
   ))
 )

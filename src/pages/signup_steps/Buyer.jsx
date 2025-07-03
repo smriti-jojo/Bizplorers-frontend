@@ -12,13 +12,21 @@ import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 import { useLayoutEffect } from "react";
 import { toast } from "react-toastify";
+import RegisterModalForm from "../../component/RegisterModalForm";
+import axios from "axios";
 import  {showSuccess,showError ,showInfo,showWarning} from '../../component/utils/toast';
 
 const RegisterBuyer = ({ type }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [stepsList, setStepsList] = useState([]);
+   const [registerData, setRegisterData] = useState({
+        name:"",
+email:"",
+    phone:"",
+   })
   const [formData, setFormData] = useState({
+
     typeOfBuyer: "",
     designation: "",
     description: "",
@@ -32,8 +40,8 @@ const RegisterBuyer = ({ type }) => {
     openToPreBreakeven: "",
     // revenueSizeMin: "",
     // revenueSizeMax: "",
-    metric: "",
-    maxMultiple: "",
+    // metric: "",
+    // maxMultiple: "",
     preferredArrangement: [],
   });
   const [errors, setErrors] = useState({});
@@ -48,6 +56,11 @@ const RegisterBuyer = ({ type }) => {
     setFormData((prev) => ({ ...prev, [name]: actualValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+  const handleRegisterChange = (e) => {
+  const { name, value } = e.target;
+  setRegisterData((prev) => ({ ...prev, [name]: value }));
+};
 
    const notifyLogOut = (msg = "Logged out successfully!") => {
             toast.success(msg, {
@@ -67,7 +80,13 @@ const RegisterBuyer = ({ type }) => {
   const validateStep = () => {
     const newErrors = {};
     if (type === "modal") {
-      if (step === 3) {
+      if (step === 1) {
+         if (!registerData.name.trim())
+          newErrors.name = "Name is required";
+         if (!registerData.email.trim())
+          newErrors.email = "Email is required";
+         if (!registerData.phone.trim())
+          newErrors.phone = "Phone is required";
         if (!formData.typeOfBuyer.trim())
           newErrors.typeOfBuyer = "Type Of Buyer is required";
         if (!formData.designation.trim())
@@ -86,7 +105,7 @@ const RegisterBuyer = ({ type }) => {
       //   }
       // }
       }
-      if (step === 4) {
+      if (step === 2) {
         if (!formData.businessCategories.length)
           newErrors.businessCategories = "Business Category is required";
         if (!formData.ticketSizeMin.trim())
@@ -97,6 +116,9 @@ const RegisterBuyer = ({ type }) => {
           newErrors.businesslocationCountry = "Business Location is required";
         if (!formData.businesslocationCities.length)
           newErrors.businesslocationCities = "At least one City is required";
+          if (!formData.preferredArrangement.length)
+          newErrors.preferredArrangement = "Preferred Arrangement is required";
+      
         if (!formData.openToPreRevenue.trim())
           newErrors.openToPreRevenue = "Please select an option";
         // if (!formData.openToPreBreakeven.trim())
@@ -111,13 +133,13 @@ const RegisterBuyer = ({ type }) => {
           formData.openToPreBreakeven = null;
       }
 
-      if (step === 5) {
-        if (!formData.metric.trim()) newErrors.metric = "Metric is required";
-        if (!formData.maxMultiple.trim())
-          newErrors.maxMultiple = "Max Multiple is required";
-        if (!formData.preferredArrangement.length)
-          newErrors.preferredArrangement = "Preferred Arrangement is required";
-      }
+      // if (step === 5) {
+        // if (!formData.metric.trim()) newErrors.metric = "Metric is required";
+        // if (!formData.maxMultiple.trim())
+        //   newErrors.maxMultiple = "Max Multiple is required";
+      //   if (!formData.preferredArrangement.length)
+      //     newErrors.preferredArrangement = "Preferred Arrangement is required";
+      // }
     } else {
       if (step === 1) {
         if (!formData.typeOfBuyer.trim())
@@ -149,6 +171,9 @@ const RegisterBuyer = ({ type }) => {
           newErrors.businesslocationCountry = "Business Location is required";
         if (!formData.businesslocationCities.length)
           newErrors.businesslocationCities = "At least one City is required";
+          if (!formData.preferredArrangement.length)
+          newErrors.preferredArrangement = "Preferred Arrangement is required";
+      
         if (!formData.openToPreRevenue.trim())
           newErrors.openToPreRevenue = "Please select an option";
         // if (openToPreRevenue === "No" && !formData.openToPreBreakeven.trim())
@@ -163,13 +188,13 @@ const RegisterBuyer = ({ type }) => {
           formData.openToPreBreakeven = null;
       }
 
-      if (step === 3) {
-        if (!formData.metric.trim()) newErrors.metric = "Metric is required";
-        if (!formData.maxMultiple.trim())
-          newErrors.maxMultiple = "Max Multiple is required";
-        if (!formData.preferredArrangement.length)
-          newErrors.preferredArrangement = "Preferred Arrangement is required";
-      }
+      // if (step === 3) {
+        // if (!formData.metric.trim()) newErrors.metric = "Metric is required";
+        // if (!formData.maxMultiple.trim())
+        //   newErrors.maxMultiple = "Max Multiple is required";
+      //   if (!formData.preferredArrangement.length)
+      //     newErrors.preferredArrangement = "Preferred Arrangement is required";
+      // }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -177,9 +202,47 @@ const RegisterBuyer = ({ type }) => {
 
   const handleNext = () => {
     if (validateStep()) {
-      setStep((prev) => prev + 1);
+      // setStep((prev) => prev + 1);
+      if(type==="modal"){
+        if(step===1){
+handleRegister();
+        }
+      }
+       setStep((prev) => prev + 1);
       //  window.scrollTo({ top: 0, behavior: "smooth" });
     }
+  };
+
+    const handleRegister = async () => {
+    // e.preventDefault();
+  const dataToRegister={
+    name:registerData.name,
+    email:registerData.email,
+    phone:registerData.phone,
+    role:"buyer"
+  }
+
+    try {
+      const token = localStorage.getItem('token'); // Replace with your actual auth method
+
+      const response = await axios.post('https://bizplorers-backend.onrender.com/api/broker/register-user', dataToRegister, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+console.log("User created successfully",response.data);
+if(response.status===201){
+  // Save the user info temporarily
+localStorage.setItem("currentBuyerBeingOnboarded", JSON.stringify(response.data.user));
+
+}
+      // setMessage(response.data.message || 'User created successfully');
+      // setFormData({ name: '', email: '', phone: '', role: 'buyer' });
+    } catch (error) {
+      // setMessage(error.response?.data?.error || 'Something went wrong.');
+      console.log("Error",error);
+    } 
   };
 
   const handleBack=()=>{
@@ -197,11 +260,16 @@ setStep((prev) => prev - 1);
     if (!validateStep()) return;
     const user = JSON.parse(localStorage.getItem("user"));
     const id = user?.id;
-
+const newUser = JSON.parse(localStorage.getItem("currentBuyerBeingOnboarded"));
     console.log("id----", id);
+    console.log("newuser----",newUser);
+    const dataForm={
+      ...formData,userId:newUser?.id
+    }
     const dataToSend =
-      type === "modal" ? { ...formData, brokerId: id ,dataFilled:true} : { ...formData ,dataFilled:true};
+      type === "modal" ? { ...dataForm, brokerId: id ,dataFilled:true} : { ...dataForm ,dataFilled:true};
 
+     
     try {
       console.log("data------formdata ", dataToSend);
       const response = await fetch(
@@ -228,7 +296,11 @@ setStep((prev) => prev - 1);
       if (type === "modal") {
         // alert("Buyer Created Successfully!");
         //  showSuccess("Buyer Created Successfully!");
+        console.log(response.data);
  showSuccess("Your Registration is Successful");
+ localStorage.setItem("refreshBuyerList", "true");
+ localStorage.removeItem("currentUserBeingOnboarded");
+
         // don't navigate
       } else {
         // alert("Data submitted successfully!");
@@ -247,17 +319,14 @@ setStep((prev) => prev - 1);
   useEffect(() => {
     if (type === "modal") {
       setStepsList([
-        "PERSONAL DETAILS",
-        "OTP VERIFICATION",
         "BASIC DETAILS",
-        "PREFERENCE DETAILS",
-        "TRANSACTION DETAILS",
+        "PREFERENCE DETAILS"
       ]);
     } else {
       setStepsList([
         "BASIC DETAILS",
         "PREFERENCE DETAILS",
-        "TRANSACTION DETAILS",
+        // "TRANSACTION DETAILS",
       ]);
     }
   }, [type]);
@@ -314,35 +383,13 @@ setStep((prev) => prev - 1);
           <Stepper step={step} steps={stepsList} />
           {type === "modal" ? (
             <>
-              {step === 1 && <SignUp type={"modal"} />}
-              {step === 2 && <OTPVerification type={"modal"} />}
-              {step === 3 && (
-                <StepOne
-                  formData={formData}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              )}
-              {step === 4 && (
-                <StepTwo
-                  formData={formData}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              )}
-              {step === 5 && (
-                <StepThree
-                  formData={formData}
-                  handleChange={handleChange}
-                  errors={errors}
-                />
-              )}
-            </>
-          ) : (
-            <>
+             
+              {/* {step === 2 && <OTPVerification type={"modal"} />} */}
               {step === 1 && (
                 <StepOne
                   formData={formData}
+                  registerData={registerData}
+                  handleRegisterChange={handleRegisterChange}
                   handleChange={handleChange}
                   errors={errors}
                   type={"modal"}
@@ -355,16 +402,41 @@ setStep((prev) => prev - 1);
                   errors={errors}
                 />
               )}
-              {step === 3 && (
+              {/* {step === 5 && (
                 <StepThree
                   formData={formData}
                   handleChange={handleChange}
                   errors={errors}
                 />
+              )} */}
+            </>
+          ) : (
+            <>
+              {step === 1 && (
+                <StepOne
+                  formData={formData}
+                  handleChange={handleChange}
+                  errors={errors}
+                  
+                />
               )}
+              {step === 2 && (
+                <StepTwo
+                  formData={formData}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              )}
+              {/* {step === 3 && (
+                <StepThree
+                  formData={formData}
+                  handleChange={handleChange}
+                  errors={errors}
+                />
+              )} */}
             </>
           )}
-<div className="mt-[10%]">
+<div className="">
           {type === "modal" ? (
             <>
               <div className="flex gap-5 mt-6 px-[5%] py-3 ">
@@ -376,7 +448,7 @@ setStep((prev) => prev - 1);
                     Back
                   </button>
                 )}
-                {step < 5 && (
+                {step < 2 && (
                   <button
                     onClick={handleNext}
                     className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -384,7 +456,7 @@ setStep((prev) => prev - 1);
                     Next
                   </button>
                 )}
-                {step === 5 && (
+                {step === 2 && (
                   <button
                     onClick={handleSubmit}
                     className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -405,7 +477,7 @@ setStep((prev) => prev - 1);
                     Back
                   </button>
                 )}
-                {step < 3 && (
+                {step < 2 && (
                   <button
                     onClick={handleNext}
                     className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -413,7 +485,7 @@ setStep((prev) => prev - 1);
                     Next
                   </button>
                 )}
-                {step === 3 && (
+                {step === 2 && (
                   <button
                     onClick={handleSubmit}
                     className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -427,10 +499,12 @@ setStep((prev) => prev - 1);
           </div>
         </div>
       </div>
+
+        {type === "modal" ?"":(
       <div className="mt-[20%]">
         <Footer /> 
       </div>
-      
+        )}
     </div>
   );
 };

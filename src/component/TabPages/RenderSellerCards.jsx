@@ -11,7 +11,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Slide from "@mui/material/Slide";
-import Seller from "../../pages/signup_steps/Buyer";
+import Seller from "../../pages/signup_steps/Seller";
 
 import { toast } from "react-toastify";
 
@@ -75,6 +75,14 @@ useEffect(()=>{
   }
   
 },[cardData])
+
+  const refresh=localStorage.getItem("refreshSellerList");
+useEffect(()=>{
+  
+    fetchSellerByBrokerData();
+  localStorage.removeItem("refreshSellerList");
+  
+},[refresh])
     // const cardData = [
     //   { title: "Card 1", content: <ReusableCards /> },
     //   { title: "Card 2", content: <ReusableCards /> },
@@ -125,14 +133,17 @@ useEffect(()=>{
           <div className="flex flex-wrap gap-x-[5%] gap-y-10">
             {cardData.map((card, index) => (
               <ReusableCards
-              key={index}
-              // id={card.userId}
-              userId={card.userId}
-                description_business={card.description_business}
-                company_name={card.company_name}
-                city={card.city}
-                askingPrice={card.askingPrice}
-            EBITDA={card.EBITDA}
+            //   key={index}
+            
+            //   userId={card.userId}
+            //     description_business={card.description_business}
+            //     company_name={card.company_name}
+            //     city={card.city}
+            //     askingPrice={card.askingPrice}
+            // EBITDA={card.EBITDA}
+             
+             key={index} type="seller" data={card}
+
               />
             ))}
           </div>

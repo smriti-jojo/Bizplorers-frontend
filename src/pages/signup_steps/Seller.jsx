@@ -13,13 +13,21 @@ import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 import { useLayoutEffect } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 
 const RegisterSeller = ({ type }) => {
   const [step, setStep] = useState(1);
   const [stepsList, setStepsList] = useState([]);
+   const [registerData, setRegisterData] = useState({
+          name:"",
+  email:"",
+      phone:"",
+     })
   const [formData, setFormData] = useState({
+    
     company_name: "",
+    headline:"",
     website_url: "",
     CIN: "",
     company_linkedin: "",
@@ -72,6 +80,11 @@ const RegisterSeller = ({ type }) => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+    const handleRegisterChange = (e) => {
+  const { name, value } = e.target;
+  setRegisterData((prev) => ({ ...prev, [name]: value }));
+};
+
 
   const validateStep = () => {
   const newErrors = {};
@@ -79,10 +92,17 @@ const RegisterSeller = ({ type }) => {
   const isEmpty = (val) => safeTrim(val) === "";
   const isMissingOrEmptyArray = (arr) => !Array.isArray(arr) || arr.length === 0;
 
-
-    if (step === 1) {
-      if (isEmpty(formData.company_name)) newErrors.company_name = "Company Name is required";
-      if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
+ if (type === "modal") {
+      if (step === 1) {
+         if(isEmpty(registerData.name))
+          newErrors.name = "Name is required";
+         if (isEmpty(registerData.email))
+          newErrors.email = "Email is required";
+         if (isEmpty(registerData.phone))
+          newErrors.phone = "Phone is required";
+          if (isEmpty(formData.company_name)) newErrors.company_name = "Company Name is required";
+       if (isEmpty(formData.headline)) newErrors.headline = "Business Headline is required";
+          if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
       if (isEmpty(formData.entityStructure)) newErrors.entityStructure = "Entity Structure is required";
 
       const entity = safeTrim(formData.entityStructure);
@@ -136,7 +156,66 @@ const RegisterSeller = ({ type }) => {
         newErrors.preferredArrangement = "Preferred arrangement is required";
       }
     }
-  
+  }
+      else{
+    if (step === 1) {
+      if (isEmpty(formData.company_name)) newErrors.company_name = "Company Name is required";
+      if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
+      if (isEmpty(formData.entityStructure)) newErrors.entityStructure = "Entity Structure is required";
+
+      const entity = safeTrim(formData.entityStructure);
+      if ((entity === "Private Ltd" || entity === "Public Ltd") && isEmpty(formData.CIN)) {
+        newErrors.CIN = "CIN is required for Private or Public Ltd companies";
+      }
+
+      if (isEmpty(formData.company_linkedin)) newErrors.company_linkedin = "Company LinkedIn profile is required";
+     if (isEmpty(formData.headline)) newErrors.headline = "Business Headline is required";
+      if (isEmpty(formData.description_business)) newErrors.description_business = "Description of business is required";
+      if (isEmpty(formData.numcofounder)) newErrors.numcofounder = "Number of cofounders is required";
+      if (isEmpty(formData.teamSize)) newErrors.teamSize = "Team size is required";
+      if (isEmpty(formData.numLocation)) newErrors.numLocation = "Number of locations is required";
+      if (isEmpty(formData.year)) newErrors.year = "Year is required";
+      if (isEmpty(formData.month)) newErrors.month = "Month is required";
+
+      if (isMissingOrEmptyArray(formData.cofounderLinks)) {
+        newErrors.cofounderLinks = "Cofounder Linkedin is required";
+      } else if (formData.cofounderLinks.some(link => isEmpty(link))) {
+        newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
+      }
+
+      if (isEmpty(formData.country)) newErrors.country = "Country is required";
+      if (isEmpty(formData.businessCategory)) newErrors.businessCategory = "Business Category is required";
+      if (isEmpty(formData.state)) newErrors.state = "State is required";
+      if (isEmpty(formData.city)) newErrors.city = "City is required";
+    }
+
+    if (step === 2) {
+      ["lastFinancialYear","trailing12months", "prevMonth"].forEach(field => {
+        if (isEmpty(formData[field])) newErrors[field] = `${field} is required`;
+      });
+
+     
+
+      [
+        "NETlastFinancialYear","NETtrailing12months",
+        "NETprevMonth","equity", "debt","positiveCashFlow"
+      ].forEach(field => {
+        if (formData[field] == null || safeTrim(formData[field].toString()) === "") {
+          newErrors[field] = `${field} is required`;
+        }
+      });
+
+      if (isEmpty(formData.assestDesc)) newErrors.assestDesc = "Asset description is required";
+    }
+
+    if (step === 3) {
+      if (isEmpty(formData.salereason)) newErrors.salereason = "Sale reason is required";
+      if (isEmpty(formData.askingPrice)) newErrors.askingPrice = "Asking price is required";
+      if (isMissingOrEmptyArray(formData.preferredArrangement)) {
+        newErrors.preferredArrangement = "Preferred arrangement is required";
+      }
+    }
+  }
 
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
@@ -407,6 +486,39 @@ const RegisterSeller = ({ type }) => {
             theme: "colored",
           });
         };
+
+           const handleRegister = async () => {
+    // e.preventDefault();
+  const dataToRegister={
+    name:registerData.name,
+    email:registerData.email,
+    phone:registerData.phone,
+    role:"seller"
+  }
+
+    try {
+      const token = localStorage.getItem('token'); // Replace with your actual auth method
+
+      const response = await axios.post('https://bizplorers-backend.onrender.com/api/broker/register-user', dataToRegister, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+console.log("User created successfully",response.data);
+if(response.status===201){
+  // Save the user info temporarily
+localStorage.setItem("currentSellerBeingOnboarded", JSON.stringify(response.data.user));
+
+}
+      // setMessage(response.data.message || 'User created successfully');
+      // setFormData({ name: '', email: '', phone: '', role: 'buyer' });
+    } catch (error) {
+      // setMessage(error.response?.data?.error || 'Something went wrong.');
+      console.log("Error",error);
+    } 
+  };
+
  
   const handleNext = async() => {
   console.log("next-----");
@@ -419,6 +531,11 @@ const RegisterSeller = ({ type }) => {
       console.log("Validation failed");
       return;
     }
+   if(type==="modal"){
+        if(step===1){
+handleRegister();
+        }
+      }
     setStep((prev) => prev + 1);
   
   } catch (e) {
@@ -444,10 +561,16 @@ setStep((prev) => prev - 1);
     if (!validateStep()) return;
     const user = JSON.parse(localStorage.getItem("user"));
     const id = user?.id;
-
+const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
     console.log("id----", id);
+    console.log("newuser----",newUser);
+    const dataForm={
+      ...formData,userId:newUser?.id
+    }
     const dataToSend =
-      type === "modal" ? { ...formData, brokerId: id,dataFilled:true } : { ...formData ,dataFilled:true};
+      type === "modal" ? { ...dataForm, brokerId: id ,dataFilled:true} : { ...dataForm ,dataFilled:true};
+
+    
 
     try {
       console.log("data------formdata ", dataToSend);
@@ -475,6 +598,10 @@ setStep((prev) => prev - 1);
       if (type === "modal") {
   // alert("Seller Created Successfully!");
   notifySuccess();
+   localStorage.setItem("refreshSellerList", "true");
+   localStorage.removeItem("currentUserBeingOnboarded");
+  
+
   // don't navigate
 } else {
   // alert("Data submitted successfully!");
@@ -556,24 +683,25 @@ setStep((prev) => prev - 1);
           <Stepper step={step} steps={stepsList} />
           {type === "modal" ? (
             <>
-              {step === 1 && <SignUp type={"modal"} />}
-              {step === 2 && <OTPVerification type={"modal"} />}
-              {step === 3 && (
+              
+              {step === 1 && (
                 <StepOne
                   formData={formData}
+                  registerData={registerData}
                   handleChange={handleChange}
+                  handleRegisterChange={handleRegisterChange}
                   errors={errors}
                   type={'modal'}
                 />
               )}
-              {step === 4 && (
+              {step === 2 && (
                 <StepTwo
                   formData={formData}
                   handleChange={handleChange}
                   errors={errors}
                 />
               )}
-              {step === 5 && (
+              {step === 3 && (
                 <StepThree
                   formData={formData}
                   handleChange={handleChange}
@@ -618,7 +746,7 @@ setStep((prev) => prev - 1);
                     Back
                   </button>
                 )}
-                {step < 5 && (
+                {step < 3 && (
                   <button
                     onClick={handleNext}
                     className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -626,7 +754,7 @@ setStep((prev) => prev - 1);
                     Next
                   </button>
                 )}
-                {step === 5 && (
+                {step === 3 && (
                   <button
                     onClick={handleSubmit}
                     className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -670,7 +798,11 @@ setStep((prev) => prev - 1);
        
         </div>
       </div>
-      <Footer/>
+     {type === "modal" ?"":(
+      <div className="mt-[20%]">
+        <Footer /> 
+      </div>
+        )}
     </>
   );
 };

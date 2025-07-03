@@ -353,8 +353,8 @@ const BuyerDashboard = () => {
     businesslocationCities: [],
     openToPreRevenue: false,
     openToPreBreakeven: false,
-    metric: "",
-    maxMultiple: "",
+    // metric: "",
+    // maxMultiple: "",
     preferredArrangement: [],
   });
 
@@ -507,8 +507,8 @@ const BuyerDashboard = () => {
           >
             <EditableRow label="Ticket Size Min" value={buyerData.ticketSizeMin} editable={isEditing} onChange={(v) => handleChange("ticketSizeMin", v)} />
             <EditableRow label="Ticket Size Max" value={buyerData.ticketSizeMax} editable={isEditing} onChange={(v) => handleChange("ticketSizeMax", v)} />
-            <EditableRow label="Metric" value={buyerData.metric} editable={isEditing} onChange={(v) => handleChange("metric", v)} dropdownOptions={["sales", "profit"]} />
-            <EditableRow label="Max Multiple" value={buyerData.maxMultiple} editable={isEditing} onChange={(v) => handleChange("maxMultiple", v)} />
+            {/* <EditableRow label="Metric" value={buyerData.metric} editable={isEditing} onChange={(v) => handleChange("metric", v)} dropdownOptions={["sales", "profit"]} /> */}
+            {/* <EditableRow label="Max Multiple" value={buyerData.maxMultiple} editable={isEditing} onChange={(v) => handleChange("maxMultiple", v)} /> */}
             <EditableRow label="Open to Pre-Revenue" value={buyerData.openToPreRevenue ? "Yes" : "No"} editable={isEditing} onChange={(v) => handleChange("openToPreRevenue", v === "Yes")} dropdownOptions={["Yes", "No"]} />
             <EditableRow label="Open to Pre-Breakeven" value={buyerData.openToPreBreakeven ? "Yes" : "No"} editable={isEditing} onChange={(v) => handleChange("openToPreBreakeven", v === "Yes")} dropdownOptions={["Yes", "No"]} />
 

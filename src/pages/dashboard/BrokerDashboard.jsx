@@ -624,7 +624,7 @@ const BrokerDashboard = () => {
     { label: "View Profile", component: () => <ViewProfile /> },
     { label: "Registered Buyer", component: () => <RenderBuyerCards /> },
     { label: "Registered Seller", component: () => <RenderSellerCards /> },
-     { label: "All", component: () => <RenderCombinedCards /> },
+    //  { label: "All", component: () => <RenderCombinedCards /> },
   ];
   return (
     <div>

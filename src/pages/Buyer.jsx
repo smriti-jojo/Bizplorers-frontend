@@ -70,7 +70,7 @@ export const BuyerCard = ({ buyer, type }) => {
             {/* <Button variant="contained" className="!bg-yellow-400 !text-black !w-[150px] !text-[0.7rem] !py-3">
               Contact Buyer
             </Button> */}
-            <SendInterestButton type={'buyer'}/>
+            {/* <SendInterestButton type={'buyer'}/> */}
           </div>
         </div>
       </div>
@@ -358,7 +358,7 @@ const Buyer = () => {
             <div className="flex flex-wrap gap-6">
               {filteredBuyers.map((buyer, index) => (
                 <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
-                  <ReusableCards type="buyer" buyer={buyer} location="home" />
+                  <ReusableCards type="buyer" data={buyer} location="home" />
                 </div>
               ))}
             </div>

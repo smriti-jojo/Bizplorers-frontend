@@ -139,8 +139,23 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
   </>
 )}
 
-
-
+<div className="pt-5">
+ <h1>Preferred Arrangement</h1>
+  <div className="w-[550px]">
+      <ReusableSelect
+      multiple
+        label="Preferred Arrangement"
+        name="preferredArrangement"
+        value={formData.preferredArrangement}
+        onChange={handleChange}
+        options={["Cash", "Stock", "Royalty","Acquihire"]}
+        className={`w-full px-3  border rounded `}
+        width={350}
+          error={errors.preferredArrangement}
+        
+      />
+    </div>
+    </div>
       </div>
      </div>
 
