@@ -171,14 +171,18 @@ const TrendingBusinesses = () => {
           {allBusinesses.map((card, index) => (
             // <div key={index} className="bg-white shadow-md rounded-lg p-4 ">
          <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
-               <ReusableCards
+               {/* <ReusableCards
                  description_business={card.description_business}
                  company_name={card.company_name}
                  city={card.city}
                  askingPrice={card.askingPrice}
                  EBITDA={card.EBITDA}
                  type={'home'}
-               />
+               /> */}
+                 <ReusableCards
+                            key={index} type="seller" data={card} location={"home"}
+               
+                             />
              </div>
           ))}
         </Slider>

@@ -32,8 +32,10 @@ const countryStateCityMap = {
 };
 
 const StepOne = ({ formData, handleChange, errors ,type,handleRegisterChange,registerData}) => {
-  const [cofounderLinks, setCofounderLinks] = useState([""]);
-
+  // const [cofounderLinks, setCofounderLinks] = useState(formData.cofounderLinks);
+const [cofounderLinks, setCofounderLinks] = useState(() =>
+  formData.cofounderLinks?.length ? formData.cofounderLinks : [""]
+);
   useEffect(() => {
     // Push to parent if needed
     handleChange({ target: { name: "cofounderLinks", value: cofounderLinks } });

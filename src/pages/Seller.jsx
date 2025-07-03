@@ -393,8 +393,8 @@ setLoading(true);
           <div className="flex justify-center w-full min-h-screen">
       <CircularProgress />
     </div>:(
-      
-  filteredBusinesses.map((card, index) => (
+       <div className="flex flex-wrap gap-6">
+  {filteredBusinesses.map((card, index) => (
     <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
       {/* <ReusableCards
       headline={card.headline}
@@ -409,7 +409,7 @@ setLoading(true);
        <ReusableCards type="seller" data={card}  />
         {/* <ReusableCards type="buyer" buyer={buyer} location="home" /> */}
     </div>
-  ))
+  ))}</div>
 )
 }
 </div>

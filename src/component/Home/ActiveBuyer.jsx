@@ -141,7 +141,7 @@ const [loading,setLoading]=useState(false);
         //       ))}
         buyerData.map((buyer, index) => (
   <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
-    <ReusableCards type="buyer" buyer={buyer} location="home" />
+    <ReusableCards type="buyer" data={buyer} location="home" />
   </div>
 ))
             }

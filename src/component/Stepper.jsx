@@ -146,7 +146,7 @@
 
 const Stepper = ({ step, steps }) => {
   return (
-    <div className="flex items-center w-full mb-10 px-5">
+    <div className="flex items-center w-full mb-10 px-5 ">
       {steps.map((label, index) => {
         const isCompleted = step > index + 1;
         const isCurrent = step === index + 1;
@@ -155,7 +155,7 @@ const Stepper = ({ step, steps }) => {
           <div className="flex-1 flex flex-col items-center relative" key={index}>
             {/* Horizontal line */}
             {index !== 0 && (
-              <div className="absolute top-4 left-0 w-1/2 h-0.5 bg-gray-300 ">
+              <div className="absolute top-4 left-0 w-1/2 h-0.5 bg-gray-300">
                 <div
                   className={`h-full ${
                     step > index ? "bg-blue-600" : "bg-gray-300"

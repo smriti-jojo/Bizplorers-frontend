@@ -38,7 +38,7 @@ const RegisterSeller = ({ type }) => {
     year: "",
     month: "",
     // cofounder_linkedin: "",
-    cofounderLinks:[],
+     cofounderLinks:[],
     businessCategory: "",
     // businessLocation:'',
     entityStructure: "",
@@ -110,7 +110,7 @@ const RegisterSeller = ({ type }) => {
         newErrors.CIN = "CIN is required for Private or Public Ltd companies";
       }
 
-      if (isEmpty(formData.company_linkedin)) newErrors.company_linkedin = "Company LinkedIn profile is required";
+      // if (isEmpty(formData.company_linkedin)) newErrors.company_linkedin = "Company LinkedIn profile is required";
       if (isEmpty(formData.description_business)) newErrors.description_business = "Description of business is required";
       if (isEmpty(formData.numcofounder)) newErrors.numcofounder = "Number of cofounders is required";
       if (isEmpty(formData.teamSize)) newErrors.teamSize = "Team size is required";
@@ -118,11 +118,11 @@ const RegisterSeller = ({ type }) => {
       if (isEmpty(formData.year)) newErrors.year = "Year is required";
       if (isEmpty(formData.month)) newErrors.month = "Month is required";
 
-      if (isMissingOrEmptyArray(formData.cofounderLinks)) {
-        newErrors.cofounderLinks = "Cofounder Linkedin is required";
-      } else if (formData.cofounderLinks.some(link => isEmpty(link))) {
-        newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
-      }
+      // if (isMissingOrEmptyArray(formData.cofounderLinks)) {
+      //   newErrors.cofounderLinks = "Cofounder Linkedin is required";
+      // } else if (formData.cofounderLinks.some(link => isEmpty(link))) {
+      //   newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
+      // }
 
       if (isEmpty(formData.country)) newErrors.country = "Country is required";
       if (isEmpty(formData.businessCategory)) newErrors.businessCategory = "Business Category is required";
@@ -168,7 +168,7 @@ const RegisterSeller = ({ type }) => {
         newErrors.CIN = "CIN is required for Private or Public Ltd companies";
       }
 
-      if (isEmpty(formData.company_linkedin)) newErrors.company_linkedin = "Company LinkedIn profile is required";
+      // if (isEmpty(formData.company_linkedin)) newErrors.company_linkedin = "Company LinkedIn profile is required";
      if (isEmpty(formData.headline)) newErrors.headline = "Business Headline is required";
       if (isEmpty(formData.description_business)) newErrors.description_business = "Description of business is required";
       if (isEmpty(formData.numcofounder)) newErrors.numcofounder = "Number of cofounders is required";
@@ -177,11 +177,11 @@ const RegisterSeller = ({ type }) => {
       if (isEmpty(formData.year)) newErrors.year = "Year is required";
       if (isEmpty(formData.month)) newErrors.month = "Month is required";
 
-      if (isMissingOrEmptyArray(formData.cofounderLinks)) {
-        newErrors.cofounderLinks = "Cofounder Linkedin is required";
-      } else if (formData.cofounderLinks.some(link => isEmpty(link))) {
-        newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
-      }
+      // if (isMissingOrEmptyArray(formData.cofounderLinks)) {
+      //   newErrors.cofounderLinks = "Cofounder Linkedin is required";
+      // } else if (formData.cofounderLinks.some(link => isEmpty(link))) {
+      //   newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
+      // }
 
       if (isEmpty(formData.country)) newErrors.country = "Country is required";
       if (isEmpty(formData.businessCategory)) newErrors.businessCategory = "Business Category is required";
@@ -710,7 +710,7 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
               )}
             </>
           ) : (
-            <>
+            <div className="">
               {step === 1 && (
                 <StepOne
                   formData={formData}
@@ -733,7 +733,7 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
                   errors={errors}
                 />
               )}
-            </>
+            </div>
           )}
           {type === "modal" ? (
             <>

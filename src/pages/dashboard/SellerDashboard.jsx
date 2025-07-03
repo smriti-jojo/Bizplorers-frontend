@@ -64,7 +64,7 @@ const EditableRow = ({ label, value, editable, onChange, type = "text", options 
           value={value}
           onChange={(e) => onChange(e.target.value)}
           renderValue={(selected) => selected.join(", ")}
-          className="min-w-[200px]"
+          className="min-w-[200px] h-10"
         >
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>
@@ -74,7 +74,7 @@ const EditableRow = ({ label, value, editable, onChange, type = "text", options 
           ))}
         </Select>
       ) : (
-        <Select value={value} onChange={(e) => onChange(e.target.value)} className="min-w-[200px]">
+        <Select value={value} onChange={(e) => onChange(e.target.value)} className="min-w-[200px] h-10">
           {options.map((opt) => (
             <MenuItem key={opt} value={opt}>
               {opt}
@@ -289,7 +289,7 @@ const SellerDashboard = () => {
   value={formData.positiveCashFlow ? "Yes" : "No"}
   editable={isEditing}
   onChange={(v) => handleChange("positiveCashFlow", v === "Yes")}
-  dropdownOptions={["Yes", "No"]}
+   options={["Yes", "No"]}
 />
 
           </Section>

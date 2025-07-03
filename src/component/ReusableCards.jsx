@@ -58,7 +58,7 @@ const ReusableCards = ({
     <>
       {type === "buyer" ? (
         <div className="relative ">
-          {token && user?.role === "broker" && location === "dashboard" && (
+          {/* {token && user?.role === "broker" && location === "dashboard" && (
             <button
               className={`absolute -top-3 -left-3 p-2 rounded-full border ${
                 isSelected ? "bg-green-500 text-white" : "bg-gray-200"
@@ -67,16 +67,16 @@ const ReusableCards = ({
             >
               <Check size={20} />
             </button>
-          )}
+          )} */}
 
-          {token &&
+          {/* {token &&
             user?.role === "broker" &&
             location === "dashboard" &&
             data?.brokerId != null && (
               <div className="absolute right-0 -top-3 text-green-600 px-1 bg-yellow-100">
                 Assigned Buyer
               </div>
-            )}
+            )} */}
 
           <div className="w-[350px] px-5 py-5 h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
             <div className="my-2 text-lg text-blue-500 font-semibold">
@@ -146,7 +146,7 @@ const ReusableCards = ({
                 ) : (
                   <SendInterestButton type={"buyer"} />
                 )} */}
-                {token && user?.role === "broker" && (
+                {/* {token && user?.role === "broker" && (
   senderId!=data.brokerId?(
       <SendInterestButton
       senderId={senderId}
@@ -156,6 +156,64 @@ const ReusableCards = ({
   ) : (
     <SendInterestButton type="buyer" />
   )
+)} */}
+{/* {token && user?.role === "broker" ? (
+  senderId === data.brokerId ?   (
+    <SendInterestButton type="buyer" />
+  ):(
+    <SendInterestButton
+      senderId={senderId}
+      receiverId={data.userId}
+      type="buyer"
+    />
+  )
+) :(
+    <SendInterestButton type="buyer" />
+  )} */}
+  {/* {token && (
+  user?.role === "broker" ? (
+    senderId === data.brokerId ? (
+      <SendInterestButton type="buyer" />
+    ) : (
+      <SendInterestButton
+        senderId={senderId}
+        receiverId={data.userId}
+        type="buyer"
+      />
+    )
+  ) : user?.role === "buyer" ? (
+    <SendInterestButton type="buyer" />
+  ) : (
+    <SendInterestButton
+      senderId={senderId}
+      receiverId={data.userId}
+      type="buyer"
+    />
+  )
+)} */}
+{token ? (
+  user?.role === "broker" ? (
+    senderId === data.brokerId ? (
+      <SendInterestButton type="buyer" />
+    ) : (
+      <SendInterestButton
+        senderId={senderId}
+        receiverId={data.userId}
+        type="buyer"
+      />
+    )
+  ) : user?.role === "buyer" ? (
+    <SendInterestButton type="buyer" />
+  ) : (
+    <SendInterestButton
+      senderId={senderId}
+      receiverId={data.userId}
+      type="buyer"
+    />
+  )
+) : (
+  
+  <SendInterestButton type="buyer" />
 )}
 
                 <Button
@@ -341,7 +399,7 @@ const ReusableCards = ({
                 ) : (
                   <SendInterestButton type={"seller"} />
                 )} */}
-                  {token && user?.role === "broker" && (
+                  {/* {token && user?.role === "broker" && (
   senderId!=data.brokerId?(
       <SendInterestButton
       senderId={senderId}
@@ -351,7 +409,73 @@ const ReusableCards = ({
   ) : (
     <SendInterestButton type="seller"/>
   )
+)} */}
+
+{/* {token && user?.role === "broker" ? 
+ (
+  senderId === data.brokerId ?   (
+    <SendInterestButton type="buyer" />
+  ):(
+    <SendInterestButton
+      senderId={senderId}
+      receiverId={data.userId}
+      type="seller"
+    />
+  )
+
+) :(
+    <SendInterestButton type="seller" />
+  )} */}
+
+  {/* {token && (
+  user?.role === "broker" ? (
+    senderId === data.brokerId ? (
+      <SendInterestButton type="seller" />
+    ) : (
+      <SendInterestButton
+        senderId={senderId}
+        receiverId={data.userId}
+        type="seller"
+      />
+    )
+  ) : user?.role === "seller" ? (
+    <SendInterestButton type="seller" />
+  ) : (
+    <SendInterestButton
+      senderId={senderId}
+      receiverId={data.userId}
+      type="seller"
+    />
+  )
+)} */}
+
+{token ? (
+  user?.role === "broker" ? (
+    senderId === data.brokerId ? (
+      <SendInterestButton type="seller" />
+    ) : (
+      <SendInterestButton
+        senderId={senderId}
+        receiverId={data.userId}
+        type="seller"
+      />
+    )
+  ) : user?.role === "seller" ? (
+    <SendInterestButton type="seller" />
+  ) : (
+    <SendInterestButton
+      senderId={senderId}
+      receiverId={data.userId}
+      type="seller"
+    />
+  )
+) : (
+  
+  <SendInterestButton type="seller" />
 )}
+
+
+
 
 
                 <Button
