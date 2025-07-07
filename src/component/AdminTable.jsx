@@ -251,9 +251,9 @@ const handleCommentChange = (userId, text) => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg w-full">
-      <div className="flex justify-between items-center mb-10">
-        <h2 className="text-xl font-semibold">Admin User</h2>
+    <div className="p-6 bg-white shadow-lg rounded-lg w-full mt-[10%]">
+      <div className="flex justify-between items-center ">
+        {/* <h2 className="text-xl font-semibold">Admin User</h2> */}
         {/* <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
           + Add User
         </button> */}

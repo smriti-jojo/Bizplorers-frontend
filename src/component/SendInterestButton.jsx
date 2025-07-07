@@ -4,13 +4,25 @@ import  {showSuccess,showError ,showInfo,showWarning} from '../component/utils/t
 
 const SendInterestButton = ({ senderId, receiverId, type }) => {
   const [loading, setLoading] = useState(false);
+  const[requestType,setRequestType]=useState('');
 const token=localStorage.getItem('token');
 const user=JSON.parse(localStorage.getItem('user'));
-  const handleClick = async () => {
-    setLoading(true);
+
+
+
+  const handleClick = async (type) => {
+    // if(type==="buyer"){
+    //   setRequestType('invite');
+    // }
+    // else{
+    //   setRequestType('interest');
+    // }
+
   
     if(!token){
-showError('Please Login to further send Invite');
+      {type==='buyer'?
+showError(`Please Login to further send invite`):
+showError(`Please Login to further send interest`)}
 setLoading(false);
     }
     else{
@@ -21,13 +33,21 @@ setLoading(false);
       //   body: JSON.stringify({ senderId, receiverId, type })
       // });
 // console.log("data------formdata ", dataToSend);
+// const typeToSend=
 const dataToSend={
   senderId:senderId,
   receiverId:receiverId,
-  type:'invite'
+  type:type==="buyer"?'invite':'interest'
 }
+
+console.log("dataToSend---dataToSend",dataToSend);
+ const endpoint =
+    type === "buyer"
+      ? "https://bizplorers-backend.onrender.com/api/invite/send-invite"
+      : "https://bizplorers-backend.onrender.com/api/interest/send-interest";
+
       const response = await fetch(
-        "https://bizplorers-backend.onrender.com/api/interests/send",
+        endpoint,
         {
           method: "POST",
           body: JSON.stringify(dataToSend),
@@ -65,7 +85,7 @@ const dataToSend={
   // : (type === 'buyer' ? 'Send Invite' : 'Send Interest')}
   //   </button>
   <button
-  onClick={handleClick}
+  onClick={()=>handleClick(type)}
   disabled={
     (type === "seller" && user?.role === "seller") ||
     (type === "buyer" && user?.role === "buyer")

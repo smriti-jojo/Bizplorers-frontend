@@ -78,7 +78,7 @@ const ReusableCards = ({
               </div>
             )} */}
 
-          <div className="w-[350px] px-5 py-5 h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
+          <div className="w-[350px] px-5 py-5 min-h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
             <div className="my-2 text-lg text-blue-500 font-semibold">
               {data?.designation || "Newly Established Restaurant for Sale"}
             </div>
@@ -347,7 +347,7 @@ const ReusableCards = ({
             </div>
           )} */}
 
-          <div className="w-[350px] px-5 py-5 h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
+          <div className="w-[350px] px-5 py-5 min-h-[420px] border-2 border-slate-300 rounded-md p-4 bg-white shadow-lg shadow-slate-400">
             <div className="my-2 text-lg text-blue-500 font-semibold">
               {data?.headline}
             </div>

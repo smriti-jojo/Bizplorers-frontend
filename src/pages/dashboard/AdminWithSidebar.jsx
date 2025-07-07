@@ -30,6 +30,8 @@ import Header from "../../component/Header";
 import BrokersVerticalTabs from "../../component/Admin/Broker/VerticalTabs";
 import  {showSuccess,showError ,showInfo,showWarning} from '../../component/utils/toast';
 import BrokerRegistrationsTable from '../../component/Admin/Broker/BrokerRegistrationTable';
+import InterestTable from "../../component/Admin/Interest/InterestTable";
+import InviteTable from "../../component/Admin/Invite/InviteTable";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -234,7 +236,7 @@ function Sidebar({
           {isAdminMenuOpen && (
             <div className="mt-2 space-y-2 max-h-60 overflow-auto px-2">
               {/* { ['User','Role'].map((item,index)=>( */}
-              {["User","Broker"].map((item, index) => (
+              {["User","Broker","Interest","Invite"].map((item, index) => (
                 <div
                   key={index}
                   onClick={() => setSelectedCategory(item)}
@@ -298,6 +300,8 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
   const [newValue, setNewValue] = useState("");
   const [ShowDeleteModal, setShowDeleteModal] = useState(false);
   const [brokerData,setBrokerData]=useState([]);
+   const [invites, setInvites] = useState([]);
+   const [interest,setInterest]=useState([]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -324,6 +328,44 @@ console.log("apibrokerData1----",brokerData1);
         // alert("data fetched successfully");
         
         setBrokerData(brokerData1);
+        // setManagement(Object.keys(backendData));
+        // setSelectedCategory(Object.keys(backendData)[0] || "");
+      } catch (err) {
+        console.error("Failed to load picklists:", err);
+      }
+    };
+
+
+     const fetchInterest = async () => {
+      try {
+        const response = await axios.get(
+          "https://bizplorers-backend.onrender.com/api/interest/admin/interests"
+          
+        );
+
+        const interestData= response.data;
+console.log("apiinterestData1----",interestData);
+        setInterest(interestData);
+        // setManagement(Object.keys(backendData));
+        // setSelectedCategory(Object.keys(backendData)[0] || "");
+      } catch (err) {
+        console.error("Failed to load picklists:", err);
+      }
+    };
+
+     const fetchInvite = async () => {
+      try {
+        const response = await axios.get(
+          "https://bizplorers-backend.onrender.com/api/invite/admin/invites"
+          
+        );
+
+        const inviteData = response.data;
+console.log("apiinviteData1----",inviteData);
+        // setPicklists(backendData);
+        // alert("data fetched successfully");
+        
+        setInvites(inviteData);
         // setManagement(Object.keys(backendData));
         // setSelectedCategory(Object.keys(backendData)[0] || "");
       } catch (err) {
@@ -505,6 +547,8 @@ console.log("apibrokerData1----",brokerData1);
 
   useEffect(()=>{
     fetchSellerBuyerUnderBroker();
+    fetchInterest();
+    fetchInvite();
   },[]);
 
   if (selectedCategory === "User" && !picklists[selectedCategory]) {
@@ -539,6 +583,21 @@ if (selectedCategory === "Broker" && !picklists[selectedCategory]) {
       ) : (
         <p>No brokers found.</p>
       )}
+    </div>
+  );
+}
+
+if (selectedCategory === "Interest" && !picklists[selectedCategory]) {
+  return (
+    <div className="p-6 mt-20 mx-20">
+   <InterestTable interests={interest}/>
+    </div>
+  );
+}
+if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
+  return (
+    <div className="p-6 mt-20 mx-20">
+     <InviteTable invites={invites}/>
     </div>
   );
 }
@@ -844,7 +903,8 @@ export default function AdminWithSidebar() {
       </header> */}
       <Header/>
 
-      <div className="flex h-screen">
+      <div className="flex h-screen w-full">
+        
         <Sidebar
           picklists={picklists}
           setPicklists={setPicklists}
@@ -853,6 +913,7 @@ export default function AdminWithSidebar() {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
+        <div className="overflow-auto w-full px-[5%] ">
         <MainContent
           picklists={picklists}
           setPicklists={setPicklists}
@@ -861,8 +922,12 @@ export default function AdminWithSidebar() {
           // fetchPicklists={fetchPicklists}
           // setShowDeleteModal={setShowDeleteModal}
         />
+        </div>
       </div>
-      <Footer />
+      <div className="pt-[5%]">
+         <Footer />
+      </div>
+     
     </>
   );
 }
