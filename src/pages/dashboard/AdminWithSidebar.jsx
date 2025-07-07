@@ -589,14 +589,14 @@ if (selectedCategory === "Broker" && !picklists[selectedCategory]) {
 
 if (selectedCategory === "Interest" && !picklists[selectedCategory]) {
   return (
-    <div className="p-6 mt-20 mx-20">
+    <div className="p-6 mt-20 ">
    <InterestTable interests={interest}/>
     </div>
   );
 }
 if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
   return (
-    <div className="p-6 mt-20 mx-20">
+    <div className="p-6 mt-20">
      <InviteTable invites={invites}/>
     </div>
   );
