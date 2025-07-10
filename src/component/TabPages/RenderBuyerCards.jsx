@@ -27,8 +27,10 @@ const Transition = React.forwardRef((props, ref) => {
 
   const handleDialogClickOpen = () => setOpenDialog(true);
   const handleDialogClose = () => setOpenDialog(false);
+
+
   const token=localStorage.getItem("token");
-   const notifyNoBuyer = (msg = "No Buyers found for this broker!") => {
+   const notifyNoBuyer = (msg = "No Buyer to display, Please Register!") => {
           toast.error(msg, {
             position: "top-right",
             autoClose: 3000,
@@ -40,6 +42,11 @@ const Transition = React.forwardRef((props, ref) => {
         };
  const user=JSON.parse(localStorage.getItem("user"));
  const brokerId=user.id;
+
+ const handleSuccess = () => {
+    console.log("Buyer registered successfully!");
+    setOpenDialog(false);
+  };
 
   const fetchBuyerByBrokerData = async () => {
     try {
@@ -105,7 +112,8 @@ const Transition = React.forwardRef((props, ref) => {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Buyer type="modal" />
+            <Buyer type="modal" onSuccess={handleSuccess}/>
+            
           </DialogContentText>
         </DialogContent>
         <DialogActions className="absolute top-0 right-2">
@@ -127,6 +135,11 @@ const Transition = React.forwardRef((props, ref) => {
           //   buyerInterest={card.buyerInterest}
           // />
           <ReusableCards  key={index} type="buyer" data={card} 
+           onUpdate={(updatedBuyer) => {
+      const updatedList = [...cardData];
+      updatedList[index] = updatedBuyer;
+      setCardData(updatedList); 
+    }}
       // id={card.userId}
       
        location="dashboard"

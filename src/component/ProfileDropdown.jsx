@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, LogOut, Bell } from "lucide-react"; // optional icons
 import avatar from '../assests/pic.jpg';
 import { useNavigate } from "react-router-dom";
+import  {showSuccess,showError ,showInfo,showWarning} from '../component/utils/toast';
 
 export default function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,21 +25,74 @@ const navigate=useNavigate();
     alert("Logged out!");
     // Add your actual logout logic here
   };
+  const token=localStorage.getItem("token");
 const storedUser = localStorage.getItem("user");
 const user = storedUser ? JSON.parse(storedUser) : null;
 
 console.log(user);
 
-const handleDashboard=()=>{
-  if(user.role==='admin')
-  {
-     navigate(`/${user.role}`)
-  }
-  else{
-     navigate(`/${user.role}/dashboard`)
-  }
+// const handleDashboard=()=>{
+//   if(user.role==='admin')
+//   {
+//      navigate(`/${user.role}`)
+//   }
+//   else{
+//      navigate(`/${user.role}/dashboard`)
+//   }
    
-}
+// }
+// const handleDashboard = () => {
+//   if (!token) {
+//     navigate("/login");
+//   } else if (!user?.dataFilled) {
+//     if(user.role==='buyer'){
+//       navigate('/buyer_step');
+//     }
+//     else if(user.role==='seller'){
+// navigate('/seller_step');
+//     }
+//     else{
+//       navigate('/broker');
+//     }
+    
+//   } else {
+//     if (user.role === "admin") {
+//       navigate("/admin");
+//     } else {
+//       navigate(`/${user.role}/dashboard`);
+//     }
+//   }
+// };
+
+const handleDashboard = () => {
+  if (!token) {
+    navigate("/login");
+  } else if (!user?.dataFilled) {
+    if (user?.role === "buyer") {
+      showWarning("Complete Your Registeration");
+      navigate("/buyer_step");
+    } else if (user?.role === "seller") {
+    showWarning("Complete Your Registeration");
+      navigate("/seller_step");
+    } else if (user?.role === "broker") {
+       showWarning("Complete Your Registeration");
+      navigate("/broker");
+    } else {
+      console.warn("Unknown role or incomplete registration.");
+      navigate("/login"); // fallback or error page
+    }
+  } else {
+    if (user?.role === "admin"){
+      navigate("/admin");
+    } else if (user?.role && user?.dataFilled){
+      navigate(`/${user.role}/dashboard`);
+    } else {
+      console.warn("User role is missing.");
+      navigate("/login"); // fallback or error page
+    }
+  }
+};
+
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>

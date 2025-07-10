@@ -179,6 +179,14 @@ const Broker = () => {
       if (!response.ok) throw new Error("Something went wrong!");
       console.log("formdata", formData);
       const data = await response.json();
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if (!("dataFilled" in user)) {
+  user.dataFilled = true;
+
+  // Save updated user back to localStorage
+  localStorage.setItem("user", JSON.stringify(user));
+}
       notifySuccess();
       console.log("brokerData----", data);
       navigate("/broker/dashboard");

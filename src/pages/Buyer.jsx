@@ -164,7 +164,7 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           <option value="Fintech">Fintech</option>
           <option value="Edtech">Edtech</option>
           <option value="Saas">Saas</option>
-          <option value="Education  & training">Education  & training</option>
+          <option value="Education & training">Education  & training</option>
           <option value="Restaurant/café">Restaurant/café</option>
           <option value="Mobile App">Mobile App</option>
         </select>
@@ -210,6 +210,7 @@ const Buyer = () => {
     ticketSizeMax: "",
     businessCategories: "",
     preferredArrangement: "",
+    
   });
 
   const resetFilters = () => {
@@ -222,6 +223,7 @@ const Buyer = () => {
       ticketSizeMax: "",
       businessCategories: "",
       preferredArrangement: "",
+     
     });
   };
 
@@ -355,9 +357,9 @@ const Buyer = () => {
               <CircularProgress />
             </div>
           ) : (
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-y-7 gap-x-7 w-full">
               {filteredBuyers.map((buyer, index) => (
-                <div key={index} className="w-full sm:w-1/2 lg:w-1/3">
+                <div key={index} className="">
                   <ReusableCards type="buyer" data={buyer} location="home" />
                 </div>
               ))}

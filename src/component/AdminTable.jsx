@@ -9,6 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import Slide from "@mui/material/Slide";
 import { Button, DialogTitle } from "@mui/material";
 import { Typography } from "@mui/material";
+import CollapsibleSection from "./CollapsibleSection";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -26,6 +27,7 @@ const AdminUserTable = () => {
   const [comments, setComments] = useState({}); 
    const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [openSection, setOpenSection] = useState("personal");
 
   // Pagination setup
   const usersPerPage = 5;
@@ -448,27 +450,24 @@ const handleCommentChange = (userId, text) => {
       </table>
 
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
-        <DialogTitle className="!font-bold">User Details</DialogTitle>
+        <DialogTitle className="!font-bold text-xl ">User Details</DialogTitle>
         <DialogContent>
        {selectedUser && (
   <>
     {/* <Typography>Name: {selectedUser.name}</Typography> */}
     <div className="flex justify-between w-full mb-3">
-      <Typography>Name: {selectedUser.name}</Typography>
-       <Typography>Email: {selectedUser.email}</Typography>
-       <Typography>Role: {selectedUser.role}</Typography>
+      <Typography><span className="font-bold">Name:</span> {selectedUser.name}</Typography>
+       <Typography><span className="font-bold">Email: </span>{selectedUser.email}</Typography>
+       <Typography><span className="font-bold">Role:</span> {selectedUser.role}</Typography>
     </div>
    
     {/* <Typography>Role: {selectedUser.role}</Typography> */}
 
     {selectedUser.Seller && (
       <>
-        {/* <Typography variant="h6" className="text-md font-bold">Seller Details</Typography> */}
-        {/* Add relevant seller fields */}
-        {/* <Typography>Company: {selectedUser.Seller.companyName}</Typography>
-        <Typography>Location: {selectedUser.Seller.city}, {selectedUser.Seller.state}</Typography> */}
        
-            <Typography variant="h6" className="!font-bold">Seller Details</Typography>
+       
+            {/* <Typography variant="h6" className="!font-bold">Seller Details</Typography>
             <Typography><div className="!font-semibold">Company Name:<span className="!font-normal">{selectedUser.Seller.company_name}</span> </div></Typography>
             <Typography><div className="!font-semibold">Website: <a href={selectedUser.Seller.website_url} target="_blank" rel="noopener noreferrer"><span className="!font-medium">{selectedUser.Seller.website_url}</span></a></div></Typography>
             <Typography>CIN: {selectedUser.Seller.CIN}</Typography>
@@ -503,16 +502,187 @@ const handleCommentChange = (userId, text) => {
             <Typography>Asking Price: ₹{selectedUser.Seller.askingPrice}</Typography>
             <Typography>Preferred Arrangement: {selectedUser.Seller.preferredArrangement.join(", ")}</Typography>
             <Typography>Status: {selectedUser.Seller.status}</Typography>
-         
-  
+          */}
+     <h3 className="text-xl font-bold my-4 ">Detailed Info</h3>
+
+      {/* PERSONAL SECTION */}
+      <CollapsibleSection
+        title="Company Details"
+        isOpen={openSection === "company"}
+        onToggle={() => setOpenSection(openSection === "company" ? "" : "company")}
+      >
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Business Headline</label>
+          <div className="text-sm">{selectedUser.Seller.headline}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Business Description</label>
+          <div className="text-sm">{selectedUser.Seller.description_business}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Business Category</label>
+          <div className="text-sm">{selectedUser.Seller.businessCategory}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Entity Structure</label>
+          <div className="text-sm">{selectedUser.Seller.entityStructure}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Website</label>
+          <div className="text-sm">{selectedUser.Seller.website_url}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">CIN</label>
+          <div className="text-sm">{selectedUser.Seller.CIN}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Company Linkedin</label>
+          <div className="text-sm">{selectedUser.Seller.company_linkedin || "N/A"}</div>
+        </div>
+        <div className="mb-4">
+          <label className="text-xs text-gray-500">No. of Cofounder</label>
+          <div className="text-sm">{selectedUser.Seller.numcofounder}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Team Size</label>
+          <div className="text-sm">{selectedUser.Seller.teamSize}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">No. of Location</label>
+          <div className="text-sm">{selectedUser.Seller.numLocation}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Founded Year</label>
+          <div className="text-sm">{selectedUser.Seller.year}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">Founded Month</label>
+          <div className="text-sm">{selectedUser.Seller.month}</div>
+        </div>
+        
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">No. of Cofounder</label>
+          <div className="text-sm">{selectedUser.Seller.numcofounder}</div>
+        </div>
+         <div className="mb-4">
+          <label className="text-xs text-gray-500">No. of Cofounder</label>
+          <div className="text-sm">{selectedUser.Seller.numcofounder}</div>
+        </div>
+      </CollapsibleSection>
+
+      {/* PREFERENCES SECTION */}
+      <CollapsibleSection
+        title="Financial Performance"
+        isOpen={openSection === "financial"}
+        onToggle={() => setOpenSection(openSection === "financial" ? "" : "financial")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Last Financial Year Revenue</label>
+          <div className="text-sm">{selectedUser.Seller.lastFinancialYear}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Trailing 12 Months Revenue</label>
+          <div className="text-sm">{selectedUser.Seller.trailing12months}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Previous Month Revenue</label>
+          <div className="text-sm">{selectedUser.Seller.prevMonth}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">NET Last Financial Year </label>
+          <div className="text-sm">
+            {selectedUser.Seller.NETlastFinancialYear}
+          </div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">NET Trailing 12 Months</label>
+          <div className="text-sm">
+            {selectedUser.Seller.NETtrailing12months}
+          </div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">NET Prev Month</label>
+          <div className="text-sm">{selectedUser.Seller.NETprevMonth}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Positive Cash Flow</label>
+          <div className="text-sm">{selectedUser.Seller.positiveCashFlow?"Yes":"No"}</div>
+        </div>
+        
+      </CollapsibleSection>
+
+{/**Assest Section */}
+         <CollapsibleSection
+        title="Assest & Liabilites"
+        isOpen={openSection === "assest"}
+        onToggle={() => setOpenSection(openSection === "assest" ? "" : "assest")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Assets Description</label>
+          <div className="text-sm">{selectedUser.Seller.assestDesc}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Equity</label>
+          <div className="text-sm">{selectedUser.Seller.equity}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Debt</label>
+          <div className="text-sm">{selectedUser.Seller.debt}</div>
+        </div>
+       
+     
+        {/**Exit Plan */}
+      </CollapsibleSection>
+         <CollapsibleSection
+        title="Exit Plan"
+        isOpen={openSection === "exit"}
+        onToggle={() => setOpenSection(openSection === "exit" ? "" : "exit")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Reason for Sale</label>
+          <div className="text-sm">{selectedUser.Seller.salereason}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Asking Price</label>
+          <div className="text-sm">{selectedUser.Seller.askingPrice}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Preferred Arrangement</label>
+          <div className="text-sm"> {(selectedUser.Seller.preferredArrangement || []).join(", ") || "N/A"}</div>
+        </div>
+      
+        
+      </CollapsibleSection>
+
+      {/* LOCATION SECTION */}
+      <CollapsibleSection
+        title="Location"
+        isOpen={openSection === "location"}
+        onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Country</label>
+          <div className="text-sm">{selectedUser.Seller.country}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">State</label>
+          <div className="text-sm">{selectedUser.Seller.state}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Cities</label>
+          <div className="text-sm">
+            {selectedUser.Seller.city|| "N/A"}
+          </div>
+        </div>
+      </CollapsibleSection>
 
       </>
     )}
 
     {selectedUser.Buyer && (
       <>
-        <Typography variant="h6 " className="!font-bold !text-xl">Buyer Details</Typography>
-        {/* Add relevant buyer fields */}
+        {/* <Typography variant="h6 " className="!font-bold !text-xl">Buyer Details</Typography>
+        
        
     <Typography>Type of Buyer: {selectedUser.Buyer.typeOfBuyer}</Typography>
     <Typography>Designation: {selectedUser.Buyer.designation}</Typography>
@@ -543,19 +713,99 @@ const handleCommentChange = (userId, text) => {
     <Typography>Metric: {selectedUser.Buyer.metric}</Typography>
     <Typography>Max Multiple: {selectedUser.Buyer.maxMultiple}</Typography>
     <Typography>Preferred Arrangements: {selectedUser.Buyer.preferredArrangement?.join(', ')}</Typography>
-    <Typography>Status: {selectedUser.Buyer.status}</Typography>
+    <Typography>Status: {selectedUser.Buyer.status}</Typography> */}
+
+        <h3 className="text-xl font-bold my-4">Detailed Info</h3>
+
+      {/* PERSONAL SECTION */}
+      <CollapsibleSection
+        title="Personal Details"
+        isOpen={openSection === "personal"}
+        onToggle={() => setOpenSection(openSection === "personal" ? "" : "personal")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Type Of Buyer</label>
+          <div className="text-sm">{selectedUser.Buyer.typeOfBuyer}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Designation</label>
+          <div className="text-sm">{selectedUser.Buyer.designation}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">LinkedIn</label>
+          <div className="text-sm">{selectedUser.Buyer.linkedinProfile || "N/A"}</div>
+        </div>
+        <div className="mb-4">
+          <label className="text-xs text-gray-500">Description</label>
+          <div className="text-sm">{selectedUser.Buyer.description}</div>
+        </div>
+      </CollapsibleSection>
+
+      {/* PREFERENCES SECTION */}
+      <CollapsibleSection
+        title="Preferences"
+        isOpen={openSection === "preferences"}
+        onToggle={() => setOpenSection(openSection === "preferences" ? "" : "preferences")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Ticket Size</label>
+          <div className="text-sm">{selectedUser.Buyer.ticketSizeMin} - {selectedUser.Buyer.ticketSizeMax}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Open To Pre-Revenue</label>
+          <div className="text-sm">{selectedUser.Buyer.openToPreRevenue ? "Yes" : "No"}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Open To Pre-Breakeven</label>
+          <div className="text-sm">{selectedUser.Buyer.openToPreBreakeven ? "Yes" : "No"}</div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Preferred Arrangement</label>
+          <div className="text-sm">
+            {(selectedUser.Buyer.preferredArrangement || []).join(", ") || "N/A"}
+          </div>
+        </div>
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Interested Business Categories</label>
+          <div className="text-sm">
+            {(selectedUser.Buyer.businessCategories || []).join(", ") || "N/A"}
+          </div>
+        </div>
+      </CollapsibleSection>
+
+      {/* LOCATION SECTION */}
+      <CollapsibleSection
+        title="Location"
+        isOpen={openSection === "location"}
+        onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
+      >
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Country</label>
+          <div className="text-sm">{selectedUser.Buyer.businesslocationCountry}</div>
+        </div>
+        {/* <div className="mb-2">
+          <label className="text-xs text-gray-500">State</label>
+          <div className="text-sm">{buyer.businesslocationState}</div>
+        </div> */}
+        <div className="mb-2">
+          <label className="text-xs text-gray-500">Cities</label>
+          <div className="text-sm">
+            {(selectedUser.Buyer.businesslocationCities || []).join(", ") || "N/A"}
+          </div>
+        </div>
+      </CollapsibleSection>
       </>
     )}
 
     {selectedUser.Broker && (
       <>
-        <Typography variant="h6" className="!font-bold">Broker Details</Typography>
-       <Typography>Address: {selectedUser.Broker.address}</Typography>
-    <Typography>City: {selectedUser.Broker.city}</Typography>
-    <Typography>State: {selectedUser.Broker.state}</Typography>
-    <Typography>Country: {selectedUser.Broker.country}</Typography>
-    <Typography>Zip Code: {selectedUser.Broker.zipcode}</Typography>
-    <Typography>Status: {selectedUser.Broker.status}</Typography>
+        <Typography variant="h6" className="!text-xl !font-bold">Broker Details</Typography>
+       <Typography className="pt-1"><span className="font-bold">Address:</span> {selectedUser.Broker.address}</Typography>
+    <Typography className="pt-1"><span className="font-bold">City:</span> {selectedUser.Broker.city}</Typography>
+    <Typography className="pt-1"><span className="font-bold">State:</span> {selectedUser.Broker.state}</Typography>
+    <Typography className="pt-1"><span className="font-bold">Country:</span> {selectedUser.Broker.country}</Typography>
+    <Typography className="pt-1"><span className="font-bold">Zip Code: </span>{selectedUser.Broker.zipcode}</Typography>
+    <Typography className="pt-1"><span className="font-bold">Status:</span> {selectedUser.Broker.status}</Typography>
       </>
     )}
   </>

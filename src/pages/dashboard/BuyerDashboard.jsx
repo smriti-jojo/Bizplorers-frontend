@@ -378,6 +378,12 @@ const BuyerDashboard = () => {
     },
   };
 
+  const countryCityMap = {
+  India: ['Delhi', 'Mumbai', 'Bangalore'],
+  USA: ['New York', 'Los Angeles', 'Chicago'],
+  Germany: ['Berlin', 'Munich', 'Frankfurt'],
+};
+
   const businessCategoryOptions = [
     "E-commerce",
     "Offline Retail",
@@ -512,6 +518,31 @@ const BuyerDashboard = () => {
             <EditableRow label="Open to Pre-Revenue" value={buyerData.openToPreRevenue ? "Yes" : "No"} editable={isEditing} onChange={(v) => handleChange("openToPreRevenue", v === "Yes")} dropdownOptions={["Yes", "No"]} />
             <EditableRow label="Open to Pre-Breakeven" value={buyerData.openToPreBreakeven ? "Yes" : "No"} editable={isEditing} onChange={(v) => handleChange("openToPreBreakeven", v === "Yes")} dropdownOptions={["Yes", "No"]} />
 
+  {/* Business Categories */}
+  
+            <div className="my-3">
+              <h1 className="font-semibold flex items-center mb-1">
+                <CheckBoxIcon className="!text-green-600 mr-1" /> Business Categories:
+              </h1>
+              {isEditing ? (
+                <select
+                  multiple
+                  className="border rounded px-2 py-1 w-full md:w-1/2"
+                  value={buyerData.businessCategories}
+                  onChange={(e) =>
+                    handleChange("businessCategories", Array.from(e.target.selectedOptions, (opt) => opt.value))
+                  }
+                >
+                  {businessCategoryOptions.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <p>{buyerData.businessCategories.join(", ") || "N/A"}</p>
+              )}
+            </div>
             {/* Preferred Arrangement */}
             <div className="my-3">
               <h1 className="font-semibold flex items-center mb-1">
@@ -591,7 +622,7 @@ const BuyerDashboard = () => {
             </div>
 
             {/* Business Categories */}
-            <div className="my-3">
+            {/* <div className="my-3">
               <h1 className="font-semibold flex items-center mb-1">
                 <CheckBoxIcon className="!text-green-600 mr-1" /> Business Categories:
               </h1>
@@ -613,7 +644,7 @@ const BuyerDashboard = () => {
               ) : (
                 <p>{buyerData.businessCategories.join(", ") || "N/A"}</p>
               )}
-            </div>
+            </div> */}
           </CollapsibleSection>
         </div>
       </div>

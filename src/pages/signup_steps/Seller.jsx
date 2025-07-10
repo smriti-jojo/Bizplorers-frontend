@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 
-const RegisterSeller = ({ type }) => {
+const RegisterSeller = ({ type,onSuccess }) => {
   const [step, setStep] = useState(1);
   const [stepsList, setStepsList] = useState([]);
    const [registerData, setRegisterData] = useState({
@@ -79,6 +79,11 @@ const RegisterSeller = ({ type }) => {
     setFormData((prev) => ({ ...prev, [name]: actualValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+  //   const handleSuccess = () => {
+  //   console.log("Seller registered successfully!");
+  //   setOpenDialog(false);
+  // };
 
     const handleRegisterChange = (e) => {
   const { name, value } = e.target;
@@ -557,6 +562,7 @@ setStep((prev) => prev - 1);
 }, [step]); // works for both next and back
 
   const token = localStorage.getItem("token");
+
   const handleSubmit = async () => {
     if (!validateStep()) return;
     const user = JSON.parse(localStorage.getItem("user"));
@@ -597,7 +603,17 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
       // }
       if (type === "modal") {
   // alert("Seller Created Successfully!");
-  notifySuccess();
+  
+ const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if (!("dataFilled" in user)) {
+  user.dataFilled = true;
+
+  // Save updated user back to localStorage
+  localStorage.setItem("user", JSON.stringify(user));
+}
+notifySuccess();
+onSuccess();
    localStorage.setItem("refreshSellerList", "true");
    localStorage.removeItem("currentUserBeingOnboarded");
   
@@ -605,7 +621,16 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
   // don't navigate
 } else {
   // alert("Data submitted successfully!");
+   const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if (!("dataFilled" in user)) {
+  user.dataFilled = true;
+
+  // Save updated user back to localStorage
+  localStorage.setItem("user", JSON.stringify(user));
+}
   notifySuccess();
+  onSuccess();
   navigate("/seller/dashboard");
 }
     } catch (error) {
@@ -633,42 +658,46 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
     }, []);
 
   return (
-    <>
-      {/* <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-       
-        <Link to="/">
-          <img
-            alt="logo"
-            width={50}
-            className="object-contain cursor-pointer"
-          />
-        </Link>
-        <nav className="hidden md:flex gap-8">
-          <Link to="/aboutUs" className="text-xl hover:text-blue-600">
-            About Us
-          </Link>
-          <Link to="/services" className="text-xl hover:text-blue-600">
-            Services
-          </Link>
-          <Link to="/seller" className="text-xl hover:text-blue-600">
-            Seller
-          </Link>
-          <Link to="/buyer" className="text-xl hover:text-blue-600">
-            Buyer
-          </Link>
-         
-          <Link to="/signUp" className="text-xl hover:text-blue-600">
-            Register
-          </Link>
-                 </nav>
-        <div className="hidden md:flex gap-2">
-        </div>
-        
-      </header> */}
-      <Header/>
+    <div className="bg-gray-100 min-h-screen">
+      {type !== "modal" && (
+        // <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
+
+        //   <Link to="/">
+        //     <img
+        //       alt="logo"
+        //       width={50}
+        //       className="object-contain cursor-pointer"
+        //     />
+        //   </Link>
+        //   <nav className="hidden md:flex gap-8">
+        //     <Link to="/aboutUs" className="text-xl hover:text-blue-600">
+        //       About Us
+        //     </Link>
+        //     <Link to="/services" className="text-xl hover:text-blue-600">
+        //       Services
+        //     </Link>
+        //     <Link to="/seller" className="text-xl hover:text-blue-600">
+        //       Seller
+        //     </Link>
+        //     <Link to="/buyer" className="text-xl hover:text-blue-600">
+        //       Buyer
+        //     </Link>
+
+        //     <Link to="/signUp" className="text-xl hover:text-blue-600">
+        //       Register
+        //     </Link>
+
+        //   </nav>
+        //   <div className="hidden md:flex gap-2">
+
+        //   </div>
+
+        // </header>
+        <Header />
+      )}
      <div
         className={`flex justify-center min-h-screen bg-slate-100 ${
-          type === "modal" ? "pt-[3%]" : "pt-[7%] pb-[5%]"
+          type === "modal" ? "" : "pt-[7%] pb-[5%]"
         }`}
       >
         {/* <div className={`bg-white px-2 py-2 rounded shadow-md w-full `}>
@@ -737,7 +766,7 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
           )}
           {type === "modal" ? (
             <>
-              <div className="flex gap-5 mt-6">
+              <div className="flex gap-5 mt-6 px-[5%] py-3">
                 {step > 1 && (
                   <button
                     onClick={handleBack}
@@ -803,7 +832,7 @@ const newUser = JSON.parse(localStorage.getItem("currentSellerBeingOnboarded"));
         <Footer /> 
       </div>
         )}
-    </>
+    </div>
   );
 };
 

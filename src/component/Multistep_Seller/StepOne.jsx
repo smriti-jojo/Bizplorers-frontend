@@ -138,7 +138,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
           />
         </div> */}
         <div className="w-1/2">
-         <FormControl className={`${type==='modal'?'w-[550px]':'w-full'}`} error={!!errors.entityStructure} size="small">
+         <FormControl className={'w-full'} error={!!errors.entityStructure} size="small">
          <InputLabel>Entity Structure</InputLabel>
           <Select
             labelId="entityStructure"
@@ -158,7 +158,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
         </FormControl>
     </div>
     <div className="w-1/2">
-         <FormControl className={`${type==='modal'?'w-[550px]':'w-full'}`} error={!!errors.businessCategory} size="small">
+         <FormControl className={'w-full'} error={!!errors.businessCategory} size="small">
          <InputLabel>Business Category</InputLabel>
           <Select
             labelId="businessCategory"

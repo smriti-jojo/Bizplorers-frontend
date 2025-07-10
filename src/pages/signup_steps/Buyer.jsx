@@ -16,7 +16,7 @@ import RegisterModalForm from "../../component/RegisterModalForm";
 import axios from "axios";
 import  {showSuccess,showError ,showInfo,showWarning} from '../../component/utils/toast';
 
-const RegisterBuyer = ({ type }) => {
+const RegisterBuyer = ({ type,onSuccess}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [stepsList, setStepsList] = useState([]);
@@ -298,13 +298,32 @@ const newUser = JSON.parse(localStorage.getItem("currentBuyerBeingOnboarded"));
         //  showSuccess("Buyer Created Successfully!");
         console.log(response.data);
  showSuccess("Your Registration is Successful");
+ onSuccess();
+ const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if (!("dataFilled" in user)) {
+  user.dataFilled = true;
+
+  // Save updated user back to localStorage
+  localStorage.setItem("user", JSON.stringify(user));
+}
  localStorage.setItem("refreshBuyerList", "true");
+ 
  localStorage.removeItem("currentUserBeingOnboarded");
 
         // don't navigate
       } else {
         // alert("Data submitted successfully!");
+ const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+if (!("dataFilled" in user)) {
+  user.dataFilled = true;
+
+  // Save updated user back to localStorage
+  localStorage.setItem("user", JSON.stringify(user));
+}
         showSuccess("Your Registration is Successful");
+        onSuccess();
         navigate("/buyer/dashboard");
       }
       console.log("buyerData----", data);

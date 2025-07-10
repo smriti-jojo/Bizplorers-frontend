@@ -32,9 +32,13 @@ const Transition = React.forwardRef((props, ref) => {
       setOpenDialog(false);
     };
 
+      const handleSuccess = () => {
+    console.log("Seller registered successfully!");
+    setOpenDialog(false);
+  };
    
 
-           const notifyNoSeller = (msg = "No Seller found for this broker!") => {
+           const notifyNoSeller = (msg = "No Seller to display, Please Register!") => {
           toast.error(msg, {
             position: "top-right",
             autoClose: 3000,
@@ -119,9 +123,9 @@ useEffect(()=>{
             }}
           >
             <DialogContent className="">
-              <DialogContentText id="alert-dialog-slide-description">
-                <Seller type={"modal"} />
-              </DialogContentText>
+              
+                <Seller type={"modal"} onSuccess={handleSuccess}/>
+              
             </DialogContent>
            
             <DialogActions className="absolute top-0 right-2">
@@ -143,7 +147,12 @@ useEffect(()=>{
             // EBITDA={card.EBITDA}
              
              key={index} type="seller" data={card}
-
+            onUpdate={(updatedBuyer) => {
+      const updatedList = [...cardData];
+      updatedList[index] = updatedBuyer;
+      setCardData(updatedList); // update state to trigger re-render
+    }}
+location={'dashboard'}
               />
             ))}
           </div>

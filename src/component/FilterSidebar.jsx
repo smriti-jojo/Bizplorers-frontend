@@ -84,15 +84,15 @@ useEffect(() => {
           {/* Revenue */}
           <label className="block text-sm font-medium mb-1">12 Months Revenue (₹)</label>
           <div className="flex gap-2 mb-3">
-            <input type="number" name="minRevenue" value={filters.minRevenue} onChange={handleChange} placeholder="Min" className="w-1/2 p-2 border rounded" />
-            <input type="number" name="maxRevenue" value={filters.maxRevenue} onChange={handleChange} placeholder="Max" className="w-1/2 p-2 border rounded" />
+            <input type="number" name="trailing12months" value={filters.trailing12months} onChange={handleChange} placeholder="Min" className="w-1/2 p-2 border rounded" />
+           
           </div>
 
           {/* Profit */}
           <label className="block text-sm font-medium mb-1">12 Months Profit (₹)</label>
           <div className="flex gap-2 mb-3">
-            <input type="number" name="minProfit" value={filters.minProfit} onChange={handleChange} placeholder="Min" className="w-1/2 p-2 border rounded" />
-            <input type="number" name="maxProfit" value={filters.maxProfit} onChange={handleChange} placeholder="Max" className="w-1/2 p-2 border rounded" />
+            <input type="number" name="NETtrailing12months" value={filters.NETtrailing12months} onChange={handleChange} placeholder="Min" className="w-1/2 p-2 border rounded" />
+           
           </div>
 
           {/* Asking Price */}
