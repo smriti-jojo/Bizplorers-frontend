@@ -6,23 +6,23 @@ import Footer from "../../component/Footer";
 import Header from "../../component/Header";
 import {CircularProgress} from "@mui/material";
 
-const countryStateCityMap = {
-  India: {
-    Delhi: ["New Delhi", "Dwarka", "Rohini"],
-    Maharashtra: ["Mumbai", "Pune", "Nagpur"],
-    Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-  },
-  USA: {
-    NewYork: ["New York City", "Buffalo", "Rochester"],
-    California: ["Los Angeles", "San Francisco", "San Diego"],
-    Illinois: ["Chicago", "Springfield", "Naperville"],
-  },
-  Germany: {
-    Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
-    Bavaria: ["Munich", "Nuremberg", "Augsburg"],
-    Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
-  },
-};
+// const countryStateCityMap = {
+//   India: {
+//     Delhi: ["New Delhi", "Dwarka", "Rohini"],
+//     Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+//     Karnataka: ["Bangalore", "Mysore", "Mangalore"],
+//   },
+//   USA: {
+//     NewYork: ["New York City", "Buffalo", "Rochester"],
+//     California: ["Los Angeles", "San Francisco", "San Diego"],
+//     Illinois: ["Chicago", "Springfield", "Naperville"],
+//   },
+//   Germany: {
+//     Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
+//     Bavaria: ["Munich", "Nuremberg", "Augsburg"],
+//     Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
+//   },
+// };
 
 const dropdownOptions = {
   businessCategory: [
@@ -40,6 +40,11 @@ const dropdownOptions = {
   preferredArrangement: ["Cash", "Stock", "Royalty", "Acquihire"],
 };
 
+  const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[2]);
+
 const Section = ({ title, isOpen, toggleOpen, children }) => (
   <div className="border-t pt-4">
     <div
@@ -53,56 +58,184 @@ const Section = ({ title, isOpen, toggleOpen, children }) => (
   </div>
 );
 
-const EditableRow = ({ label, value, editable, onChange, type = "text", options = [], multiple = false }) => {
-  const renderView = () => <p>{Array.isArray(value) ? value.join(", ") : value || "—"}</p>;
+// const EditableRow = ({ label, value, editable, onChange, type = "text", options = [], multiple = false }) => {
+//   const renderView = () => <p>{Array.isArray(value) ? value.join(", ") : value || "—"}</p>;
 
+//   const renderEdit = () => {
+//     if (options.length > 0) {
+//       return multiple ? (
+//         <Select
+//           multiple
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//           renderValue={(selected) => selected.join(", ")}
+//           className="min-w-[200px] h-10"
+//         >
+//           {/* {options.map((opt) => (
+//             <MenuItem key={opt} value={opt}>
+//               <Checkbox checked={value.includes(opt)} />
+//               <ListItemText primary={opt} />
+//             </MenuItem>
+//           ))} */}
+//           {options.map((opt) => {
+//   const val = typeof opt === "string" ? opt : opt.value;
+//   return (
+//     <MenuItem key={val} value={val}>
+//       <Checkbox checked={value.includes(val)} />
+//       <ListItemText primary={val} />
+//     </MenuItem>
+//   );
+// })}
+
+//         </Select>
+//       ) : (
+//         <Select value={value} onChange={(e) => onChange(e.target.value)} className="min-w-[200px] h-10">
+//           {/* {options.map((opt) => (
+//             <MenuItem key={opt} value={opt}>
+//               {opt}
+//             </MenuItem>
+//           ))} */}
+//           {options.map((opt) => {
+//   const val = typeof opt === "string" ? opt : opt.value;
+//   return (
+//     <MenuItem key={val} value={val}>
+//       {val}
+//     </MenuItem>
+//   );
+// })}
+
+//         </Select>
+//       );
+//     }
+
+//     if (type === "textarea") {
+//       return (
+//         <textarea
+//           className="border rounded px-2 py-1 w-full md:w-[60%]"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       );
+//     }
+
+//     return (
+//       <input
+//         className="border rounded px-2 py-1"
+//         value={value}
+//         onChange={(e) => onChange(e.target.value)}
+//       />
+//     );
+//   };
+
+//   return (
+//     <div className="flex gap-5 items-start flex-wrap my-2">
+//       <h1 className="font-semibold flex items-center">
+//         <CheckBoxIcon className="!text-green-600 mr-1" />
+//         {label}:
+//       </h1>
+//       {editable ? renderEdit() : renderView()}
+//     </div>
+//   );
+// };
+const EditableRow = ({
+  label,
+  value,
+  editable,
+  onChange,
+  type = "text",
+  options = [],
+  multiple = false,
+}) => {
+  /* ---------- helpers ---------- */
+  const getId   = (opt) => (typeof opt === "string" ? opt : opt.id);
+  const getText = (opt) => (typeof opt === "string" ? opt : opt.label ?? opt.value);
+
+  /* ---------- VIEW mode ---------- */
+  const renderView = () => {
+    if (Array.isArray(value)) return <p>{value.map(getText).join(", ") || "—"}</p>;
+    if (typeof value === "object") return <p>{getText(value) || "—"}</p>;
+    return <p>{value || "—"}</p>;
+  };
+
+  /* ---------- EDIT mode ---------- */
   const renderEdit = () => {
-    if (options.length > 0) {
-      return multiple ? (
-        <Select
-          multiple
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          renderValue={(selected) => selected.join(", ")}
-          className="min-w-[200px] h-10"
-        >
-          {options.map((opt) => (
-            <MenuItem key={opt} value={opt}>
-              <Checkbox checked={value.includes(opt)} />
-              <ListItemText primary={opt} />
-            </MenuItem>
-          ))}
-        </Select>
-      ) : (
-        <Select value={value} onChange={(e) => onChange(e.target.value)} className="min-w-[200px] h-10">
-          {options.map((opt) => (
-            <MenuItem key={opt} value={opt}>
-              {opt}
-            </MenuItem>
-          ))}
-        </Select>
-      );
-    }
-
-    if (type === "textarea") {
+    /* textarea or free‑text ---------------------------------- */
+    if (options.length === 0) {
+      if (type === "textarea") {
+        return (
+          <textarea
+            className="border rounded px-2 py-1 w-full md:w-[60%]"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        );
+      }
       return (
-        <textarea
-          className="border rounded px-2 py-1 w-full md:w-[60%]"
+        <input
+          className="border rounded px-2 py-1"
           value={value}
           onChange={(e) => onChange(e.target.value)}
         />
       );
     }
 
+    /* dropdown (single / multi) ------------------------------ */
+    if (multiple) {
+      const selectedIds = (value || []).map(getId);
+      return (
+        <Select
+          multiple
+          value={selectedIds}
+          onChange={(e) => {
+            const newVals = options.filter((o) =>
+              e.target.value.includes(getId(o))
+            );
+            onChange(newVals);
+          }}
+          renderValue={(selected) =>
+            selected
+              .map((id) => getText(options.find((o) => getId(o) === id)))
+              .join(", ")
+          }
+          className="min-w-[200px] h-10"
+        >
+          {options.map((opt) => {
+            const id = getId(opt);
+            return (
+              <MenuItem key={id} value={id}>
+                <Checkbox checked={selectedIds.includes(id)} />
+                <ListItemText primary={getText(opt)} />
+              </MenuItem>
+            );
+          })}
+        </Select>
+      );
+    }
+
+    /* single‑select ------------------------------------------ */
+    const currentId = value ? getId(value) : "";
     return (
-      <input
-        className="border rounded px-2 py-1"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
+      <Select
+        value={currentId}
+        onChange={(e) => {
+          const selected = options.find((o) => getId(o) === e.target.value);
+          onChange(selected);
+        }}
+        className="min-w-[200px] h-10"
+      >
+        {options.map((opt) => {
+          const id = getId(opt);
+          return (
+            <MenuItem key={id} value={id}>
+              {getText(opt)}
+            </MenuItem>
+          );
+        })}
+      </Select>
     );
   };
 
+  /* ---------- JSX row wrapper ---------- */
   return (
     <div className="flex gap-5 items-start flex-wrap my-2">
       <h1 className="font-semibold flex items-center">
@@ -114,8 +247,12 @@ const EditableRow = ({ label, value, editable, onChange, type = "text", options 
   );
 };
 
+
 const SellerDashboard = () => {
   const [isEditing, setIsEditing] = useState(false);
+   const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
   const[loading,setLoading]=useState(false);
   const [openSections, setOpenSections] = useState({
     company: true,
@@ -125,6 +262,7 @@ const SellerDashboard = () => {
     exit: false,
   });
 
+ 
   const [formData, setFormData] = useState({
     company_name: "",
     website_url: "",
@@ -157,11 +295,101 @@ const SellerDashboard = () => {
     preferredArrangement: [],
   });
 
-  const handleChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-    if (key === "country") setFormData((prev) => ({ ...prev, state: "", city: "" }));
-    if (key === "state") setFormData((prev) => ({ ...prev, city: "" }));
-  };
+  //   useEffect(()=>{
+  //     const countryArray=parsedPicklists[2]?.values;
+  // setCountries(countryArray);
+  
+  // },[]);
+  useEffect(() => {
+  const countryArray = parsedPicklists[2]?.values || [];
+  const mapped = countryArray.map((c) => ({
+    id: c.id,
+    label: c.value,
+  }));
+  setCountries(mapped);
+}, []);
+
+
+  // const handleChange = (key, value) => {
+  //   setFormData((prev) => ({ ...prev, [key]: value }));
+  //   if (key === "country") setFormData((prev) => ({ ...prev, state: "", city: "" }));
+  //   if (key === "state") setFormData((prev) => ({ ...prev, city: "" }));
+  // };
+//   const handleChange = (field, value) => {
+//      console.log("handlebefireeefiled---",field);
+//     console.log("handlebefireee---",value);
+//   setFormData((prev) => {
+//     const next = { ...prev, [field]: value };
+
+//     /* ---------- if a COUNTRY field changed ---------- */
+//     if (field === "country" || field.endsWith("Country")) {
+//       const stateKey =
+//         field === "country" ? "state" : field.replace("Country", "State");
+//       const cityKey =
+//         field === "country" ? "city" : field.replace("Country", "Cities");
+
+//       next[stateKey] = "";          // reset state
+//       next[cityKey] = Array.isArray(prev[cityKey]) ? [] : ""; // reset cities
+//     }
+
+//     /* ---------- if a STATE field changed ------------ */
+//     if (field === "state" || field.endsWith("State")) {
+//       const cityKey =
+//         field === "state" ? "city" : field.replace("State", "Cities");
+
+//       next[cityKey] = Array.isArray(prev[cityKey]) ? [] : ""; // reset cities
+//     }
+
+//     return next;
+//   });
+
+//   /* Fetch dependent dropdown data */
+//   if (field === "country" || field.endsWith("Country")) {
+//     console.log("handlechange-----",value);
+//     fetchStateByCountryData(value.id);        // <-- states API
+//   }
+
+//   if (field === "state" || field.endsWith("State")) {
+//       console.log("handlechangeststae-----",value);
+//     fetchCityByStateData(value);           // <-- cities API
+//   }
+// };
+const handleChange = (field, selectedValue) => {
+  console.log("Field:", field);
+  console.log("Value:", selectedValue);
+
+  setFormData((prev) => {
+    const next = { ...prev, [field]: selectedValue };
+
+    // Reset dependent fields
+    if (field === "country" || field.endsWith("Country")) {
+      const stateKey = field === "country" ? "state" : field.replace("Country", "State");
+      const cityKey = field === "country" ? "city" : field.replace("Country", "City");
+
+      next[stateKey] = ""; // reset state
+      next[cityKey] = "";  // reset city
+    }
+
+    if (field === "state" || field.endsWith("State")) {
+      const cityKey = field === "state" ? "city" : field.replace("State", "City");
+      next[cityKey] = ""; // reset city
+    }
+
+    return next;
+  });
+
+  // Trigger dependent data fetch
+  if (field === "country" || field.endsWith("Country")) {
+    const countryId = typeof selectedValue === "object" ? selectedValue.id : null;
+    if (countryId) fetchStateByCountryData(countryId);
+  }
+
+  if (field === "state" || field.endsWith("State")) {
+    const stateId = typeof selectedValue === "object" ? selectedValue.id : selectedValue;
+    if (stateId) fetchCityByStateData(stateId);
+  }
+};
+
 
   const token = localStorage.getItem("token");
 
@@ -210,9 +438,76 @@ const SellerDashboard = () => {
     fetchSellerData();
   }, []);
 
-  const countries = Object.keys(countryStateCityMap);
-  const states = formData.country ? Object.keys(countryStateCityMap[formData.country]) : [];
-  const cities = formData.country && formData.state ? countryStateCityMap[formData.country][formData.state] : [];
+  //  const fetchStateByCountryData = async (id) => {
+  //     try {
+  //       const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/states?countryId=${id}`, {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${token}`,
+  //         },
+  //       });
+
+  
+  //       if (!response.ok) throw new Error('Failed to fetch');
+  
+  //       const data = await response.json();
+  //       console.log("data---buyerstate--",data);
+  //       setStates(data);
+  //     } catch (error) {
+  //       console.error(error);
+       
+  //     }
+  //   };
+
+  const fetchStateByCountryData = async (id) => {
+  const res = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/states?countryId=${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  const mapped = data.map((s) => ({
+    id: s.id,
+    label: s.value,
+  }));
+  setStates(mapped);
+};
+
+    //  const fetchCityByStateData = async (id) => {
+    //   try {
+    //     const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/cities?stateId=${id}`, {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': `Bearer ${token}`,
+    //       },
+    //     });
+
+  
+    //     if (!response.ok) throw new Error('Failed to fetch');
+  
+    //     const data = await response.json();
+    //     console.log("data---buyerstate--",data);
+    //     setCities(data);
+    //   } catch (error) {
+    //     console.error(error);
+       
+    //   }
+    // };
+  // const countries = Object.keys(countryStateCityMap);
+  // const countries = parsedPicklists[2].values;
+  // const states = formData.country ? Object.keys(countryStateCityMap[formData.country]) : [];
+  // const cities = formData.country && formData.state ? countryStateCityMap[formData.country][formData.state] : [];
+const fetchCityByStateData = async (id) => {
+  const res = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/cities?stateId=${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  const mapped = data.map((c) => ({
+    id: c.id,
+    label: c.value,
+  }));
+  setCities(mapped);
+};
 
   return (
     <div>
@@ -266,9 +561,29 @@ const SellerDashboard = () => {
             isOpen={openSections.location}
             toggleOpen={() => setOpenSections((p) => ({ ...p, location: !p.location }))}
           >
-            <EditableRow label="Country" value={formData.country} editable={isEditing} onChange={(v) => handleChange("country", v)} options={countries} />
-            <EditableRow label="State" value={formData.state} editable={isEditing} onChange={(v) => handleChange("state", v)} options={states} />
-            <EditableRow label="City" value={formData.city} editable={isEditing} onChange={(v) => handleChange("city", v)} options={cities} />
+
+  <EditableRow
+    label="Country"
+    value={formData.country}
+    editable={isEditing}
+    onChange={(v) => handleChange("country", v)}
+    options={countries}
+  />
+  <EditableRow
+    label="State"
+    value={formData.state}
+    editable={isEditing}
+    onChange={(v) => handleChange("state", v)}
+    options={states}
+  />
+  <EditableRow
+    label="City"
+    value={formData.city}
+    editable={isEditing}
+    onChange={(v) => handleChange("city", v)}
+    options={cities}
+  />
+
           </Section>
 
           {/* Financial Section */}
@@ -396,7 +711,7 @@ export default SellerDashboard;
 //     company_linkedin: "",
 //     description_business: "",
 //     numcofounder: "",
-//     teamSize: "",
+//     teamSize: ""y
 //     numLocation: "",
 //     year: "",
 //     month: "",

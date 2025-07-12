@@ -11,7 +11,10 @@ import {
 
 const StepThree = ({ formData, handleChange,errors,type }) => {
 
-    
+     const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[8]);
 
   return(
   
@@ -45,9 +48,9 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
             onChange={handleChange}
             
          >
-            {['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation'].map((entity,index) => (
-              <MenuItem key={index} value={entity}>
-                {entity}
+            {parsedPicklists[7].values.map((entity,index) => (
+              <MenuItem key={index} value={entity.value}>
+                {entity.value}
               </MenuItem>
             ))}
           </Select>
@@ -76,21 +79,21 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
 <div className=''>
   <h1 className="text-xl font-semibold mb-4">Preferred Arrangement</h1>
 <div className=" flex flex-wrap  ">
-  {["Cash", "Stock", "Royalty", "Acquihire"].map((option) => (
+  {parsedPicklists[6]?.values.map((option) => (
     <button
-      key={option}
+      key={option.value}
       type="button"
       className={`w-[100px] py-3 rounded-sm  border text-sm ${
-        formData.preferredArrangement.includes(option)
+        formData.preferredArrangement.includes(option.value)
           ? "bg-blue-100 text-blue-500 border-blue-500":
            "bg-white text-gray-800 border-gray-300"
           
       } hover:bg-blue-100 border border-blue`}
       onClick={() => {
-        const isSelected = formData.preferredArrangement.includes(option);
+        const isSelected = formData.preferredArrangement.includes(option.value);
         const newSelection = isSelected
-          ? formData.preferredArrangement.filter((item) => item !== option)
-          : [...formData.preferredArrangement, option];
+          ? formData.preferredArrangement.filter((item) => item !== option.value)
+          : [...formData.preferredArrangement, option.value];
 
         handleChange({
           target: {
@@ -100,7 +103,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
         });
       }}
     >
-      {option}
+      {option.value}
     </button>
   ))}
 </div>

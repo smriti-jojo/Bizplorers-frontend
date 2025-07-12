@@ -85,7 +85,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between">
           <div className="md:w-1/3 px-6">
-            <h2 className="text-4xl font-bold">Bizplorers</h2>
+            <h2 className="text-4xl font-bold">Bizdeals</h2>
             <p className="mt-2">
               find trending sellers , buyers 
             </p>
@@ -142,7 +142,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center mt-10">
-          <p>© Copyright 2025 Bizplorers. All Rights Reserved.</p>
+          <p>© Copyright 2025 Bizdeals. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

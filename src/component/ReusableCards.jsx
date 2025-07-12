@@ -689,7 +689,7 @@
 // };
 
 // export default ReusableCards;
-import React from "react";
+import React, { useEffect } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -701,8 +701,9 @@ import { Check } from "lucide-react";
 import { useState } from "react";
 import SendInterestButton from "../component/SendInterestButton";
 import CollapsibleSection from "./CollapsibleSection";
-import EditableRow from "./ReusableEditableRow";
+ import EditableRow from "./ReusableEditableRow";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+
 
 const ReusableCards = ({
   
@@ -717,12 +718,71 @@ const ReusableCards = ({
   const [editSellerMode, setSellerEditMode] = useState(false);
    const [editBuyerMode, setBuyerEditMode] = useState(false);
 const [formData, setFormData] = useState({ ...data });
+const [countries, setCountries] = useState([]);
+const [states, setStates] = useState([]);
+const [cities, setCities] = useState([]);
+
+
+  const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[2]);
 
 
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
   const senderId = user?.id;
+
+  useEffect(()=>{
+    const countryArray=parsedPicklists[2]?.values;
+setCountries(countryArray);
+
+},[]);
+  
+ const fetchStateByCountryData = async (id) => {
+      try {
+        const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/states?countryId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+  
+        if (!response.ok) throw new Error('Failed to fetch');
+  
+        const data = await response.json();
+        console.log("data---buyerstate--",data);
+        setStates(data);
+      } catch (error) {
+        console.error(error);
+       
+      }
+    };
+
+     const fetchCityByStateData = async (id) => {
+      try {
+        const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/cities?stateId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+  
+        if (!response.ok) throw new Error('Failed to fetch');
+  
+        const data = await response.json();
+        console.log("data---buyerstate--",data);
+        setCities(data);
+      } catch (error) {
+        console.error(error);
+       
+      }
+    };
 
   const isTruthy = (val) => {
     if (typeof val === "boolean") return val;
@@ -732,12 +792,113 @@ const [formData, setFormData] = useState({ ...data });
     return false;
   };
 
-const handleChange = (field, value) => {
-  setFormData((prev) => ({
-    ...prev,
-    [field]: value,
-  }));
+// const handleChange = (field, value) => {
+//   setFormData((prev) => ({
+//     ...prev,
+//     [field]: value,
+//   }));
+// };
+// const handleChange = (field, value) => {
+//   setFormData((prev) => ({
+//     ...prev,
+//     [field]: value,
+//     ...(field === "businesslocationCountry" && { businesslocationState: "", businesslocationCities: [] }),
+//     ...(field === "businesslocationState" && { businesslocationCities: [] }),
+//   }));
+
+//   if (field === "businesslocationCountry") {
+//     fetchStateByCountryData(value);
+//   }
+
+//   if (field === "businesslocationState") {
+//     fetchCityByStateData(value);
+//   }
+// };
+// const handleChange = (field, value) => {
+//   setFormData((prev) => ({
+//     ...prev,
+//     [field]: value,
+//     ...(field.includes("Country") && { [field.replace("Country", "State")]: "", [field.replace("Country", "Cities")]: [] }),
+//     ...(field.includes("State") && { [field.replace("State", "Cities")]: [] }),
+//   }));
+
+//   if (field.includes("Country")) {
+//     fetchStateByCountryData(value);
+//   }
+
+//   if (field.includes("State")) {
+//     fetchCityByStateData(value);
+//   }
+// };
+// Works for BOTH buyers and sellers
+const handleBuyerChange = (field, selected) => {
+  setFormData((prev) => {
+    const next = { ...prev, [field]: selected };
+
+    // reset city when country changes
+    if (field === "businesslocationCountry") {
+      next.businesslocationCities = "";
+    }
+    return next;
+  });
+
+  if (field === "businesslocationCountry") {
+    const id = typeof selected === "object" ? selected.id : null;
+    if (id) fetchCitiesByCountry(id);
+  }
 };
+
+const fetchCitiesByCountry = async (countryId) => {
+  try {
+    const res   = await fetch(
+      `https://bizplorers-backend.onrender.com/api/picklist/buyer-cities?countryId=${countryId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    const data  = await res.json();
+    setCities(data.map((c) => ({ id: c.id, label: c.value })));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+const handleChange = (field, value) => {
+  setFormData((prev) => {
+    const next = { ...prev, [field]: value };
+
+    /* ---------- if a COUNTRY field changed ---------- */
+    if (field === "country" || field.endsWith("Country")) {
+      const stateKey =
+        field === "country" ? "state" : field.replace("Country", "State");
+      const cityKey =
+        field === "country" ? "city" : field.replace("Country", "Cities");
+
+      next[stateKey] = "";          // reset state
+      next[cityKey] = Array.isArray(prev[cityKey]) ? [] : ""; // reset cities
+    }
+
+    /* ---------- if a STATE field changed ------------ */
+    if (field === "state" || field.endsWith("State")) {
+      const cityKey =
+        field === "state" ? "city" : field.replace("State", "Cities");
+
+      next[cityKey] = Array.isArray(prev[cityKey]) ? [] : ""; // reset cities
+    }
+
+    return next;
+  });
+
+  /* Fetch dependent dropdown data */
+  if (field === "country" || field.endsWith("Country")) {
+    fetchStateByCountryData(value);        // <-- states API
+  }
+
+  if (field === "state" || field.endsWith("State")) {
+    fetchCityByStateData(value);           // <-- cities API
+  }
+};
+
+
 
 const handleSellerSave = async () => {
   // const endpoint =
@@ -884,27 +1045,28 @@ const dropdownOptions = {
   preferredArrangement: ["Cash", "Stock", "Royalty", "Acquihire"],
 };
 
-const countryStateCityMap = {
-  India: {
-    Delhi: ["New Delhi", "Dwarka", "Rohini"],
-    Maharashtra: ["Mumbai", "Pune", "Nagpur"],
-    Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-  },
-  USA: {
-    NewYork: ["New York City", "Buffalo", "Rochester"],
-    California: ["Los Angeles", "San Francisco", "San Diego"],
-    Illinois: ["Chicago", "Springfield", "Naperville"],
-  },
-  Germany: {
-    Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
-    Bavaria: ["Munich", "Nuremberg", "Augsburg"],
-    Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
-  },
-};
+// const countryStateCityMap = {
+//   India: {
+//     Delhi: ["New Delhi", "Dwarka", "Rohini"],
+//     Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+//     Karnataka: ["Bangalore", "Mysore", "Mangalore"],
+//   },
+//   USA: {
+//     NewYork: ["New York City", "Buffalo", "Rochester"],
+//     California: ["Los Angeles", "San Francisco", "San Diego"],
+//     Illinois: ["Chicago", "Springfield", "Naperville"],
+//   },
+//   Germany: {
+//     Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
+//     Bavaria: ["Munich", "Nuremberg", "Augsburg"],
+//     Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
+//   },
+// };
 
-const countries = Object.keys(countryStateCityMap);
-  const states = formData.country ? Object.keys(countryStateCityMap[formData.country]) : [];
-  const cities = formData.country && formData.state ? countryStateCityMap[formData.country][formData.state] : [];
+// const countries = Object.keys(countryStateCityMap);
+//   const states = formData.country ? Object.keys(countryStateCityMap[formData.country]) : [];
+//   const cities = formData.country && formData.state ? countryStateCityMap[formData.country][formData.state] : [];
+
 
 
   return (
@@ -1161,10 +1323,10 @@ const countries = Object.keys(countryStateCityMap);
         isOpen={openSection === "personal"}
         onToggle={() => setOpenSection(openSection === "personal" ? "" : "personal")}
       >
-        <EditableRow label="Type Of Buyer" value={formData.typeOfBuyer} editable={editBuyerMode} onChange={(v) => handleChange("typeOfBuyer", v)} dropdownOptions={["Individual", "Organization"]} />
-            <EditableRow label="Designation" value={formData.designation} editable={editBuyerMode} onChange={(v) => handleChange("designation", v)} />
-            <EditableRow label="LinkedIn" value={formData.linkedinProfile?formData.linkedinProfile:"N/A"} editable={editBuyerMode} onChange={(v) => handleChange("linkedinProfile", v)} />
-            <EditableRow label="Description" value={formData.description} editable={editBuyerMode} onChange={(v) => handleChange("description", v)} textarea />
+        <EditableRow label="Type Of Buyer" value={formData.typeOfBuyer} editable={editBuyerMode} onChange={(v) => handleBuyerChange("typeOfBuyer", v)} dropdownOptions={["Individual", "Organization"]} />
+            <EditableRow label="Designation" value={formData.designation} editable={editBuyerMode} onChange={(v) => handleBuyerChange("designation", v)} />
+            <EditableRow label="LinkedIn" value={formData.linkedinProfile?formData.linkedinProfile:"N/A"} editable={editBuyerMode} onChange={(v) => handleBuyerChange("linkedinProfile", v)} />
+            <EditableRow label="Description" value={formData.description} editable={editBuyerMode} onChange={(v) => handleBuyerChange("description", v)} textarea />
       </CollapsibleSection>
 
       {/* PREFERENCES SECTION */}
@@ -1173,12 +1335,12 @@ const countries = Object.keys(countryStateCityMap);
         isOpen={openSection === "preferences"}
         onToggle={() => setOpenSection(openSection === "preferences" ? "" : "preferences")}
       >
-         <EditableRow label="Ticket Size Min" value={formData.ticketSizeMin} editable={editBuyerMode} onChange={(v) => handleChange("ticketSizeMin", v)} />
-            <EditableRow label="Ticket Size Max" value={formData.ticketSizeMax} editable={editBuyerMode} onChange={(v) => handleChange("ticketSizeMax", v)} />
+         <EditableRow label="Ticket Size Min" value={formData.ticketSizeMin} editable={editBuyerMode} onChange={(v) => handleBuyerChange("ticketSizeMin", v)} />
+            <EditableRow label="Ticket Size Max" value={formData.ticketSizeMax} editable={editBuyerMode} onChange={(v) => handleBuyerChange("ticketSizeMax", v)} />
             {/* <EditableRow label="Metric" value={buyerData.metric} editable={isEditing} onChange={(v) => handleChange("metric", v)} dropdownOptions={["sales", "profit"]} /> */}
             {/* <EditableRow label="Max Multiple" value={buyerData.maxMultiple} editable={isEditing} onChange={(v) => handleChange("maxMultiple", v)} /> */}
-            <EditableRow label="Open to Pre-Revenue" value={formData.openToPreRevenue ? "Yes" : "No"} editable={editBuyerMode} onChange={(v) => handleChange("openToPreRevenue", v === "Yes")} dropdownOptions={["Yes", "No"]} />
-            <EditableRow label="Open to Pre-Breakeven" value={formData.openToPreBreakeven ? "Yes" : "No"} editable={editBuyerMode} onChange={(v) => handleChange("openToPreBreakeven", v === "Yes")} dropdownOptions={["Yes", "No"]} />
+            <EditableRow label="Open to Pre-Revenue" value={formData.openToPreRevenue ? "Yes" : "No"} editable={editBuyerMode} onChange={(v) => handleBuyerChange("openToPreRevenue", v === "Yes")} dropdownOptions={["Yes", "No"]} />
+            <EditableRow label="Open to Pre-Breakeven" value={formData.openToPreBreakeven ? "Yes" : "No"} editable={editBuyerMode} onChange={(v) => handleBuyerChange("openToPreBreakeven", v === "Yes")} dropdownOptions={["Yes", "No"]} />
         <div className="my-3">
               <h1 className="font-semibold flex items-center mb-1">
                 <CheckBoxIcon className="!text-green-600 mr-1" /> Business Categories:
@@ -1189,7 +1351,7 @@ const countries = Object.keys(countryStateCityMap);
                   className="border rounded px-2 py-1 w-full md:w-1/2"
                   value={formData.businessCategories}
                   onChange={(e) =>
-                    handleChange("businessCategories", Array.from(e.target.selectedOptions, (opt) => opt.value))
+                    handleBuyerChange("businessCategories", Array.from(e.target.selectedOptions, (opt) => opt.value))
                   }
                 >
                   {dropdownOptions.businessCategory.map((cat) => (
@@ -1213,7 +1375,7 @@ const countries = Object.keys(countryStateCityMap);
                   className="border rounded px-2 py-1 w-full md:w-1/2"
                   value={formData.preferredArrangement}
                   onChange={(e) =>
-                    handleChange(
+                    handleBuyerChange(
                       "preferredArrangement",
                       Array.from(e.target.selectedOptions, (option) => option.value)
                     )
@@ -1233,7 +1395,7 @@ const countries = Object.keys(countryStateCityMap);
       </CollapsibleSection>
 
       {/* LOCATION SECTION */}
-      <CollapsibleSection
+      {/* <CollapsibleSection
         title="Location"
         isOpen={openSection === "location"}
         onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
@@ -1280,10 +1442,77 @@ const countries = Object.keys(countryStateCityMap);
                      <p>{formData.businesslocationCities.join(", ") || "N/A"}</p>
                    )}
                  </div>
-     
+     <EditableRow
+  label="Country"
+  value={formData.businesslocationCountry}
+  editable={editBuyerMode}
+  onChange={(v) => handleBuyerChange("businesslocationCountry", v)}
+  dropdownOptions={countries}
+/>
+
+{formData.businesslocationCountry && (
+  <EditableRow
+    label="State"
+    value={formData.businesslocationState}
+    editable={editBuyerMode}
+    onChange={(v) => handleBuyerChange("businesslocationState", v)}
+    dropdownOptions={states}
+/>
+)}
+
+<div className="my-2">
+  <h1 className="font-semibold flex items-center mb-1">
+    <CheckBoxIcon className="!text-green-600 mr-1" /> Cities:
+  </h1>
+  {editBuyerMode ? (
+    cities.map((city) => (
+      <label key={city} className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={formData.businesslocationCities.includes(city)}
+          onChange={(e) => {
+            const selected = formData.businesslocationCities.includes(city);
+            const updatedCities = selected
+              ? formData.businesslocationCities.filter((c) => c !== city)
+              : [...formData.businesslocationCities, city];
+            handleBuyerChange("businesslocationCities", updatedCities);
+          }}
+        />
+        {city}
+      </label>
+    ))
+  ) : (
+    <p>{formData.businesslocationCities.join(", ") || "N/A"}</p>
+  )}
+</div>
+
               
       
-      </CollapsibleSection>
+      </CollapsibleSection> */}
+           <CollapsibleSection
+  title="Location"
+  isOpen={openSection === "location"}
+  onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
+>
+  {/* COUNTRY – single‑select */}
+  <EditableRow
+    label="Country"
+    value={FormData.businesslocationCountry}
+    editable={editBuyerMode}
+    onChange={(v) => handleBuyerChange("businesslocationCountry", v)}
+    dropdownOptions={countries}    // <- array of {id,label}
+  />
+
+  {/* CITY – single‑select */}
+  <EditableRow
+    label="City"
+    value={FormData.businesslocationCities}
+    editable={editBuyerMode}
+    onChange={(v) => handleBuyerChange("businesslocationCities", v)}
+    dropdownOptions={cities}       // <- array of {id,label} coming from API
+    multiple
+  />
+</CollapsibleSection>
     </div>
   </div>
 )}
@@ -1537,7 +1766,7 @@ const countries = Object.keys(countryStateCityMap);
       
 
       {/* LOCATION SECTION */}
-      <CollapsibleSection
+      {/* <CollapsibleSection
         title="Location"
         isOpen={openSection === "location"}
         onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
@@ -1546,7 +1775,35 @@ const countries = Object.keys(countryStateCityMap);
             <EditableRow label="State" value={formData.state} editable={editSellerMode} onChange={(v) => handleChange("state", v)} options={states} />
             <EditableRow label="City" value={formData.city} editable={editSellerMode} onChange={(v) => handleChange("city", v)} options={cities} />
           
-      </CollapsibleSection>
+      </CollapsibleSection> */}
+      <CollapsibleSection
+  title="Location"
+  isOpen={openSection === "location"}
+  onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
+>
+  <EditableRow
+    label="Country"
+    value={formData.country}
+    editable={editSellerMode}
+    onChange={(v) => handleChange("country", v)}
+    options={countries}
+  />
+  <EditableRow
+    label="State"
+    value={formData.state}
+    editable={editSellerMode}
+    onChange={(v) => handleChange("state", v)}
+    options={states}
+  />
+  <EditableRow
+    label="City"
+    value={formData.city}
+    editable={editSellerMode}
+    onChange={(v) => handleChange("city", v)}
+    options={cities}
+  />
+</CollapsibleSection>
+
     </div>
   </div>
 )}

@@ -3,7 +3,10 @@ import ReusableSelect from '../Dropdown';
 
 const StepOne = ({ formData, handleChange,errors,type ,registerData,handleRegisterChange}) => {
 
-    
+  const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[8]);
 
   return(
   
@@ -162,7 +165,11 @@ const StepOne = ({ formData, handleChange,errors,type ,registerData,handleRegist
               name="typeOfBuyer"
               value={formData.typeOfBuyer}
               onChange={handleChange}
-              options={['Individual', 'Organization']}
+              // options={['Individual', 'Organization']}
+            options={parsedPicklists[8]?.values?.map((item) => ({
+  id: item.id,
+  label: item.value
+}))}
               className="w-full px-3 border rounded"
               width={550}
               error={errors.typeOfBuyer}

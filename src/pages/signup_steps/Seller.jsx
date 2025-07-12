@@ -19,6 +19,8 @@ import axios from "axios";
 const RegisterSeller = ({ type,onSuccess }) => {
   const [step, setStep] = useState(1);
   const [stepsList, setStepsList] = useState([]);
+  const [sellerStateData,setSellerStateData]=useState([]);
+  const[sellerCityData,setSellerCityData]=useState([]);
    const [registerData, setRegisterData] = useState({
           name:"",
   email:"",
@@ -73,12 +75,65 @@ const RegisterSeller = ({ type,onSuccess }) => {
     const actualValue = multiple
       ? Array.from(selectedOptions).map((option) => option.value)
       : value;
+      console.log("name--",name);
+console.log("valuee--",value);
+if(name==='country'){
+  fetchStateByCountryData(value);
+}
+
+if(name==='state'){
+  fetchCityByStateData(value);
+}
 
       console.log("actualValuenAME",name);
       console.log("actualValue",actualValue);
     setFormData((prev) => ({ ...prev, [name]: actualValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+     const fetchStateByCountryData = async (id) => {
+      try {
+        const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/states?countryId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+  
+        if (!response.ok) throw new Error('Failed to fetch');
+  
+        const data = await response.json();
+        console.log("data---buyerstate--",data);
+        setSellerStateData(data);
+      } catch (error) {
+        console.error(error);
+       
+      }
+    };
+
+     const fetchCityByStateData = async (id) => {
+      try {
+        const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/cities?stateId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+  
+        if (!response.ok) throw new Error('Failed to fetch');
+  
+        const data = await response.json();
+        console.log("data---buyerstate--",data);
+        setSellerCityData(data);
+      } catch (error) {
+        console.error(error);
+       
+      }
+    };
 
   //   const handleSuccess = () => {
   //   console.log("Seller registered successfully!");
@@ -129,10 +184,10 @@ const RegisterSeller = ({ type,onSuccess }) => {
       //   newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
       // }
 
-      if (isEmpty(formData.country)) newErrors.country = "Country is required";
+      // if (isEmpty(formData.country)) newErrors.country = "Country is required";
       if (isEmpty(formData.businessCategory)) newErrors.businessCategory = "Business Category is required";
-      if (isEmpty(formData.state)) newErrors.state = "State is required";
-      if (isEmpty(formData.city)) newErrors.city = "City is required";
+      // if (isEmpty(formData.state)) newErrors.state = "State is required";
+      // if (isEmpty(formData.city)) newErrors.city = "City is required";
     }
 
     if (step === 2) {
@@ -188,10 +243,10 @@ const RegisterSeller = ({ type,onSuccess }) => {
       //   newErrors.cofounderLinks = "All Cofounder LinkedIn fields must be filled or removed";
       // }
 
-      if (isEmpty(formData.country)) newErrors.country = "Country is required";
+      // if (isEmpty(formData.country)) newErrors.country = "Country is required";
       if (isEmpty(formData.businessCategory)) newErrors.businessCategory = "Business Category is required";
-      if (isEmpty(formData.state)) newErrors.state = "State is required";
-      if (isEmpty(formData.city)) newErrors.city = "City is required";
+      // if (isEmpty(formData.state)) newErrors.state = "State is required";
+      // if (isEmpty(formData.city)) newErrors.city = "City is required";
     }
 
     if (step === 2) {
@@ -630,7 +685,7 @@ if (!("dataFilled" in user)) {
   localStorage.setItem("user", JSON.stringify(user));
 }
   notifySuccess();
-  onSuccess();
+  // onSuccess();
   navigate("/seller/dashboard");
 }
     } catch (error) {
@@ -721,6 +776,8 @@ if (!("dataFilled" in user)) {
                   handleRegisterChange={handleRegisterChange}
                   errors={errors}
                   type={'modal'}
+                  sellerStateData={sellerStateData}
+                  sellerCityData={sellerCityData}
                 />
               )}
               {step === 2 && (
@@ -746,6 +803,8 @@ if (!("dataFilled" in user)) {
                   handleChange={handleChange}
                   errors={errors}
                   type={''}
+                  sellerStateData={sellerStateData}
+                  sellerCityData={sellerCityData}
                 />
               )}
               {step === 2 && (

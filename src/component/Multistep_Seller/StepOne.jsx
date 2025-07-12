@@ -13,29 +13,36 @@ import {
 import ReusableSelect from "../Dropdown";
 
 
-const countryStateCityMap = {
-  India: {
-    Delhi: ["New Delhi", "Dwarka", "Rohini"],
-    Maharashtra: ["Mumbai", "Pune", "Nagpur"],
-    Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-  },
-  USA: {
-    NewYork: ["New York City", "Buffalo", "Rochester"],
-    California: ["Los Angeles", "San Francisco", "San Diego"],
-    Illinois: ["Chicago", "Springfield", "Naperville"],
-  },
-  Germany: {
-    Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
-    Bavaria: ["Munich", "Nuremberg", "Augsburg"],
-    Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
-  },
-};
+// const countryStateCityMap = {
+//   India: {
+//     Delhi: ["New Delhi", "Dwarka", "Rohini"],
+//     Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+//     Karnataka: ["Bangalore", "Mysore", "Mangalore"],
+//   },
+//   USA: {
+//     NewYork: ["New York City", "Buffalo", "Rochester"],
+//     California: ["Los Angeles", "San Francisco", "San Diego"],
+//     Illinois: ["Chicago", "Springfield", "Naperville"],
+//   },
+//   Germany: {
+//     Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
+//     Bavaria: ["Munich", "Nuremberg", "Augsburg"],
+//     Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
+//   },
+// };
 
-const StepOne = ({ formData, handleChange, errors ,type,handleRegisterChange,registerData}) => {
+
+const StepOne = ({ formData, handleChange, errors ,type,handleRegisterChange,registerData, sellerStateData,sellerCityData}) => {
   // const [cofounderLinks, setCofounderLinks] = useState(formData.cofounderLinks);
 const [cofounderLinks, setCofounderLinks] = useState(() =>
   formData.cofounderLinks?.length ? formData.cofounderLinks : [""]
 );
+
+ const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[5]);
+
   useEffect(() => {
     // Push to parent if needed
     handleChange({ target: { name: "cofounderLinks", value: cofounderLinks } });
@@ -147,9 +154,9 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
             value={formData.entityStructure}
             onChange={handleChange}
          >
-           {["PartnerShip", "LLP", "Private Ltd", "Public Ltd"].map((entity,index) => (
-              <MenuItem key={index} value={entity}>
-                {entity}
+           {parsedPicklists[5].values.map((entity,index) => (
+              <MenuItem key={index} value={entity.value}>
+                {entity.value}
               </MenuItem>
             ))}
           </Select>
@@ -168,18 +175,10 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
             onChange={handleChange}
             
          >
-            {[
-              "E-commerce",
-              "Offline Retail",
-              "Fintech",
-              "Edtech",
-              "Saas",
-              "Education & training",
-              "Restaurant/café",
-              "Mobile App",
-            ].map((entity,index) => (
-              <MenuItem key={index} value={entity}>
-                {entity}
+         
+            {parsedPicklists[0].values.map((entity,index) => (
+              <MenuItem key={index} value={entity.value}>
+                {entity.value}
               </MenuItem>
             ))}
           </Select>
@@ -312,73 +311,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
         />
       </div>
 
-      <div className="flex justify-between w-full gap-4">
-      
-        <FormControl className="w-[350px]" error={!!errors.country} size="small">
-          <InputLabel id="country-label">Select Country</InputLabel>
-          <Select
-            labelId="country-label"
-            label="Select Country"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-          >
-            {Object.keys(countryStateCityMap).map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
-              </MenuItem>
-            ))}
-          </Select>
-          {errors.country && <FormHelperText>{errors.country}</FormHelperText>}
-        </FormControl>
-
-        
-        <FormControl className="w-[350px]" error={!!errors.state} size="small">
-          <InputLabel id="state-label">Select State</InputLabel>
-          <Select
-            labelId="state-label"
-            label="Select State"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            disabled={!formData.country}
-          >
-            {formData.country &&
-              Object.keys(countryStateCityMap[formData.country] || {}).map(
-                (state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
-                  </MenuItem>
-                )
-              )}
-          </Select>
-          {errors.state && <FormHelperText>{errors.state}</FormHelperText>}
-        </FormControl>
-
     
-        <FormControl className="w-[350px]" error={!!errors.city} size="small">
-          <InputLabel id="city-label">Select City</InputLabel>
-          <Select
-            labelId="city-label"
-            label="Select City"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            disabled={!formData.state}
-          >
-            {formData.country &&
-              formData.state &&
-              (countryStateCityMap[formData.country][formData.state] || []).map(
-                (city) => (
-                  <MenuItem key={city} value={city}>
-                    {city}
-                  </MenuItem>
-                )
-              )}
-          </Select>
-          {errors.city && <FormHelperText>{errors.city}</FormHelperText>}
-        </FormControl>
-      </div>
 
        {/* <div className="flex justify-between w-full ">
     <div>
@@ -805,9 +738,13 @@ width={350}
             value={formData.country}
             onChange={handleChange}
           >
-            {Object.keys(countryStateCityMap).map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
+               {/* options={parsedPicklists[2].values.map((item) => ({
+    label: item.value,
+    value: item.id,
+  }))} */}
+            {parsedPicklists[2].values.map((country) => (
+              <MenuItem key={country.id} value={country.id}>
+                {country.value}
               </MenuItem>
             ))}
           </Select>
@@ -826,10 +763,10 @@ width={350}
             disabled={!formData.country}
           >
             {formData.country &&
-              Object.keys(countryStateCityMap[formData.country] || {}).map(
+              sellerStateData.map(
                 (state) => (
-                  <MenuItem key={state} value={state}>
-                    {state}
+                  <MenuItem key={state.id} value={state.id}>
+                    {state.value}
                   </MenuItem>
                 )
               )}
@@ -838,7 +775,7 @@ width={350}
         </FormControl>
 
     
-        <FormControl className="w-[350px]" error={!!errors.city} size="small">
+         <FormControl className="w-[350px]" error={!!errors.city} size="small">
           <InputLabel id="city-label">Select City</InputLabel>
           <Select
             labelId="city-label"
@@ -850,16 +787,16 @@ width={350}
           >
             {formData.country &&
               formData.state &&
-              (countryStateCityMap[formData.country][formData.state] || []).map(
+              sellerCityData.map(
                 (city) => (
-                  <MenuItem key={city} value={city}>
-                    {city}
+                  <MenuItem key={city.id} value={city.id}>
+                    {city.value}
                   </MenuItem>
                 )
               )}
           </Select>
           {errors.city && <FormHelperText>{errors.city}</FormHelperText>}
-        </FormControl>
+        </FormControl> 
       </div>
 
        {/* <div className="flex justify-between w-full ">

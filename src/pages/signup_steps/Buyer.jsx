@@ -20,6 +20,7 @@ const RegisterBuyer = ({ type,onSuccess}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [stepsList, setStepsList] = useState([]);
+  const[buyerStateData,setBuyerStateData]=useState([])
    const [registerData, setRegisterData] = useState({
         name:"",
 email:"",
@@ -52,10 +53,16 @@ email:"",
     const actualValue = multiple
       ? Array.from(selectedOptions).map((option) => option.value)
       : value;
-
+console.log("name--",name);
+console.log("valuee--",value);
+if(name==='businesslocationCountry'){
+  fetchCityByCountryData(value);
+}
     setFormData((prev) => ({ ...prev, [name]: actualValue }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+  
 
   const handleRegisterChange = (e) => {
   const { name, value } = e.target;
@@ -112,7 +119,7 @@ email:"",
           newErrors.ticketSizeMin = "Minimum Ticket Size is required";
         if (!formData.ticketSizeMax.trim())
           newErrors.ticketSizeMax = "Maximum Ticket Size is required";
-        if (!formData.businesslocationCountry.trim())
+        if (!formData.businesslocationCountry)
           newErrors.businesslocationCountry = "Business Location is required";
         if (!formData.businesslocationCities.length)
           newErrors.businesslocationCities = "At least one City is required";
@@ -167,7 +174,7 @@ email:"",
           newErrors.ticketSizeMin = "Minimum Ticket Size is required";
         if (!formData.ticketSizeMax.trim())
           newErrors.ticketSizeMax = "Maximum Ticket Size is required";
-        if (!formData.businesslocationCountry.trim())
+        if (!formData.businesslocationCountry)
           newErrors.businesslocationCountry = "Business Location is required";
         if (!formData.businesslocationCities.length)
           newErrors.businesslocationCities = "At least one City is required";
@@ -256,6 +263,28 @@ setStep((prev) => prev - 1);
 
   const token = localStorage.getItem("token");
 
+     const fetchCityByCountryData = async (id) => {
+      try {
+        const response = await fetch(`https://bizplorers-backend.onrender.com/api/picklist/buyer-cities?countryId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+  
+        if (!response.ok) throw new Error('Failed to fetch');
+  
+        const data = await response.json();
+        console.log("data---buyerstate--",data);
+        setBuyerStateData(data);
+      } catch (error) {
+        console.error(error);
+       
+      }
+    };
+
   const handleSubmit = async () => {
     if (!validateStep()) return;
     const user = JSON.parse(localStorage.getItem("user"));
@@ -323,7 +352,7 @@ if (!("dataFilled" in user)) {
   localStorage.setItem("user", JSON.stringify(user));
 }
         showSuccess("Your Registration is Successful");
-        onSuccess();
+        // onSuccess();
         navigate("/buyer/dashboard");
       }
       console.log("buyerData----", data);
@@ -353,39 +382,7 @@ if (!("dataFilled" in user)) {
   return (
     <div className="bg-gray-100 min-h-screen">
       {type !== "modal" && (
-        // <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-3 bg-white shadow-md z-10">
-
-        //   <Link to="/">
-        //     <img
-        //       alt="logo"
-        //       width={50}
-        //       className="object-contain cursor-pointer"
-        //     />
-        //   </Link>
-        //   <nav className="hidden md:flex gap-8">
-        //     <Link to="/aboutUs" className="text-xl hover:text-blue-600">
-        //       About Us
-        //     </Link>
-        //     <Link to="/services" className="text-xl hover:text-blue-600">
-        //       Services
-        //     </Link>
-        //     <Link to="/seller" className="text-xl hover:text-blue-600">
-        //       Seller
-        //     </Link>
-        //     <Link to="/buyer" className="text-xl hover:text-blue-600">
-        //       Buyer
-        //     </Link>
-
-        //     <Link to="/signUp" className="text-xl hover:text-blue-600">
-        //       Register
-        //     </Link>
-
-        //   </nav>
-        //   <div className="hidden md:flex gap-2">
-
-        //   </div>
-
-        // </header>
+        
         <Header />
       )}
 
@@ -419,6 +416,8 @@ if (!("dataFilled" in user)) {
                   formData={formData}
                   handleChange={handleChange}
                   errors={errors}
+                   buyerStateData={buyerStateData}
+                   type={"modal"}
                 />
               )}
               {/* {step === 5 && (
@@ -444,6 +443,8 @@ if (!("dataFilled" in user)) {
                   formData={formData}
                   handleChange={handleChange}
                   errors={errors}
+                  buyerStateData={buyerStateData}
+                  type={''}
                 />
               )}
               {/* {step === 3 && (

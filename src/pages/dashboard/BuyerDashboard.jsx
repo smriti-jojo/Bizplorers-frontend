@@ -298,32 +298,177 @@ import Header from "../../component/Header";
 import Footer from "../../component/Footer";
 import {CircularProgress} from "@mui/material";
 // Reusable row
-const EditableRow = ({ label, value, editable, onChange, textarea, dropdownOptions }) => (
-  <div className="flex gap-5 items-start flex-wrap my-2">
-    <h1 className="font-semibold flex items-center">
-      <CheckBoxIcon className="!text-green-600 mr-1" />
-      <span>{label}:</span>
-    </h1>
-    {editable ? (
-      dropdownOptions ? (
-        <select className="border rounded px-2 py-1" value={value} onChange={(e) => onChange(e.target.value)}>
-          <option value="">Select</option>
-          {dropdownOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      ) : textarea ? (
-        <textarea className="border rounded px-2 py-1 w-full md:w-[60%]" value={value} onChange={(e) => onChange(e.target.value)} />
+// const EditableRow = ({ label, value, editable, onChange, textarea, dropdownOptions }) => (
+//   <div className="flex gap-5 items-start flex-wrap my-2">
+//     <h1 className="font-semibold flex items-center">
+//       <CheckBoxIcon className="!text-green-600 mr-1" />
+//       <span>{label}:</span>
+//     </h1>
+//     {editable ? (
+//       dropdownOptions ? (
+//         <select className="border rounded px-2 py-1" value={value} onChange={(e) => onChange(e.target.value)}>
+//           <option value="">Select</option>
+//           {dropdownOptions.map((opt) => (
+//             <option key={opt} value={opt}>
+//               {opt}
+//             </option>
+//           ))}
+//         </select>
+//       ) : textarea ? (
+//         <textarea className="border rounded px-2 py-1 w-full md:w-[60%]" value={value} onChange={(e) => onChange(e.target.value)} />
+//       ) : (
+//         <input className="border rounded px-2 py-1" value={value} onChange={(e) => onChange(e.target.value)} />
+//       )
+//     ) : (
+//       <p>
+//   {Array.isArray(value)
+//     ? value.map((v) => (typeof v === "object" ? v.label : v)).join(", ")
+//     : typeof value === "object"
+//     ? value?.label || "—"
+//     : value || "—"}
+// </p>
+
+//     )}
+//   </div>
+// );
+// const EditableRow = ({ label, value, editable, onChange, textarea, dropdownOptions }) => (
+//   <div className="flex gap-5 items-start flex-wrap my-2">
+//     <h1 className="font-semibold flex items-center">
+//       <CheckBoxIcon className="!text-green-600 mr-1" />
+//       <span>{label}:</span>
+//     </h1>
+//     {editable ? (
+//       dropdownOptions ? (
+//         <select
+//           className="border rounded px-2 py-1"
+//           value={typeof value === "object" ? value.id : value}
+//           onChange={(e) => {
+//             const selectedId = e.target.value;
+//             const selectedOption = dropdownOptions.find((opt) => opt.id?.toString() === selectedId);
+//             onChange(selectedOption || selectedId);
+//           }}
+//         >
+//           <option value="">Select</option>
+//           {dropdownOptions.map((opt) => {
+//             const val = typeof opt === "object" ? opt.id : opt;
+//             const label = typeof opt === "object" ? opt.label : opt;
+//             return (
+//               <option key={val} value={val}>
+//                 {label}
+//               </option>
+//             );
+//           })}
+//         </select>
+//       ) : textarea ? (
+//         <textarea
+//           className="border rounded px-2 py-1 w-full md:w-[60%]"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       ) : (
+//         <input
+//           className="border rounded px-2 py-1"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       )
+//     ) : (
+//       <p>
+//         {Array.isArray(value)
+//           ? value.map((v) => (typeof v === "object" ? v.label : v)).join(", ")
+//           : typeof value === "object"
+//           ? value?.label || "—"
+//           : value || "—"}
+//       </p>
+//     )}
+//   </div>
+// );
+const EditableRow = ({
+  label,
+  value,
+  editable,
+  onChange,
+  textarea,
+  dropdownOptions,
+  multiple = false, // Optional prop to indicate if dropdown is multi-select
+}) => {
+  const isDropdown = !!dropdownOptions;
+  const isMultiSelect = multiple;
+
+  return (
+    <div className="flex gap-5 items-start flex-wrap my-2">
+      <h1 className="font-semibold flex items-center">
+        <CheckBoxIcon className="!text-green-600 mr-1" />
+        <span>{label}:</span>
+      </h1>
+
+      {editable ? (
+        isDropdown ? (
+          <select
+            multiple={isMultiSelect}
+            className="border rounded px-2 py-1 w-full md:w-1/2"
+            value={
+              isMultiSelect
+                ? Array.isArray(value)
+                  ? value.map((v) => (typeof v === "object" ? v.id : v))
+                  : []
+                : typeof value === "object"
+                ? value?.id || ""
+                : value || ""
+            }
+            onChange={(e) => {
+              if (isMultiSelect) {
+                const selected = Array.from(e.target.selectedOptions).map((opt) => {
+                  const matched = dropdownOptions.find((o) => o.id?.toString() === opt.value);
+                  return matched || opt.value;
+                });
+                onChange(selected);
+              } else {
+                const selectedId = e.target.value;
+                const selectedOption = dropdownOptions.find(
+                  (opt) => opt.id?.toString() === selectedId
+                );
+                onChange(selectedOption || selectedId);
+              }
+            }}
+          >
+            <option value="">Select</option>
+            {dropdownOptions.map((opt) => {
+              const val = typeof opt === "object" ? opt.id : opt;
+              const label = typeof opt === "object" ? opt.label : opt;
+              return (
+                <option key={val} value={val}>
+                  {label}
+                </option>
+              );
+            })}
+          </select>
+        ) : textarea ? (
+          <textarea
+            className="border rounded px-2 py-1 w-full md:w-[60%]"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        ) : (
+          <input
+            className="border rounded px-2 py-1"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        )
       ) : (
-        <input className="border rounded px-2 py-1" value={value} onChange={(e) => onChange(e.target.value)} />
-      )
-    ) : (
-      <p>{Array.isArray(value) ? value.join(", ") : value}</p>
-    )}
-  </div>
-);
+        <p>
+          {Array.isArray(value)
+            ? value.map((v) => (typeof v === "object" ? v.label : v)).join(", ")
+            : typeof value === "object"
+            ? value?.label || "—"
+            : value || "—"}
+        </p>
+      )}
+    </div>
+  );
+};
+
 
 // Collapsible section
 const CollapsibleSection = ({ title, children, isOpen, onToggle }) => (
@@ -340,6 +485,8 @@ const BuyerDashboard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openSection, setOpenSection] = useState("personal");
+  const [countries, setCountries] = useState([]);
+    const [cities, setCities] = useState([]);
   const [buyerData, setBuyerData] = useState({
     typeOfBuyer: "",
     designation: "",
@@ -358,31 +505,33 @@ const BuyerDashboard = () => {
     preferredArrangement: [],
   });
 
+    const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[2]);
   const token = localStorage.getItem("token");
 
-  const countryStateCityMap = {
-    India: {
-      Delhi: ["New Delhi", "Dwarka", "Rohini"],
-      Maharashtra: ["Mumbai", "Pune", "Nagpur"],
-      Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-    },
-    USA: {
-      NewYork: ["New York City", "Buffalo", "Rochester"],
-      California: ["Los Angeles", "San Francisco", "San Diego"],
-      Illinois: ["Chicago", "Springfield", "Naperville"],
-    },
-    Germany: {
-      Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
-      Bavaria: ["Munich", "Nuremberg", "Augsburg"],
-      Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
-    },
-  };
+ /* Countries once on mount */
+useEffect(() => {
+  const countryArr = parsedPicklists[2]?.values || [];
+  setCountries(countryArr.map((c) => ({ id: c.id, label: c.value })));
+}, []);
 
-  const countryCityMap = {
-  India: ['Delhi', 'Mumbai', 'Bangalore'],
-  USA: ['New York', 'Los Angeles', 'Chicago'],
-  Germany: ['Berlin', 'Munich', 'Frankfurt'],
+/* Fetch cities when a country is chosen */
+const fetchCitiesByCountry = async (countryId) => {
+  try {
+    const res   = await fetch(
+      `https://bizplorers-backend.onrender.com/api/picklist/buyer-cities?countryId=${countryId}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    const data  = await res.json();
+    setCities(data.map((c) => ({ id: c.id, label: c.value })));
+  } catch (err) {
+    console.error(err);
+  }
 };
+
+
 
   const businessCategoryOptions = [
     "E-commerce",
@@ -407,20 +556,62 @@ const BuyerDashboard = () => {
 
   // };
 
-  const handleChange = (key, value) => {
+//   const handleChange = (key, value) => {
+//   setBuyerData((prev) => {
+//     const updated = { ...prev, [key]: value };
+
+//     if (key === "businesslocationCountry") {
+//       updated.businesslocationState = "";
+//       updated.businesslocationCities = [];
+//     } else if (key === "businesslocationState") {
+//       updated.businesslocationCities = [];
+//     }
+
+//     return updated;
+//   });
+// };
+// const handleChange = (field, selectedValue) => {
+//   console.log("Field:", field);
+//   console.log("Value:", selectedValue);
+
+//   setBuyerData((prev) => {
+//     const next = { ...prev, [field]: selectedValue };
+
+//     // Reset city if country changes
+//     if (field === "businesslocationCountry") {
+//       next.businesslocationCities= "";
+//     }
+
+//     return next;
+//   });
+
+//   // Fetch cities based on selected country
+//   if (field === "businesslocationCountry") {
+//     const countryId = typeof selectedValue === "object" ? selectedValue.id : null;
+//     if (countryId) {
+//       fetchCityByCountryData(countryId); // This should be renamed to `fetchCitiesByCountryData` ideally
+//     }
+//   }
+// };
+const handleChange = (field, selected) => {
   setBuyerData((prev) => {
-    const updated = { ...prev, [key]: value };
+    const next = { ...prev, [field]: selected };
 
-    if (key === "businesslocationCountry") {
-      updated.businesslocationState = "";
-      updated.businesslocationCities = [];
-    } else if (key === "businesslocationState") {
-      updated.businesslocationCities = [];
+    // reset city when country changes
+    if (field === "businesslocationCountry") {
+      next.businesslocationCities = "";
     }
-
-    return updated;
+    return next;
   });
+
+  if (field === "businesslocationCountry") {
+    const id = typeof selected === "object" ? selected.id : null;
+    if (id) fetchCitiesByCountry(id);
+  }
 };
+
+
+
 
  const handleCancel=()=>{
     setIsEditing(!isEditing);
@@ -573,79 +764,31 @@ const BuyerDashboard = () => {
           </CollapsibleSection>
 
           {/* Location Section */}
-          <CollapsibleSection
-            title="Location"
-            isOpen={openSection === "location"}
-            onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
-          >
-            <EditableRow label="Country" value={buyerData.businesslocationCountry} editable={isEditing} onChange={(v) => handleChange("businesslocationCountry", v)} dropdownOptions={Object.keys(countryStateCityMap)} />
-            {buyerData.businesslocationCountry && (
-            <EditableRow
-  label="State"
-  value={buyerData.businesslocationState || "N/A"}
-  editable={isEditing}
-  onChange={(v) => handleChange("businesslocationState", v)}
-  dropdownOptions={
-    buyerData.businesslocationCountry
-      ? Object.keys(countryStateCityMap[buyerData.businesslocationCountry] || {})
-      : []
-  }
-/>
+      <CollapsibleSection
+  title="Location"
+  isOpen={openSection === "location"}
+  onToggle={() => setOpenSection(openSection === "location" ? "" : "location")}
+>
+  {/* COUNTRY – single‑select */}
+  <EditableRow
+    label="Country"
+    value={buyerData.businesslocationCountry}
+    editable={isEditing}
+    onChange={(v) => handleChange("businesslocationCountry", v)}
+    dropdownOptions={countries}    // <- array of {id,label}
+  />
 
-            )}
-            <div className="my-2">
-              <h1 className="font-semibold flex items-center mb-1">
-                <CheckBoxIcon className="!text-green-600 mr-1" /> Cities:
-              </h1>
-              {isEditing ? (
-                (countryStateCityMap[buyerData.businesslocationCountry]?.[buyerData.businesslocationState] || []).map(
-                  (city) => (
-                    <label key={city} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={buyerData.businesslocationCities.includes(city)}
-                        onChange={(e) => {
-                          const selected = buyerData.businesslocationCities.includes(city);
-                          const updatedCities = selected
-                            ? buyerData.businesslocationCities.filter((c) => c !== city)
-                            : [...buyerData.businesslocationCities, city];
-                          handleChange("businesslocationCities", updatedCities);
-                        }}
-                      />
-                      {city}
-                    </label>
-                  )
-                )
-              ) : (
-                <p>{buyerData.businesslocationCities.join(", ") || "N/A"}</p>
-              )}
-            </div>
+  {/* CITY – single‑select */}
+  <EditableRow
+    label="City"
+    value={buyerData.businesslocationCities}
+    editable={isEditing}
+    onChange={(v) => handleChange("businesslocationCities", v)}
+    dropdownOptions={cities}       // <- array of {id,label} coming from API
+    multiple
+  />
+</CollapsibleSection>
 
-            {/* Business Categories */}
-            {/* <div className="my-3">
-              <h1 className="font-semibold flex items-center mb-1">
-                <CheckBoxIcon className="!text-green-600 mr-1" /> Business Categories:
-              </h1>
-              {isEditing ? (
-                <select
-                  multiple
-                  className="border rounded px-2 py-1 w-full md:w-1/2"
-                  value={buyerData.businessCategories}
-                  onChange={(e) =>
-                    handleChange("businessCategories", Array.from(e.target.selectedOptions, (opt) => opt.value))
-                  }
-                >
-                  {businessCategoryOptions.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <p>{buyerData.businessCategories.join(", ") || "N/A"}</p>
-              )}
-            </div> */}
-          </CollapsibleSection>
         </div>
       </div>
                 )}

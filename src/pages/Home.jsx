@@ -43,7 +43,8 @@ const Home = () => {
   const fetchAllPicklists = async () => {
     try {
       const response = await fetch(
-        "https://bizplorers-backend.onrender.com/api/picklist/get_all",
+        // "https://bizplorers-backend.onrender.com/api/picklist/get_all",
+        "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values",
         {
           method: "GET",
           // headers: {
@@ -56,8 +57,8 @@ const Home = () => {
       console.log("picklistResults---", result);
       if (response.ok) {
         // setUserData(result.data);
-        console.log("picklists--value", JSON.stringify(result));
-        localStorage.setItem("picklists", JSON.stringify(result));
+        console.log("picklists--value", JSON.stringify(result.data));
+        localStorage.setItem("picklists", JSON.stringify(result.data));
       } else {
         console.error("Error fetching users:", result.message);
       }

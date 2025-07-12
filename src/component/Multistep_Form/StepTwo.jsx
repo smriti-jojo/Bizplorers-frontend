@@ -8,7 +8,15 @@ const countryCityMap = {
   Germany: ['Berlin', 'Munich', 'Frankfurt'],
 };
 
-const StepTwo = ({ formData, handleChange ,errors}) => (
+const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
+
+   const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=JSON.parse(picklists);
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[0]);
+   console.log("buyerStateData",buyerStateData);
+
+  return(
   <div className="space-y-4 px-[5%]">
    
      <div>
@@ -19,7 +27,8 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
         name="businessCategories"
         value={formData.businessCategories}
         onChange={handleChange}
-        options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
+        // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
+        options={parsedPicklists[0].values.map((item)=>[item.value])}
         className={`w-full px-3 py-2 border rounded `}
           error={errors.businessCategories}
           width={350}
@@ -44,7 +53,12 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
         value={formData.businesslocationCountry}
         onChange={handleChange}
         // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
-       options={Object.keys(countryCityMap)}
+      //  options={Object.keys(countryCityMap)}
+      //  options={parsedPicklists[2].values.map((item)=>[item.value])}
+      options={parsedPicklists[2].values.map((item) => ({
+    label: item.value,
+    value: item.id,
+  }))}
         className={`w-full py-2 border rounded `}
           error={errors.businesslocationCountry}
           width={350}
@@ -59,7 +73,8 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
     name="businesslocationCities"
     value={formData.businesslocationCities}
     onChange={handleChange}
-    options={countryCityMap[formData.businesslocationCountry] || []}
+    // options={countryCityMap[formData.businesslocationCountry] || []}
+     options={buyerStateData.map((item)=>item.value)}
     error={errors.businesslocationCities}
     width={350}
   />
@@ -148,7 +163,8 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
         name="preferredArrangement"
         value={formData.preferredArrangement}
         onChange={handleChange}
-        options={["Cash", "Stock", "Royalty","Acquihire"]}
+        // options={["Cash", "Stock", "Royalty","Acquihire"]}
+         options={parsedPicklists[6].values.map((item)=>[item.value])}
         className={`w-full px-3  border rounded `}
         width={350}
           error={errors.preferredArrangement}
@@ -163,6 +179,7 @@ const StepTwo = ({ formData, handleChange ,errors}) => (
      
     
   </div>
-);
+  )
+};
 
 export default StepTwo;
