@@ -1665,7 +1665,7 @@ const dropdownOptions = {
 
 <div className="flex justify-end gap-3 mb-4">
   {location === 'dashboard' && (
-    editBuyerMode ? (
+    editSellerMode ? (
       <>
       <button
         onClick={handleSellerSave}
