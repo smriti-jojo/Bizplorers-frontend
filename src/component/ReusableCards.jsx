@@ -996,6 +996,7 @@ const handleSave = async () => {
 }
 
   try {
+    console.log("payload----",payload);
     const response = await fetch(`https://bizplorers-backend.onrender.com/api/buyer/updateBuyer`, {
       method: "PUT",
       headers: {
@@ -1713,8 +1714,13 @@ const dropdownOptions = {
             <EditableRow label="Founded Year" value={formData.year} editable={editSellerMode} onChange={(v) => handleChange("year", v)} />
             <EditableRow label="Founded Month" value={formData.month} editable={editSellerMode} onChange={(v) => handleChange("month", v)} />
             <EditableRow label="Business Description" value={formData.description_business} editable={editSellerMode} onChange={(v) => handleChange("description_business", v)} type="textarea" />
-            <EditableRow label="Business Category" value={formData.businessCategory} editable={editSellerMode} onChange={(v) => handleChange("businessCategory", v)} options={dropdownOptions.businessCategory} />
-            <EditableRow label="Entity Structure" value={formData.entityStructure} editable={editSellerMode} onChange={(v) => handleChange("entityStructure", v)} options={dropdownOptions.entityStructure} />
+            <EditableRow label="Business Category" value={formData.businessCategory} editable={editSellerMode} onChange={(v) => handleChange("businessCategory", v)} 
+             dropdownOptions={dropdownOptions.businessCategory}       // <- array of {id,label} coming from API
+   />
+            {/* <EditableRow label="Entity Structure" value={formData.entityStructure} editable={editSellerMode} onChange={(v) => handleChange("entityStructure", v)} options={dropdownOptions.entityStructure} />
+               */}
+                <EditableRow label="Entity Structure" value={formData.entityStructure} editable={editSellerMode} onChange={(v) => handleChange("entityStructure", v)}  dropdownOptions={dropdownOptions.entityStructure}  />
+              
       </CollapsibleSection>
 
       {/* PREFERENCES SECTION */}
@@ -1735,7 +1741,8 @@ const dropdownOptions = {
   value={formData.positiveCashFlow ? "Yes" : "No"}
   editable={editSellerMode}
   onChange={(v) => handleChange("positiveCashFlow", v === "Yes")}
-   options={["Yes", "No"]}
+  //  options={["Yes", "No"]}
+   dropdownOptions={["Yes", "No"]}
 />
 
         
@@ -1758,9 +1765,9 @@ const dropdownOptions = {
         isOpen={openSection === "exit"}
         onToggle={() => setOpenSection(openSection === "exit" ? "" : "exit")}
       >
-          <EditableRow label="Reason for Sale" value={formData.salereason} editable={editSellerMode} onChange={(v) => handleChange("salereason", v)} options={dropdownOptions.salereason} />
+          <EditableRow label="Reason for Sale" value={formData.salereason} editable={editSellerMode} onChange={(v) => handleChange("salereason", v)} dropdownOptions={dropdownOptions.salereason} />
             <EditableRow label="Asking Price" value={formData.askingPrice} editable={editSellerMode} onChange={(v) => handleChange("askingPrice", v)} />
-            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={editSellerMode} onChange={(v) => handleChange("preferredArrangement", v)} options={dropdownOptions.preferredArrangement} multiple />
+            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={editSellerMode} onChange={(v) => handleChange("preferredArrangement", v)} dropdownOptions={dropdownOptions.preferredArrangement}  multiple />
         
       </CollapsibleSection>
       
