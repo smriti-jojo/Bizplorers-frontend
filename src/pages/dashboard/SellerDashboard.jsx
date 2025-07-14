@@ -43,7 +43,7 @@ const dropdownOptions = {
   const picklists=localStorage.getItem("picklists");
    const parsedPicklists=JSON.parse(picklists);
    console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[2]);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists?.[2]);
 
 const Section = ({ title, isOpen, toggleOpen, children }) => (
   <div className="border-t pt-4">
