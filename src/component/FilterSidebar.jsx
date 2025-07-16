@@ -84,14 +84,14 @@ useEffect(() => {
           {/* Revenue */}
           <label className="block text-sm font-medium mb-1">12 Months Revenue (₹)</label>
           <div className="flex gap-2 mb-3">
-            <input type="number" name="trailing12months" value={filters.trailing12months} onChange={handleChange} placeholder="Min" className="w-1/2 p-2 border rounded" />
+            <input type="number" name="trailing12months" value={filters.trailing12months} onChange={handleChange} placeholder="Min" className="w-full p-2 border rounded" />
            
           </div>
 
           {/* Profit */}
           <label className="block text-sm font-medium mb-1">12 Months Profit (₹)</label>
           <div className="flex gap-2 mb-3">
-            <input type="number" name="NETtrailing12months" value={filters.NETtrailing12months} onChange={handleChange} placeholder="Min" className="w-1/2 p-2 border rounded" />
+            <input type="number" name="NETtrailing12months" value={filters.NETtrailing12months} onChange={handleChange} placeholder="Min" className="w-full p-2 border rounded" />
            
           </div>
 
@@ -133,7 +133,7 @@ useEffect(() => {
 
           {/* Buttons */}
           <div className="flex justify-end">
-            <button onClick={onReset} className="border border-gray-500 px-4 py-2 rounded text-sm text-gray-700 hover:bg-gray-100">
+            <button onClick={onReset} className="w-full border border-gray-500 px-4 py-2 rounded text-sm text-white bg-blue-600 hover:bg-blue-700">
               Reset Filters
             </button>
           </div>

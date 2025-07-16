@@ -90,7 +90,7 @@ const Transition = React.forwardRef((props, ref) => {
   return (
     <div className="px-[5%] py-6">
       <div className="flex justify-end pb-4">
-        <Button variant="contained" onClick={handleDialogClickOpen}>
+        <Button variant="contained" onClick={handleDialogClickOpen} className='!bg-blue-600 hover:!bg-blue-700'>
           <AddIcon className="mr-1" />
           Add Buyer
         </Button>

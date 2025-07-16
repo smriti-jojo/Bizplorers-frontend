@@ -37,7 +37,7 @@ function App() {
           {/**Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/signUp" element={<SignUp />} />
-           <Route path="/nre-signup" element={<NRESignup />} />
+           {/* <Route path="/nre-signup" element={<NRESignup />} /> */}
           <Route path="/aboutUs" element={<AboutUs />} />
           <Route path="/services" element={<OurServices />} />
           {/* <Route path="/" element={<SignUp/>}/> */}

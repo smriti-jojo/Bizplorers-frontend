@@ -100,7 +100,7 @@ useEffect(()=>{
       <>
         <div className="px-[5%] ">
           <div className="flex justify-end pb-4">
-            <Button variant="contained" onClick={handleDialogClickOpen}>
+            <Button variant="contained" onClick={handleDialogClickOpen} className='!bg-blue-600 hover:!bg-blue-700'>
               <AddIcon className="mr-1" />
               Add Seller
             </Button>

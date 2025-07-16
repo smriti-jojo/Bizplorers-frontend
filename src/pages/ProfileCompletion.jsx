@@ -7,7 +7,7 @@ const ProfileCompletion = () => {
       <div className='w-full h-screen flex justify-center items-center'>
         <div className='border-2 border-slate-300 rounded-md shadow-md shadow-slate-400 w-[40%] h-[40%]'>
             <h1>Profile Successfully Completed</h1>
-             <Button className="!w-[90%]" variant='contained' >Back to my Dashboard</Button>
+             <Button className="!w-[90%] !bg-blue-600 hover:!bg-blue-700" variant='contained' >Back to my Dashboard</Button>
         </div>
 </div>
     

@@ -208,8 +208,8 @@ const Seller = () => {
     preferredManagement: "",
     year: "",
     month: "",
-    trailing12months: "",         // ✅ minimum revenue filter
-    NETtrailing12months: "",      // ✅ minimum profit filter
+    trailing12months: "",         // minimum revenue filter
+    NETtrailing12months: "",      // minimum profit filter
     minPrice: "",
     maxPrice: "",
     status: "",

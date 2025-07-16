@@ -1339,7 +1339,7 @@ const dropdownOptions = {
     ) : (
       <button
         onClick={() => setBuyerEditMode(true)}
-        className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-300 text-white"
+        className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 text-white"
       >
         Edit Details
       </button>
@@ -1349,7 +1349,7 @@ const dropdownOptions = {
 
 
 
-      <h3 className="text-lg font-semibold mb-4">Detailed Info</h3>
+      <h3 className="text-2xl font-semibold mb-4">Detailed Info</h3>
 
       {/* PERSONAL SECTION */}
       <CollapsibleSection
@@ -1780,7 +1780,7 @@ const dropdownOptions = {
     ) : (
     <button
       onClick={() => setSellerEditMode(true)}
-      className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-300 text-white"
+      className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 text-white"
     >
       Edit Details
     </button>
@@ -1789,19 +1789,24 @@ const dropdownOptions = {
 </div>
 
 
-      <h3 className="text-lg font-semibold mb-4">Detailed Info</h3>
-
+      <h3 className="text-2xl font-semibold mb-4">Detailed Info</h3>
+     
       {/* PERSONAL SECTION */}
       <CollapsibleSection
         title="Company Details"
         isOpen={openSection === "company"}
         onToggle={() => setOpenSection(openSection === "company" ? "" : "company")}
       >
-     <EditableRow label="Company Name" value={formData.company_name} editable={editSellerMode} onChange={(v) => handleChange("company_name", v)} />
+   { location==='dashboard'?
+
+   <>
+  
+   <EditableRow label="Company Name" value={formData.company_name} editable={editSellerMode} onChange={(v) => handleChange("company_name", v)} />
             <EditableRow label="Website" value={formData.website_url} editable={editSellerMode} onChange={(v) => handleChange("website_url", v)} />
             <EditableRow label="CIN" value={formData.CIN} editable={editSellerMode} onChange={(v) => handleChange("CIN", v)} />
             <EditableRow label="Company LinkedIn" value={formData.company_linkedin} editable={editSellerMode} onChange={(v) => handleChange("company_linkedin", v)} />
-            <EditableRow label="No. of Cofounders" value={formData.numcofounder} editable={editSellerMode} onChange={(v) => handleChange("numcofounder", v)} />
+     </>:null}    
+      <EditableRow label="No. of Cofounders" value={formData.numcofounder} editable={editSellerMode} onChange={(v) => handleChange("numcofounder", v)} />
             <EditableRow label="Team Size" value={formData.teamSize} editable={editSellerMode} onChange={(v) => handleChange("teamSize", v)} />
             <EditableRow label="Locations Count" value={formData.numLocation} editable={editSellerMode} onChange={(v) => handleChange("numLocation", v)} />
             <EditableRow label="Founded Year" value={formData.year} editable={editSellerMode} onChange={(v) => handleChange("year", v)} />

@@ -334,7 +334,7 @@ const SignUp = ({ type }) => {
                     onClick={() => setFormData((prev) => ({ ...prev, role }))}
                     className={`w-1/3 py-2 text-center font-medium transition border-r ${
                       formData.role === role
-                        ? "bg-blue-600 text-white hover:bg-blue-300"
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "border-blue-500 text-blue-500 bg-white border-b-2"
                     }`}
                   >
@@ -345,13 +345,13 @@ const SignUp = ({ type }) => {
                   </button>
                 ))}
               </div>
-              <a href="/nre-register" className="text-blue-600 underline">
+              {/* <a href="/nre-register" className="text-blue-600 underline">
                 NRE Registration?
-              </a>
+              </a> */}
 
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
               >
                 {loading ? "Signing in..." : "Sign Up"}
               </button>
@@ -483,7 +483,7 @@ const SignUp = ({ type }) => {
                     onClick={() => setFormData((prev) => ({ ...prev, role }))}
                     className={`w-1/3 py-2 text-center font-medium transition border-r ${
                       formData.role === role
-                        ? "bg-blue-600 text-white hover:bg-blue-300"
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
                         : "border-blue-500 text-blue-500 bg-white border-b-2"
                     }`}
                   >
@@ -497,7 +497,7 @@ const SignUp = ({ type }) => {
 
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
               >
                 {loading ? "Signing in..." : "Sign Up"}
               </button>

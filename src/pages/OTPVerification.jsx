@@ -130,7 +130,7 @@ if (storedUser.role === "buyer") {
   value={otp}
   onChange={handleChange}
 />
-             <Button className="!w-[90%]" variant='contained' onClick={handleSubmit}>Submit</Button>
+             <Button className="!w-[90%] !bg-blue-600 hover:!bg-blue-700" variant='contained' onClick={handleSubmit}>Submit</Button>
              <h1>Already have an account?<span className='text-blue-600 ml-1'>Log In</span></h1>
             </div>
            
