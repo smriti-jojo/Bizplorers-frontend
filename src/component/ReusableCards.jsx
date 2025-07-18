@@ -1347,7 +1347,19 @@ const dropdownOptions = {
   )}
 </div>
 
+{token && user?.role === "broker" && location==="dashboard"? (
+  <>
+   <h3 className="text-2xl font-semibold mb-2">User Info</h3>
+   <div className="flex justify-between mb-2">
+    <p className="font-bold">Name :<span className="!font-normal !ml-1">{formData.User.name}</span></p>
+     <p className="font-bold">Email : <span className="!font-normal !ml-1">{formData.User.email}</span></p>
+    <p className="font-bold">Phone : <span className="!font-normal !ml-1">{formData.User.phone}</span></p>
+    <p>
 
+    </p>
+    </div>
+    </>
+):<></>}
 
       <h3 className="text-2xl font-semibold mb-4">Detailed Info</h3>
 
@@ -1787,6 +1799,20 @@ const dropdownOptions = {
   ))}
 
 </div>
+
+{token && user?.role === "broker" && location==="dashboard"? (
+  <>
+   <h3 className="text-2xl font-semibold mb-2">User Info</h3>
+   <div className="flex justify-between mb-2">
+    <p className="font-bold">Name :<span className="!font-normal !ml-1">{formData.User.name}</span></p>
+     <p className="font-bold">Email : <span className="!font-normal !ml-1">{formData.User.email}</span></p>
+    <p className="font-bold">Phone : <span className="!font-normal !ml-1">{formData.User.phone}</span></p>
+    <p>
+
+    </p>
+    </div>
+    </>
+):<></>}
 
 
       <h3 className="text-2xl font-semibold mb-4">Detailed Info</h3>

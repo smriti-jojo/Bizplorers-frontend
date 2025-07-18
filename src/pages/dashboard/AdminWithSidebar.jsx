@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRef } from "react";
 import { IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import {MenuItem} from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   ArrowDropDown,
@@ -51,6 +52,8 @@ function Sidebar({
   const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [brokerData,setBrokerData]=useState([]);
+ 
+
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const MainMenuOpen = () => setIsMainMenuOpen(!isMainMenuOpen);
@@ -89,7 +92,7 @@ function Sidebar({
           newPicklistsForFrontend[field] = uniqueValues.map((val, idx) => ({
             id: idx + 1,
             name: val,
-            active: true,
+            is_active: true,
           }));
 
           // ✅ For backend
@@ -126,7 +129,7 @@ function Sidebar({
         console.error("Request failed:", error);
       }
 
-      // ✅ Set frontend state
+      // Set frontend state
       setPicklists(newPicklistsForFrontend);
       setManagement(managementLabels);
       setSelectedCategory(managementLabels[0] || "");
@@ -163,12 +166,12 @@ function Sidebar({
     const fetchPicklists = async () => {
       try {
         const response = await axios.get(
-          "https://bizplorers-backend.onrender.com/api/picklist/get_all",
+          "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values",
           {
             headers: { Authorization: `Bearer ${token}` }, // if protected
           }
         );
-
+console.log("picklist--data",response.data.data);
         const backendData = response.data.data;
 
         setPicklists(backendData);
@@ -267,7 +270,7 @@ function Sidebar({
             {isMainMenuOpen &&
               (management.length > 0 ? (
                 <div className="mt-2 space-y-2 max-h-60 overflow-auto">
-                  {management.map((item, index) => (
+                  {/* {management.map((item, index) => (
                     <div
                       key={index}
                       onClick={() => setSelectedCategory(item)}
@@ -279,7 +282,25 @@ function Sidebar({
                     >
                       {item}
                     </div>
-                  ))}
+                  ))} */}
+                  {management.map((item, index) => {
+  const category = picklists[item]; // get the actual category object
+
+  return (
+    <div
+      key={index}
+      onClick={() => setSelectedCategory(item)}
+      className={`cursor-pointer p-2 rounded ${
+        selectedCategory === item
+          ? "bg-blue-200"
+          : "hover:bg-gray-200"
+      }`}
+    >
+      {category?.name || "Unknown Category"}
+    </div>
+  );
+})}
+
                 </div>
               ) : (
                 <div>No labels found</div>
@@ -302,10 +323,25 @@ function MainContent({ picklists, setPicklists, selectedCategory }) {
   const [brokerData,setBrokerData]=useState([]);
    const [invites, setInvites] = useState([]);
    const [interest,setInterest]=useState([]);
+    const [deleteTarget, setDeleteTarget] = useState(null); // holds { id, value, etc.}
+     const [toggleTarget, setToggleTarget] = useState(null); 
+    const [selectedCountryId, setSelectedCountryId] = useState(null);
+const [selectedStateId, setSelectedStateId] = useState(null);
+const[selectedCategoryId,setSelectedCategoryId]=useState(null);
+const [parentType,setParentType]=useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+
+  const handleAddCategory=(category)=>{
+    console.log("category--Add---",category);
+        setSelectedCategoryId(selectedCategory);
+        setTimeout(()=>{
+           handleClickOpen();
+        },4000);
+          // handleClickOpen();
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -373,7 +409,10 @@ console.log("apiinviteData1----",inviteData);
       }
     };
 
-  const handleDelete = async (category, id) => {
+  const handleDelete = async (category, value) => {
+    console.log("catgeoyr----handledelete",category);
+      console.log("value----handledelete",value);
+      const id=value?.id;
     try {
       const response = await axios.delete(
         `https://bizplorers-backend.onrender.com/api/picklist/delete/${id}`,
@@ -390,7 +429,12 @@ console.log("apiinviteData1----",inviteData);
       const updatedValue = response.data.data;
       setPicklists((prev) => ({
         ...prev,
-        [category]: prev[category].filter((item) => item.id !== id),
+        // [category]: prev[category].filter((item) => item.id !== id),
+        [category]: {
+  ...prev[category],
+  values: prev[category]?.values.filter((item) => item.id !== id),
+}
+
       }));
       setShowDeleteModal(false);
     } catch (error) {
@@ -402,20 +446,42 @@ console.log("apiinviteData1----",inviteData);
 
   const handleAdd = async (category, value) => {
     console.log("category---", category);
+    console.log("categoryId---", category.id);
     console.log("value--", value);
+    console.log("selectedCountryId",selectedCountryId);
+    console.log("selectedstateId",selectedStateId);
     // const newItem = { id: Date.now(), name: "New Value", active: true };
     // setPicklists((prev) => ({
     //   ...prev,
     //   [category]: [...prev[category], newItem],
     // }));
+    let dataToAdd;
+if(Number(category.id)===8){
+   dataToAdd = {
+      category_id: category.id,
+      value: value,
+      parent_id:selectedCountryId,
 
-    const dataToAdd = {
-      category: category,
+    };
+}
+else if(Number(category.id)===9){
+ dataToAdd = {
+      category_id: category.id,
+      value: value,
+      parent_id:selectedStateId,
+
+    };
+}
+else{
+    dataToAdd = {
+      category_id: category.id,
       value: value,
     };
+  }
+
     try {
       const response = await fetch(
-        "https://bizplorers-backend.onrender.com/api/picklist/add_value",
+        "https://bizplorers-backend.onrender.com/api/picklist/add",
         {
           method: "POST",
           body: JSON.stringify(dataToAdd),
@@ -451,13 +517,21 @@ console.log("apiinviteData1----",inviteData);
     setEditName(currentName);
   };
 
-  const handleToggle = async (category, id) => {
+  const handleToggle = async (category, value) => {
+    console.log("Categorytoggle----",category);
+    console.log("value",value);
+    console.log("id",value?.id);
     const token = localStorage.getItem("token");
+    const id=value?.id;
+
+    const data={
+      is_active:!value.is_active
+    }
 
     try {
-      const response = await axios.patch(
+      const response = await axios.put(
         `https://bizplorers-backend.onrender.com/api/picklist/toggle/${id}`,
-        {},
+        data,
         {
           headers: {
             "Content-Type": "application/json",
@@ -479,12 +553,23 @@ console.log("apiinviteData1----",inviteData);
       // alert(response.data.message);
       const updatedValue = response.data.data;
 
-      setPicklists((prev) => ({
-        ...prev,
-        [category]: prev[category].map((item) =>
-          item.id === id ? { ...item, active: updatedValue.is_active } : item
-        ),
-      }));
+      setPicklists((prev) => {
+        const existing = prev[category];
+
+  if (!Array.isArray(existing)) {
+    console.error(`Expected array at prev[${category}], but got:`, existing);
+    return prev; // Don't update if the data is bad
+  }
+
+  const updated = existing.map((item) =>
+    item.id === id ? { ...item, value: updatedValue?.value } : item
+  );
+
+  return {
+    ...prev,
+    [category]: updated,
+  };
+      });
     } catch (error) {
       console.error("Status Update failed:", error);
       showError("Failed to update status. Please try again.");
@@ -523,8 +608,11 @@ console.log("apiinviteData1----",inviteData);
       setPicklists((prev) => ({
         ...prev,
         [category]: prev[category].map((item) =>
-          item.id === id ? { ...item, name: updatedValue.value } : item
-        ),
+      item.id === id ? { ...item, value: updatedValue.value } : item
+    )
+        // ((item) =>
+        //   item.id === id ? { ...item, name: updatedValue.value } : item
+        // ),
       }));
 
       setEditingId(null);
@@ -614,7 +702,7 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
 
   return (
     <main className="flex-1 p-6 overflow-auto mt-[5%]">
-      <h2 className="text-2xl font-semibold mb-4">{selectedCategory}</h2>
+      <h2 className="text-2xl font-semibold mb-4"> {picklists[selectedCategory]?.name}</h2>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded shadow">
@@ -627,7 +715,9 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
             </tr>
           </thead>
           <tbody>
-            {picklists[selectedCategory]?.map((item) => (
+            {/* {picklists[selectedCategory]?.map((item) => ( */}
+            {picklists[selectedCategory]?.values?.map((item) => (
+
               <tr key={item.id} className="border-b">
                 <td className="py-2 px-4">{item.id}</td>
                 <td className="py-2 px-4">
@@ -647,17 +737,20 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
                       className="border rounded px-2 py-1 w-full"
                     />
                   ) : (
-                    item.name
+                    // item.name
+                    item.value
                   )}
                 </td>
                 <td
                   className={`py-2 px-4 cursor-pointer font-semibold ${
-                    item.active ? "text-green-600" : "text-red-600"
+                    item.is_active ? "text-green-600" : "text-red-600"
                   }`}
-                  onClick={() => handleToggle(selectedCategory, item.id)}
+                  onClick={() => 
+                    
+                    handleToggle(selectedCategory, item)}
                   title="Click to toggle status"
                 >
-                  {item.active ? "Active" : "Inactive"}
+                  {item.is_active ? "Active" : "Inactive"}
                 </td>
                 <td className="py-2 px-4 space-x-2">
                   {editingId === item.id ? (
@@ -688,11 +781,14 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
                         </button>
                         <button
                           // onClick={() => handleDelete(selectedCategory, item.id)}
-                          onClick={() => setShowDeleteModal(true)}
+                          onClick={() =>{ 
+                            setDeleteTarget(item);
+                            setShowDeleteModal(true)}}
                           className="text-red-600 hover:underline "
                         >
                           <DeleteIcon />
                         </button>
+                        {deleteTarget && (
                         <Dialog
                           open={ShowDeleteModal}
                           slots={{
@@ -735,7 +831,8 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
                           >
                             <Button
                               onClick={() =>
-                                handleDelete(selectedCategory, item.id)
+                                // handleDelete(item.id, item)
+                                 handleDelete(picklists[selectedCategory]?.id, deleteTarget)
                               }
                               color="error"
                               variant="contained"
@@ -743,7 +840,9 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
                               Yes, Delete
                             </Button>
                             <Button
-                              onClick={() => setShowDeleteModal(false)}
+                              onClick={() => {
+                                
+                                setShowDeleteModal(false)}}
                               variant="outlined"
                             >
                               Cancel
@@ -756,6 +855,7 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
                           </Button>
                         </DialogActions> */}
                         </Dialog>
+                        )}
                       </div>
                     </>
                   )}
@@ -768,7 +868,7 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
 
       <button
         // onClick={() => handleAdd(selectedCategory)}
-        onClick={handleClickOpen}
+        onClick={()=>handleAddCategory(selectedCategory)}
         className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
         Add New Value
@@ -785,15 +885,92 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
               const formJson = Object.fromEntries(formData.entries());
               const value = formJson.value;
               console.log(value);
+              // picklists[selectedCategory]?.values?.map((item)
               // setNewValue(value);
-              handleAdd(selectedCategory, value);
+              handleAdd(picklists[selectedCategory], value);
               handleClose();
             },
           },
         }}
+       fullWidth={Number(selectedCategory) === 3 || Number(selectedCategory) ===1}
+  maxWidth={Number(selectedCategory) === 3 ?Number(selectedCategory) ===1? 'md':'sm' : 'md'}
       >
         <DialogTitle>Add Value</DialogTitle>
-        <DialogContent>
+        <DialogContent >
+        <div className="!flex !gap-5 !pt-3">
+
+        {Number(selectedCategoryId)===3 && (
+  <>
+    <TextField
+    
+      select
+      label="Select Country"
+      fullWidth
+      value={selectedCountryId ?? ''}
+      onChange={(e) => {
+        setSelectedCountryId(Number(e.target.value));
+        setSelectedStateId(null); // Reset state when country changes
+      }}
+    >
+      {picklists[2]?.values?.map((country) => (
+        <MenuItem key={country.id} value={country.id}>
+          {country.value}
+        </MenuItem>
+      ))}
+    </TextField>
+  </>
+)}
+     {Number(selectedCategoryId)===1 && (
+  <>
+  <div className="w-1/2">
+  <label className="block mb-2 font-semibold">Select Parent Type:</label>
+<select value={parentType} onChange={(e) => setParentType(e.target.value)}>
+  <option value="">-- Select --</option>
+  <option value="country">Country</option>
+  <option value="state">State</option>
+</select>
+</div>
+
+   {parentType === 'country' && (
+  <TextField
+    select
+    label="Select Country"
+    fullWidth
+    value={selectedCountryId ?? ''}
+    onChange={(e) => {
+      setSelectedCountryId(Number(e.target.value));
+      setSelectedStateId(null); // Reset state when country changes
+    }}
+  >
+    {picklists[2]?.values?.map((country) => (
+      <MenuItem key={country.id} value={country.id}>
+        {country.value}
+      </MenuItem>
+    ))}
+  </TextField>
+)}
+
+{/* Conditionally render State dropdown */}
+{parentType === 'state' && (
+  <TextField
+    select
+    label="Select State"
+    fullWidth
+    value={selectedStateId ?? ''}
+    onChange={(e) => {
+      setSelectedStateId(Number(e.target.value));
+    }}
+  >
+    {picklists[3]?.values?.map((state) => (
+      <MenuItem key={state.id} value={state.id}>
+        {state.value}
+      </MenuItem>
+    ))}
+  </TextField>
+)}
+  </>
+)}
+
           <TextField
             autoFocus
             required
@@ -805,6 +982,8 @@ if (selectedCategory === "Invite" && !picklists[selectedCategory]) {
             fullWidth
             variant="standard"
           />
+</div>
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="error">

@@ -201,6 +201,7 @@ console.log("userResults---",result);
   };
 
   const handleDelete = async () => {
+    console.log("userTODelete-----",userToDelete);
     try {
       const response = await fetch(
         `https://bizplorers-backend.onrender.com/api/users/${userToDelete}`,
