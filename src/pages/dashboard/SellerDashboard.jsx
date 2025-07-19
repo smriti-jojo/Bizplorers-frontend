@@ -43,7 +43,9 @@ const dropdownOptions = {
   const picklists=localStorage.getItem("picklists");
    const parsedPicklists=JSON.parse(picklists);
    console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists?.[2]);
+   console.log("parsedPicklistsbuyerrr-----",parsedPicklists?.[5]);
+
+   
 
 const Section = ({ title, isOpen, toggleOpen, children }) => (
   <div className="border-t pt-4">
@@ -137,6 +139,203 @@ const Section = ({ title, isOpen, toggleOpen, children }) => (
 //     </div>
 //   );
 // };
+// const EditableRow = ({
+//   label,
+//   value,
+//   editable,
+//   onChange,
+//   type = "text",
+//   options = [],
+//   multiple = false,
+// }) => {
+//   /* ---------- helpers ---------- */
+//   const getId   = (opt) => (typeof opt === "string" ? opt : opt.id);
+//   const getText = (opt) => (typeof opt === "string" ? opt : opt.label ?? opt.value);
+// console.log("getId",getId);
+// console.log("getText",getText);
+//   /* ---------- VIEW mode ---------- */
+//   const renderView = () => {
+//     if (Array.isArray(value)) return <p>{value.map(getText).join(", ") || "—"}</p>;
+//     if (typeof value === "object") return <p>{getText(value) || "—"}</p>;
+//     return <p>{value || "—"}</p>;
+//   };
+
+//   /* ---------- EDIT mode ---------- */
+//   const renderEdit = () => {
+//     /* textarea or free‑text ---------------------------------- */
+//     if (options.length === 0) {
+//       if (type === "textarea") {
+//         return (
+//           <textarea
+//             className="border rounded px-2 py-1 w-full md:w-[60%]"
+//             value={value}
+//             onChange={(e) => onChange(e.target.value)}
+//           />
+//         );
+//       }
+//       return (
+//         <input
+//           className="border rounded px-2 py-1"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       );
+//     }
+
+//     /* dropdown (single / multi) ------------------------------ */
+//     if (multiple) {
+//       const selectedIds = (value || []).map(getId);
+//       return (
+//         <Select
+//           multiple
+//           value={selectedIds}
+//           onChange={(e) => {
+//             const newVals = options.filter((o) =>
+//               e.target.value.includes(getId(o))
+//             );
+//             onChange(newVals);
+//           }}
+//           renderValue={(selected) =>
+//             selected
+//               .map((id) => getText(options.find((o) => getId(o) === id)))
+//               .join(", ")
+//           }
+//           className="min-w-[200px] h-10"
+//         >
+//           {options.map((opt) => {
+//             const id = getId(opt);
+//             return (
+//               <MenuItem key={id} value={id}>
+//                 <Checkbox checked={selectedIds.includes(id)} />
+//                 <ListItemText primary={getText(opt)} />
+//               </MenuItem>
+//             );
+//           })}
+//         </Select>
+//       );
+//     }
+
+//     /* single‑select ------------------------------------------ */
+//     const currentId = value ? getId(value) : "";
+//     return (
+//       <Select
+//         value={currentId}
+//         onChange={(e) => {
+//           const selected = options.find((o) => getId(o) === e.target.value);
+//           onChange(selected);
+//         }}
+//         className="min-w-[200px] h-10"
+//       >
+//         {options.map((opt) => {
+//           const id = getId(opt);
+//           return (
+//             <MenuItem key={id} value={id}>
+//               {getText(opt)}
+//             </MenuItem>
+//           );
+//         })}
+//       </Select>
+//     );
+//   };
+
+
+
+// // const renderEdit = () => {
+// //   // Textarea or text input if no options
+// //   if (options.length === 0) {
+// //     if (type === "textarea") {
+// //       return (
+// //         <textarea
+// //           className="border rounded px-2 py-1 w-full md:w-[60%]"
+// //           value={value || ""}
+// //           onChange={(e) => onChange(e.target.value)}
+// //         />
+// //       );
+// //     }
+// //     return (
+// //       <input
+// //         className="border rounded px-2 py-1"
+// //         value={value || ""}
+// //         onChange={(e) => onChange(e.target.value)}
+// //       />
+// //     );
+// //   }
+
+// //   // Multi-select dropdown
+// //   if (multiple) {
+// //     const selectedIds = (value || []).map(getId);
+// //     return (
+// //       <Select
+// //         multiple
+// //         value={selectedIds}
+// //         onChange={(e) => {
+// //           const newVals = options.filter((o) =>
+// //             e.target.value.includes(getId(o))
+// //           );
+// //           onChange(newVals);
+// //         }}
+// //         renderValue={(selected) =>
+// //           selected
+// //             .map((id) => getText(options.find((o) => getId(o) === id)))
+// //             .join(", ")
+// //         }
+// //         className="min-w-[200px] h-10"
+// //       >
+// //         {options.map((opt) => {
+// //           const id = getId(opt);
+// //           return (
+// //             <MenuItem key={id} value={id}>
+// //               <Checkbox checked={selectedIds.includes(id)} />
+// //               <ListItemText primary={getText(opt)} />
+// //             </MenuItem>
+// //           );
+// //         })}
+// //       </Select>
+// //     );
+// //   }
+
+// //   // Single-select dropdown
+// //   const currentId =
+// //     value && typeof value === "object" ? getId(value) : value || "";
+
+// //   return (
+// //     <Select
+// //       value={currentId}
+// //       onChange={(e) => {
+// //         const selectedOption = options.find(
+// //           (opt) => getId(opt) === e.target.value
+// //         );
+// //         onChange(selectedOption || e.target.value); // for non-object values
+// //       }}
+// //       className="min-w-[200px] h-10"
+// //     >
+// //       {options.map((opt) => {
+// //         const id = getId(opt);
+// //         return (
+// //           <MenuItem key={id} value={id}>
+// //             {getText(opt)}
+// //           </MenuItem>
+// //         );
+// //       })}
+// //     </Select>
+// //   );
+// // };
+
+
+//   /* ---------- JSX row wrapper ---------- */
+//   return (
+//     <div className="flex gap-5 items-start flex-wrap my-2">
+//       <h1 className="font-semibold flex items-center">
+//         <CheckBoxIcon className="!text-green-600 mr-1" />
+//         {label}:
+//       </h1>
+//       {editable ? renderEdit() : renderView()}
+//     </div>
+//   );
+// };
+
+
+
 const EditableRow = ({
   label,
   value,
@@ -146,26 +345,28 @@ const EditableRow = ({
   options = [],
   multiple = false,
 }) => {
-  /* ---------- helpers ---------- */
-  const getId   = (opt) => (typeof opt === "string" ? opt : opt.id);
-  const getText = (opt) => (typeof opt === "string" ? opt : opt.label ?? opt.value);
+  const getId = (opt) => (typeof opt === "string" ? opt : opt?.id?.toString?.() || "");
+  const getText = (opt) =>
+    typeof opt === "string" ? opt : opt?.label ?? opt?.name ?? opt?.value ?? "";
 
-  /* ---------- VIEW mode ---------- */
   const renderView = () => {
-    if (Array.isArray(value)) return <p>{value.map(getText).join(", ") || "—"}</p>;
-    if (typeof value === "object") return <p>{getText(value) || "—"}</p>;
+    if (Array.isArray(value)) {
+      return <p>{value.map(getText).join(", ") || "—"}</p>;
+    }
+    if (typeof value === "object") {
+      return <p>{getText(value) || "—"}</p>;
+    }
     return <p>{value || "—"}</p>;
   };
 
-  /* ---------- EDIT mode ---------- */
   const renderEdit = () => {
-    /* textarea or free‑text ---------------------------------- */
+    // Free input or textarea
     if (options.length === 0) {
       if (type === "textarea") {
         return (
           <textarea
             className="border rounded px-2 py-1 w-full md:w-[60%]"
-            value={value}
+            value={value || ""}
             onChange={(e) => onChange(e.target.value)}
           />
         );
@@ -173,34 +374,40 @@ const EditableRow = ({
       return (
         <input
           className="border rounded px-2 py-1"
-          value={value}
+          value={value || ""}
           onChange={(e) => onChange(e.target.value)}
         />
       );
     }
 
-    /* dropdown (single / multi) ------------------------------ */
+    // Multi-select
     if (multiple) {
-      const selectedIds = (value || []).map(getId);
+      const selectedIds = Array.isArray(value)
+        ? value.map((v) => getId(v).toString())
+        : [];
+
       return (
         <Select
           multiple
           value={selectedIds}
           onChange={(e) => {
-            const newVals = options.filter((o) =>
-              e.target.value.includes(getId(o))
+            const selected = options.filter((o) =>
+              e.target.value.includes(getId(o).toString())
             );
-            onChange(newVals);
+            onChange(selected);
           }}
           renderValue={(selected) =>
             selected
-              .map((id) => getText(options.find((o) => getId(o) === id)))
+              .map((id) => {
+                const match = options.find((o) => getId(o) === id);
+                return getText(match);
+              })
               .join(", ")
           }
           className="min-w-[200px] h-10"
         >
           {options.map((opt) => {
-            const id = getId(opt);
+            const id = getId(opt).toString();
             return (
               <MenuItem key={id} value={id}>
                 <Checkbox checked={selectedIds.includes(id)} />
@@ -212,19 +419,20 @@ const EditableRow = ({
       );
     }
 
-    /* single‑select ------------------------------------------ */
-    const currentId = value ? getId(value) : "";
+    // Single-select
+    const currentId = value ? getId(value).toString() : "";
+
     return (
       <Select
         value={currentId}
         onChange={(e) => {
-          const selected = options.find((o) => getId(o) === e.target.value);
-          onChange(selected);
+          const selected = options.find((o) => getId(o).toString() === e.target.value);
+          onChange(selected || e.target.value);
         }}
         className="min-w-[200px] h-10"
       >
         {options.map((opt) => {
-          const id = getId(opt);
+          const id = getId(opt).toString();
           return (
             <MenuItem key={id} value={id}>
               {getText(opt)}
@@ -235,7 +443,6 @@ const EditableRow = ({
     );
   };
 
-  /* ---------- JSX row wrapper ---------- */
   return (
     <div className="flex gap-5 items-start flex-wrap my-2">
       <h1 className="font-semibold flex items-center">
@@ -251,6 +458,8 @@ const EditableRow = ({
 const SellerDashboard = () => {
   const [isEditing, setIsEditing] = useState(false);
    const [countries, setCountries] = useState([]);
+   const[preferredArrangement,setPreferredArrangement]=useState([]);
+    const[saleReason,setSaleReason]=useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const[loading,setLoading]=useState(false);
@@ -307,6 +516,21 @@ const SellerDashboard = () => {
     label: c.value,
   }));
   setCountries(mapped);
+
+  const SaleArray = parsedPicklists[6]?.values || [];
+  const Salemapped = SaleArray.map((c) => ({
+    id: c.id,
+    label: c.value,
+  }));
+  setSaleReason(Salemapped);
+
+  const ArrangementArray = parsedPicklists[5]?.values || [];
+  const arrangemapped = ArrangementArray.map((c) => ({
+    id: c.id,
+    label: c.value,
+  }));
+  setPreferredArrangement(arrangemapped);
+
 }, []);
 
 
@@ -542,17 +766,18 @@ const fetchCityByStateData = async (id) => {
             toggleOpen={() => setOpenSections((p) => ({ ...p, company: !p.company }))}
           >
             <EditableRow label="Company Name" value={formData.company_name} editable={isEditing} onChange={(v) => handleChange("company_name", v)} />
+            <EditableRow label="Business Headline" value={formData.headline} editable={isEditing} onChange={(v) => handleChange("headline", v)} />
             <EditableRow label="Website" value={formData.website_url} editable={isEditing} onChange={(v) => handleChange("website_url", v)} />
             <EditableRow label="CIN" value={formData.CIN} editable={isEditing} onChange={(v) => handleChange("CIN", v)} />
             <EditableRow label="Company LinkedIn" value={formData.company_linkedin} editable={isEditing} onChange={(v) => handleChange("company_linkedin", v)} />
             <EditableRow label="No. of Cofounders" value={formData.numcofounder} editable={isEditing} onChange={(v) => handleChange("numcofounder", v)} />
             <EditableRow label="Team Size" value={formData.teamSize} editable={isEditing} onChange={(v) => handleChange("teamSize", v)} />
             <EditableRow label="Locations Count" value={formData.numLocation} editable={isEditing} onChange={(v) => handleChange("numLocation", v)} />
-            <EditableRow label="Founded Year" value={formData.year} editable={isEditing} onChange={(v) => handleChange("year", v)} />
-            <EditableRow label="Founded Month" value={formData.month} editable={isEditing} onChange={(v) => handleChange("month", v)} />
+            <EditableRow label="Founded Year" value={formData.year} editable={isEditing} onChange={(v) => handleChange("year", v)} options={["2025", "2024", "2023", "2022", "2021", "2020"]} />
+            <EditableRow label="Founded Month" value={formData.month} editable={isEditing} onChange={(v) => handleChange("month", v)} options={["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]}/>
             <EditableRow label="Business Description" value={formData.description_business} editable={isEditing} onChange={(v) => handleChange("description_business", v)} type="textarea" />
-            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={dropdownOptions.businessCategory} />
-            <EditableRow label="Entity Structure" value={formData.entityStructure} editable={isEditing} onChange={(v) => handleChange("entityStructure", v)} options={dropdownOptions.entityStructure} />
+            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={parsedPicklists[0]?.values} />
+            <EditableRow label="Entity Structure" value={formData.entityStructure} editable={isEditing} onChange={(v) => handleChange("entityStructure", v)} options={parsedPicklists[4]?.values} />
           </Section>
 
           {/* Location Section */}
@@ -626,9 +851,9 @@ const fetchCityByStateData = async (id) => {
             isOpen={openSections.exit}
             toggleOpen={() => setOpenSections((p) => ({ ...p, exit: !p.exit }))}
           >
-            <EditableRow label="Reason for Sale" value={formData.salereason} editable={isEditing} onChange={(v) => handleChange("salereason", v)} options={dropdownOptions.salereason} />
+            <EditableRow label="Reason for Sale" value={formData.salereason} editable={isEditing} onChange={(v) => handleChange("salereason", v)}  options={saleReason}  />
             <EditableRow label="Asking Price" value={formData.askingPrice} editable={isEditing} onChange={(v) => handleChange("askingPrice", v)} />
-            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={isEditing} onChange={(v) => handleChange("preferredArrangement", v)} options={dropdownOptions.preferredArrangement} multiple />
+            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={isEditing} onChange={(v) => handleChange("preferredArrangement", v)}  options={preferredArrangement}  multiple />
           </Section>
         </div>
       </div>

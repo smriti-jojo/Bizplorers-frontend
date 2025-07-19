@@ -48,19 +48,62 @@ email:"",
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, multiple, selectedOptions, value } = e.target;
-    const actualValue = multiple
+   const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=picklists?JSON.parse(picklists):null;
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistscountryyy-----",parsedPicklists[2]);
+  //  console.log("buyerStateData",buyerStateData);
+
+//   const handleChange = (e) => {
+//     const { name, multiple, selectedOptions, value } = e.target;
+//     console.log("e.target",e.target);
+//     let valueFind;
+//     let actualValue;
+//     if(name==='businesslocationCountry'){
+//  const findValue= parsedPicklists[2]?.values.filter((item)=>item.id===value);
+//  actualValue=findValue?.value;
+// }
+//    else{ 
+//     actualValue = multiple
+//       ? Array.from(selectedOptions).map((option) => option.value)
+//       : value;
+//    }
+// console.log("valueFibd--",actualValue);
+// console.log("name--",name);
+// console.log("valuee--",value);
+// if(name==='businesslocationCountry'){
+//   fetchCityByCountryData(value);
+// }
+// console.log("actualva;ue----",actualValue)
+//     setFormData((prev) => ({ ...prev, [name]: actualValue }));
+//     setErrors((prev) => ({ ...prev, [name]: "" }));
+//   };
+const handleChange = (e) => {
+  const { name, multiple, selectedOptions, value } = e.target;
+
+  console.log("e.target", e.target);
+
+  let actualValue;
+
+  if (name === 'businesslocationCountry') {
+    const foundItem = parsedPicklists[2]?.values.find(
+      (item) => item.id == value
+    );
+    actualValue = foundItem?.value; // or use `item.id` if you need the ID
+    fetchCityByCountryData(value); // maybe pass item.id instead of value
+  } else {
+    actualValue = multiple
       ? Array.from(selectedOptions).map((option) => option.value)
       : value;
-console.log("name--",name);
-console.log("valuee--",value);
-if(name==='businesslocationCountry'){
-  fetchCityByCountryData(value);
-}
-    setFormData((prev) => ({ ...prev, [name]: actualValue }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+  }
+
+  console.log("actualValue:", actualValue);
+  console.log("name:", name);
+  console.log("value:", value);
+
+  setFormData((prev) => ({ ...prev, [name]: actualValue }));
+  setErrors((prev) => ({ ...prev, [name]: "" }));
+};
 
   
 

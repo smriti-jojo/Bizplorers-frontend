@@ -48,7 +48,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
             onChange={handleChange}
             
          >
-            {parsedPicklists[7].values.map((entity,index) => (
+            {parsedPicklists[6].values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -79,7 +79,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
 <div className=''>
   <h1 className="text-xl font-semibold mb-4">Preferred Arrangement</h1>
 <div className=" flex flex-wrap  ">
-  {parsedPicklists[6]?.values.map((option) => (
+  {parsedPicklists[5]?.values.map((option) => (
     <button
       key={option.value}
       type="button"

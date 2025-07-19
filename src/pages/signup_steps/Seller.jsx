@@ -70,26 +70,72 @@ const RegisterSeller = ({ type,onSuccess }) => {
   const navigate = useNavigate();
 
  
-  const handleChange = (e) => {
-    const { name, multiple, selectedOptions, value } = e.target;
-    const actualValue = multiple
-      ? Array.from(selectedOptions).map((option) => option.value)
-      : value;
-      console.log("name--",name);
-console.log("valuee--",value);
-if(name==='country'){
-  fetchStateByCountryData(value);
-}
+//   const handleChange = (e) => {
+//     const { name, multiple, selectedOptions, value } = e.target;
+//     const actualValue = multiple
+//       ? Array.from(selectedOptions).map((option) => option.value)
+//       : value;
+//       console.log("name--",name);
+// console.log("valuee--",value);
+// if(name==='country'){
+//   fetchStateByCountryData(value);
+// }
 
-if(name==='state'){
-  fetchCityByStateData(value);
-}
+// if(name==='state'){
+//   fetchCityByStateData(value);
+// }
 
-      console.log("actualValuenAME",name);
-      console.log("actualValue",actualValue);
-    setFormData((prev) => ({ ...prev, [name]: actualValue }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
+//       console.log("actualValuenAME",name);
+//       console.log("actualValue",actualValue);
+//     setFormData((prev) => ({ ...prev, [name]: actualValue }));
+//     setErrors((prev) => ({ ...prev, [name]: "" }));
+//   };
+ const picklists=localStorage.getItem("picklists");
+   const parsedPicklists=picklists?JSON.parse(picklists):null;
+   console.log("parsedPicklists-----",parsedPicklists);
+   console.log("parsedPicklistscountryyy-----",parsedPicklists[2]);
+
+
+const handleChange = (e) => {
+  const { name, multiple, selectedOptions, value } = e.target;
+
+  console.log("name--", name);
+  console.log("valuee--", value);
+
+  let actualValue = multiple
+    ? Array.from(selectedOptions).map((option) => option.value)
+    : value;
+
+  // Convert string to number for ID matching
+  // const parsedValue = parseInt(value, 10);
+
+  if (name === 'country') {
+    const foundCountry = parsedPicklists[2]?.values.find(item => item.value === value);
+     console.log("foundCountry",foundCountry);
+    actualValue = value // store name instead of id
+    fetchStateByCountryData(foundCountry?.id);
+  }
+
+  if (name === 'state') {
+    const foundState = parsedPicklists[3]?.values.find(item => item.value === value);
+    console.log("foundState",foundState);
+    actualValue = value;
+    fetchCityByStateData(foundState?.id);
+  }
+
+  if (name === 'city') {
+    const foundCity = parsedPicklists[4]?.values.find(item => item.value === value);
+     console.log("foundCity",foundCity);
+    actualValue = value;
+  }
+
+  console.log("actualValuenAME", name);
+  console.log("actualValue", actualValue);
+
+  setFormData((prev) => ({ ...prev, [name]: actualValue }));
+  setErrors((prev) => ({ ...prev, [name]: "" }));
+};
+
 
      const fetchStateByCountryData = async (id) => {
       try {

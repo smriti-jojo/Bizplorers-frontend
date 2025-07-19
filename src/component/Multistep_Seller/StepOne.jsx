@@ -743,7 +743,7 @@ width={350}
     value: item.id,
   }))} */}
             {parsedPicklists[2].values.map((country) => (
-              <MenuItem key={country.id} value={country.id}>
+              <MenuItem key={country.id} value={country.value}>
                 {country.value}
               </MenuItem>
             ))}
@@ -765,7 +765,7 @@ width={350}
             {formData.country &&
               sellerStateData.map(
                 (state) => (
-                  <MenuItem key={state.id} value={state.id}>
+                  <MenuItem key={state.id} value={state.value}>
                     {state.value}
                   </MenuItem>
                 )
@@ -789,7 +789,7 @@ width={350}
               formData.state &&
               sellerCityData.map(
                 (city) => (
-                  <MenuItem key={city.id} value={city.id}>
+                  <MenuItem key={city.id} value={city.value}>
                     {city.value}
                   </MenuItem>
                 )
