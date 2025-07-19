@@ -24,21 +24,21 @@ import {CircularProgress} from "@mui/material";
 //   },
 // };
 
-const dropdownOptions = {
-  businessCategory: [
-              "E-commerce",
-              "Offline Retail",
-              "Fintech",
-              "Edtech",
-              "Saas",
-              "Education & training",
-              "Restaurant/café",
-              "Mobile App",
-            ],
-  entityStructure: ["PartnerShip", "LLP", "Private Ltd", "Public Ltd"],
-  salereason: ['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation'],
-  preferredArrangement: ["Cash", "Stock", "Royalty", "Acquihire"],
-};
+// const dropdownOptions = {
+//   businessCategory: [
+//               "E-commerce",
+//               "Offline Retail",
+//               "Fintech",
+//               "Edtech",
+//               "Saas",
+//               "Education & training",
+//               "Restaurant/café",
+//               "Mobile App",
+//             ],
+//   entityStructure: ["PartnerShip", "LLP", "Private Ltd", "Public Ltd"],
+//   salereason: ['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation'],
+//   preferredArrangement: ["Cash", "Stock", "Royalty", "Acquihire"],
+// };
 
   const picklists=localStorage.getItem("picklists");
    const parsedPicklists=JSON.parse(picklists);
