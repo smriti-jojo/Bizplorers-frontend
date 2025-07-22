@@ -36,31 +36,31 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
-  <div className="flex items-start gap-2 my-2">
-    <span className="font-semibold flex items-center">
-      {icon}
-      {label}:
-    </span>
-    {editable ? (
-      textarea ? (
-        <textarea
-          className="border p-2 rounded-md w-full"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      ) : (
-        <input
-          className="border p-2 rounded-md w-full"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      )
-    ) : (
-      <span>{value}</span>
-    )}
-  </div>
-);
+// const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
+//   <div className="flex items-start gap-2 my-2">
+//     <span className="font-semibold flex items-center">
+//       {icon}
+//       {label}:
+//     </span>
+//     {editable ? (
+//       textarea ? (
+//         <textarea
+//           className="border p-2 rounded-md w-full"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       ) : (
+//         <input
+//           className="border p-2 rounded-md w-full"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       )
+//     ) : (
+//       <span>{value}</span>
+//     )}
+//   </div>
+// );
 
 //  const RenderBuyerCards = () => {
 //   const [openDialog, setOpenDialog] = useState(false);
@@ -540,6 +540,8 @@ const EditableRow = ({ label, icon, value, editable, onChange, textarea }) => (
 //     </div>
 //   );
 // };
+
+
 
 const BrokerDashboard = () => {
   const [duration, setDuration] = useState("");

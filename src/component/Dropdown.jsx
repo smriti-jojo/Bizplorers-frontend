@@ -307,9 +307,13 @@ export default function ReusableSelect({
   const theme = useTheme();
 
   // Remove duplicates by value
+  // const uniqueOptions = [
+  //   ...new Map(options.map((opt) => [optionValue(opt), opt])).values(),
+  // ];
+
   const uniqueOptions = [
-    ...new Map(options.map((opt) => [optionValue(opt), opt])).values(),
-  ];
+  ...new Map((options || []).map((item) => [optionValue(item), item])).values(),
+];
 
   return (
     <FormControl sx={{ my: 1, width }} error={error}>
@@ -323,6 +327,7 @@ export default function ReusableSelect({
         value={value}
         onChange={(e) => {
           const selectedValue = e.target.value;
+          console.log("selectedValue---reusableselct----",selectedValue)
           onChange({
             target: {
               name,

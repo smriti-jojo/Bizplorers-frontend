@@ -154,7 +154,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
             value={formData.entityStructure}
             onChange={handleChange}
          >
-           {parsedPicklists[5].values.map((entity,index) => (
+           {parsedPicklists[4].values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -355,6 +355,77 @@ width={350}
  </div>
   </div> */}
 
+ <div className="flex justify-between w-full gap-4">
+      
+        <FormControl className="w-[350px]" error={!!errors.country} size="small">
+          <InputLabel id="country-label">Select Country</InputLabel>
+          <Select
+            labelId="country-label"
+            label="Select Country"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+          >
+               {/* options={parsedPicklists[2].values.map((item) => ({
+    label: item.value,
+    value: item.id,
+  }))} */}
+            {parsedPicklists[2].values.map((country) => (
+              <MenuItem key={country.id} value={country.value}>
+                {country.value}
+              </MenuItem>
+            ))}
+          </Select>
+          {errors.country && <FormHelperText>{errors.country}</FormHelperText>}
+        </FormControl>
+
+        
+        <FormControl className="w-[350px]" error={!!errors.state} size="small">
+          <InputLabel id="state-label">Select State</InputLabel>
+          <Select
+            labelId="state-label"
+            label="Select State"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+            disabled={!formData.country}
+          >
+            {formData.country &&
+              sellerStateData.map(
+                (state) => (
+                  <MenuItem key={state.id} value={state.value}>
+                    {state.value}
+                  </MenuItem>
+                )
+              )}
+          </Select>
+          {errors.state && <FormHelperText>{errors.state}</FormHelperText>}
+        </FormControl>
+
+    
+         <FormControl className="w-[350px]" error={!!errors.city} size="small">
+          <InputLabel id="city-label">Select City</InputLabel>
+          <Select
+            labelId="city-label"
+            label="Select City"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            disabled={!formData.state}
+          >
+            {formData.country &&
+              formData.state &&
+              sellerCityData.map(
+                (city) => (
+                  <MenuItem key={city.id} value={city.value}>
+                    {city.value}
+                  </MenuItem>
+                )
+              )}
+          </Select>
+          {errors.city && <FormHelperText>{errors.city}</FormHelperText>}
+        </FormControl> 
+      </div>
 
        <div className="flex justify-between w-full gap-4 py-2">
         <div className="w-[350px]">
@@ -507,7 +578,9 @@ width={350}
 </div>
 
           </div>
-        </div></>:<>
+        </div></>:
+        
+        <>
       <div className="py-2">
         <h1>Company Name</h1>
         <TextField
@@ -562,9 +635,9 @@ width={350}
             value={formData.entityStructure}
             onChange={handleChange}
          >
-           {["PartnerShip", "LLP", "Private Ltd", "Public Ltd"].map((entity,index) => (
-              <MenuItem key={index} value={entity}>
-                {entity}
+            {parsedPicklists[4].values.map((entity,index) => (
+              <MenuItem key={index} value={entity.value}>
+                {entity.value}
               </MenuItem>
             ))}
           </Select>
@@ -583,18 +656,9 @@ width={350}
             onChange={handleChange}
             
          >
-            {[
-              "E-commerce",
-              "Offline Retail",
-              "Fintech",
-              "Edtech",
-              "Saas",
-              "Education & training",
-              "Restaurant/café",
-              "Mobile App",
-            ].map((entity,index) => (
-              <MenuItem key={index} value={entity}>
-                {entity}
+             {parsedPicklists[0].values.map((entity,index) => (
+              <MenuItem key={index} value={entity.value}>
+                {entity.value}
               </MenuItem>
             ))}
           </Select>

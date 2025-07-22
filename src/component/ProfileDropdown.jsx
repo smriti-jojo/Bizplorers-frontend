@@ -64,34 +64,71 @@ console.log(user);
 //   }
 // };
 
+// const handleDashboard = () => {
+//   if (!token) {
+//     navigate("/login");
+//   } else if (!user?.dataFilled) {
+//     if (user?.role === "buyer") {
+//       showWarning("Complete Your Registeration");
+//       navigate("/buyer_step");
+//     } else if (user?.role === "seller") {
+//     showWarning("Complete Your Registeration");
+//       navigate("/seller_step");
+//     } else if (user?.role === "broker") {
+//        showWarning("Complete Your Registeration");
+//       navigate("/broker");
+//     } else {
+//       console.warn("Unknown role or incomplete registration.");
+//       navigate("/login"); // fallback or error page
+//     }
+//   } else {
+//     if (user?.role === "admin"){
+//       navigate("/admin");
+//     } else if (!user?.role==="admin" && user?.dataFilled){
+//       navigate(`/${user.role}/dashboard`);
+//     } else {
+//       console.warn("User role is missing.");
+//       navigate("/login"); // fallback or error page
+//     }
+//   }
+// };
 const handleDashboard = () => {
   if (!token) {
     navigate("/login");
-  } else if (!user?.dataFilled) {
+    return;
+  }
+
+  if (user?.role === "admin") {
+    navigate("/admin");
+    return;
+  }
+
+  if (!user?.dataFilled) {
     if (user?.role === "buyer") {
-      showWarning("Complete Your Registeration");
+      showWarning("Complete Your Registration");
       navigate("/buyer_step");
     } else if (user?.role === "seller") {
-    showWarning("Complete Your Registeration");
+      showWarning("Complete Your Registration");
       navigate("/seller_step");
     } else if (user?.role === "broker") {
-       showWarning("Complete Your Registeration");
+      showWarning("Complete Your Registration");
       navigate("/broker");
     } else {
       console.warn("Unknown role or incomplete registration.");
       navigate("/login"); // fallback or error page
     }
+    return;
+  }
+
+  // Final fallback if everything is okay
+  if (user?.role) {
+    navigate(`/${user.role}/dashboard`);
   } else {
-    if (user?.role === "admin"){
-      navigate("/admin");
-    } else if (user?.role && user?.dataFilled){
-      navigate(`/${user.role}/dashboard`);
-    } else {
-      console.warn("User role is missing.");
-      navigate("/login"); // fallback or error page
-    }
+    console.warn("User role is missing.");
+    navigate("/login");
   }
 };
+
 
 
   return (

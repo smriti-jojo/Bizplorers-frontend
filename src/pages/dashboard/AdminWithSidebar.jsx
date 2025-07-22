@@ -437,6 +437,7 @@ console.log("apiinviteData1----",inviteData);
 
       }));
       setShowDeleteModal(false);
+       window.location.reload();
     } catch (error) {
       console.error("Deletion failed:", error);
       showError("Failed to delete value. Please try again.");
@@ -570,6 +571,7 @@ else{
     [category]: updated,
   };
       });
+       window.location.reload();
     } catch (error) {
       console.error("Status Update failed:", error);
       showError("Failed to update status. Please try again.");
@@ -591,8 +593,8 @@ else{
     };
 
     try {
-      const response = await axios.put(
-        "https://bizplorers-backend.onrender.com/api/picklist/update_value",
+      const response = await axios.post(
+        "https://bizplorers-backend.onrender.com/api/picklist/update",
         data,
         {
           headers: {
@@ -605,15 +607,44 @@ else{
       // alert(response.data.message);
       const updatedValue = response.data.value;
 
-      setPicklists((prev) => ({
-        ...prev,
-        [category]: prev[category].map((item) =>
-      item.id === id ? { ...item, value: updatedValue.value } : item
-    )
+//       setPicklists((prev) => {
+//   const current = Array.isArray(prev[category]) ? prev[category] : [];
+
+//   return {
+//     ...prev,
+//     [category]: current.map((item) =>
+//       item.id === updatedValue.id
+//         ? { ...item, value: updatedValue.value }
+//         : item
+//     )
+//   };
+// });
+setPicklists((prev) => {
+  const current = Array.isArray(prev[category]?.values) ? prev[category].values : [];
+
+  return {
+    ...prev,
+    [category]: {
+      ...prev[category],
+      values: current.map((item) =>
+        item.id === updatedValue.id
+          ? { ...item, value: updatedValue.value }
+          : item
+      ),
+    },
+  };
+});
+
+
+    //   setPicklists((prev) => ({
+    //     ...prev,
+    //     [category]: prev[category].map((item) =>
+    //   item.id === id ? { ...item, value: updatedValue.value } : item
+    // )
         // ((item) =>
         //   item.id === id ? { ...item, name: updatedValue.value } : item
         // ),
-      }));
+      // }));
 
       setEditingId(null);
     } catch (error) {

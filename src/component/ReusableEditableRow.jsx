@@ -153,6 +153,117 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 //     </div>
 //   );
 // };
+// const EditableRow = ({
+//   label,
+//   value,
+//   editable,
+//   onChange,
+//   type = "text",
+//   options = [],
+//   multiple = false,
+// }) => {
+//   /* ---------- helpers ---------- */
+//   const getId   = (opt) => (typeof opt === "string" ? opt : opt.id);
+//   const getText = (opt) => (typeof opt === "string" ? opt : opt.label ?? opt.value);
+
+//   /* ---------- VIEW mode ---------- */
+//   const renderView = () => {
+//     if (Array.isArray(value)) return <p>{value.map(getText).join(", ") || "—"}</p>;
+//     if (typeof value === "object") return <p>{getText(value) || "—"}</p>;
+//     return <p>{value || "—"}</p>;
+//   };
+
+//   /* ---------- EDIT mode ---------- */
+//   const renderEdit = () => {
+//     /* textarea or free‑text ---------------------------------- */
+//     if (options.length === 0) {
+//       if (type === "textarea") {
+//         return (
+//           <textarea
+//             className="border rounded px-2 py-1 w-full md:w-[60%]"
+//             value={value}
+//             onChange={(e) => onChange(e.target.value)}
+//           />
+//         );
+//       }
+//       return (
+//         <input
+//           className="border rounded px-2 py-1"
+//           value={value}
+//           onChange={(e) => onChange(e.target.value)}
+//         />
+//       );
+//     }
+
+//     /* dropdown (single / multi) ------------------------------ */
+//     if (multiple) {
+//       const selectedIds = (value || []).map(getId);
+//       return (
+//         <Select
+//           multiple
+//           value={selectedIds}
+//           onChange={(e) => {
+//             const newVals = options.filter((o) =>
+//               e.target.value.includes(getId(o))
+//             );
+//             onChange(newVals);
+//           }}
+//           renderValue={(selected) =>
+//             selected
+//               .map((id) => getText(options.find((o) => getId(o) === id)))
+//               .join(", ")
+//           }
+//           className="min-w-[200px] h-10"
+//         >
+//           {options.map((opt) => {
+//             const id = getId(opt);
+//             return (
+//               <MenuItem key={id} value={id}>
+//                 <Checkbox checked={selectedIds.includes(id)} />
+//                 <ListItemText primary={getText(opt)} />
+//               </MenuItem>
+//             );
+//           })}
+//         </Select>
+//       );
+//     }
+
+//     /* single‑select ------------------------------------------ */
+//     const currentId = value ? getId(value) : "";
+//     return (
+//       <Select
+//         value={currentId}
+//         onChange={(e) => {
+//           const selected = options.find((o) => getId(o) === e.target.value);
+//           onChange(selected);
+//         }}
+//         className="min-w-[200px] h-10"
+//       >
+//         {options.map((opt) => {
+//           const id = getId(opt);
+//           return (
+//             <MenuItem key={id} value={id}>
+//               {getText(opt)}
+//             </MenuItem>
+//           );
+//         })}
+//       </Select>
+//     );
+//   };
+
+//   /* ---------- JSX row wrapper ---------- */
+//   return (
+//     <div className="flex gap-5 items-start flex-wrap my-2">
+//       <h1 className="font-semibold flex items-center">
+//         <CheckBoxIcon className="!text-green-600 mr-1" />
+//         {label}:
+//       </h1>
+//       {editable ? renderEdit() : renderView()}
+//     </div>
+//   );
+// };
+
+
 const EditableRow = ({
   label,
   value,
@@ -162,26 +273,28 @@ const EditableRow = ({
   options = [],
   multiple = false,
 }) => {
-  /* ---------- helpers ---------- */
-  const getId   = (opt) => (typeof opt === "string" ? opt : opt.id);
-  const getText = (opt) => (typeof opt === "string" ? opt : opt.label ?? opt.value);
+  const getId = (opt) => (typeof opt === "string" ? opt : opt?.id?.toString?.() || "");
+  const getText = (opt) =>
+    typeof opt === "string" ? opt : opt?.label ?? opt?.name ?? opt?.value ?? "";
 
-  /* ---------- VIEW mode ---------- */
   const renderView = () => {
-    if (Array.isArray(value)) return <p>{value.map(getText).join(", ") || "—"}</p>;
-    if (typeof value === "object") return <p>{getText(value) || "—"}</p>;
+    if (Array.isArray(value)) {
+      return <p>{value.map(getText)?.join(", ") || "—"}</p>;
+    }
+    if (typeof value === "object") {
+      return <p>{getText(value) || "—"}</p>;
+    }
     return <p>{value || "—"}</p>;
   };
 
-  /* ---------- EDIT mode ---------- */
   const renderEdit = () => {
-    /* textarea or free‑text ---------------------------------- */
+    // Free input or textarea
     if (options.length === 0) {
       if (type === "textarea") {
         return (
           <textarea
             className="border rounded px-2 py-1 w-full md:w-[60%]"
-            value={value}
+            value={value || ""}
             onChange={(e) => onChange(e.target.value)}
           />
         );
@@ -189,34 +302,40 @@ const EditableRow = ({
       return (
         <input
           className="border rounded px-2 py-1"
-          value={value}
+          value={value || ""}
           onChange={(e) => onChange(e.target.value)}
         />
       );
     }
 
-    /* dropdown (single / multi) ------------------------------ */
+    // Multi-select
     if (multiple) {
-      const selectedIds = (value || []).map(getId);
+      const selectedIds = Array.isArray(value)
+        ? value.map((v) => getId(v).toString())
+        : [];
+
       return (
         <Select
           multiple
           value={selectedIds}
           onChange={(e) => {
-            const newVals = options.filter((o) =>
-              e.target.value.includes(getId(o))
+            const selected = options.filter((o) =>
+              e.target.value.includes(getId(o).toString())
             );
-            onChange(newVals);
+            onChange(selected);
           }}
           renderValue={(selected) =>
             selected
-              .map((id) => getText(options.find((o) => getId(o) === id)))
-              .join(", ")
+              .map((id) => {
+                const match = options.find((o) => getId(o) === id);
+                return getText(match);
+              })
+             ?.join(", ")
           }
           className="min-w-[200px] h-10"
         >
           {options.map((opt) => {
-            const id = getId(opt);
+            const id = getId(opt).toString();
             return (
               <MenuItem key={id} value={id}>
                 <Checkbox checked={selectedIds.includes(id)} />
@@ -228,19 +347,20 @@ const EditableRow = ({
       );
     }
 
-    /* single‑select ------------------------------------------ */
-    const currentId = value ? getId(value) : "";
+    // Single-select
+    const currentId = value ? getId(value).toString() : "";
+
     return (
       <Select
         value={currentId}
         onChange={(e) => {
-          const selected = options.find((o) => getId(o) === e.target.value);
-          onChange(selected);
+          const selected = options.find((o) => getId(o).toString() === e.target.value);
+          onChange(selected || e.target.value);
         }}
         className="min-w-[200px] h-10"
       >
         {options.map((opt) => {
-          const id = getId(opt);
+          const id = getId(opt).toString();
           return (
             <MenuItem key={id} value={id}>
               {getText(opt)}
@@ -251,7 +371,6 @@ const EditableRow = ({
     );
   };
 
-  /* ---------- JSX row wrapper ---------- */
   return (
     <div className="flex gap-5 items-start flex-wrap my-2">
       <h1 className="font-semibold flex items-center">
@@ -262,8 +381,6 @@ const EditableRow = ({
     </div>
   );
 };
-
-
 
 
 export default EditableRow;

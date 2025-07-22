@@ -28,7 +28,7 @@ const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
         value={formData.businessCategories}
         onChange={handleChange}
         // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
-        options={parsedPicklists[0].values.map((item)=>[item.value])}
+        options={parsedPicklists[0].values.map((item)=>item.value)}
         className={`w-full px-3 py-2 border rounded `}
           error={errors.businessCategories}
           width={350}
@@ -164,7 +164,7 @@ const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
         value={formData.preferredArrangement}
         onChange={handleChange}
         // options={["Cash", "Stock", "Royalty","Acquihire"]}
-         options={parsedPicklists[6].values.map((item)=>[item.value])}
+         options={parsedPicklists[6].values.map((item)=>item.value)}
         className={`w-full px-3  border rounded `}
         width={350}
           error={errors.preferredArrangement}

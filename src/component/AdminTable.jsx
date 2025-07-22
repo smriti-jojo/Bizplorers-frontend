@@ -58,7 +58,11 @@ const AdminUserTable = () => {
       const result = await response.json();
 console.log("userResults---",result);
       if (response.ok) {
-        setUserData(result.data);
+        const resultData=result.data;
+        const sortedByRegisteredOnDesc = resultData.sort(
+  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+);
+        setUserData(sortedByRegisteredOnDesc);
       } else {
         console.error("Error fetching users:", result.message);
       }

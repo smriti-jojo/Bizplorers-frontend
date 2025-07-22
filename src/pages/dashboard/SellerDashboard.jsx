@@ -460,6 +460,7 @@ const SellerDashboard = () => {
    const [countries, setCountries] = useState([]);
    const[preferredArrangement,setPreferredArrangement]=useState([]);
     const[saleReason,setSaleReason]=useState([]);
+     const[businessCategoryArray,setbusinessCategoryArray]=useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const[loading,setLoading]=useState(false);
@@ -530,6 +531,12 @@ const SellerDashboard = () => {
     label: c.value,
   }));
   setPreferredArrangement(arrangemapped);
+  const businessCategoryArray = parsedPicklists[0]?.values || [];
+  const businessCategorymapped = businessCategoryArray.map((c) => ({
+    id: c.id,
+    label: c.value,
+  }));
+  setbusinessCategoryArray(businessCategorymapped);
 
 }, []);
 
@@ -581,9 +588,18 @@ const SellerDashboard = () => {
 const handleChange = (field, selectedValue) => {
   console.log("Field:", field);
   console.log("Value:", selectedValue);
+// let valueToSelect;
+//   if(field==='businessCategory'){
+// valueToSelect=selectedValue.value;
+//   }
+//   else{
+//     valueToSelect=selectedValue;
+//   }
 
   setFormData((prev) => {
-    const next = { ...prev, [field]: selectedValue };
+    // const next = { ...prev, [field]: valueToSelect};
+     const next = { ...prev, [field]: selectedValue};
+
 
     // Reset dependent fields
     if (field === "country" || field.endsWith("Country")) {
@@ -776,7 +792,7 @@ const fetchCityByStateData = async (id) => {
             <EditableRow label="Founded Year" value={formData.year} editable={isEditing} onChange={(v) => handleChange("year", v)} options={["2025", "2024", "2023", "2022", "2021", "2020"]} />
             <EditableRow label="Founded Month" value={formData.month} editable={isEditing} onChange={(v) => handleChange("month", v)} options={["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]}/>
             <EditableRow label="Business Description" value={formData.description_business} editable={isEditing} onChange={(v) => handleChange("description_business", v)} type="textarea" />
-            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={parsedPicklists[0]?.values} />
+            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={businessCategoryArray} />
             <EditableRow label="Entity Structure" value={formData.entityStructure} editable={isEditing} onChange={(v) => handleChange("entityStructure", v)} options={parsedPicklists[4]?.values} />
           </Section>
 
