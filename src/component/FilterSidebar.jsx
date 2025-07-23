@@ -6,6 +6,11 @@ const SellerFilterSidebar = ({ filters, setFilters, onReset }) => {
   const [showFilters, setShowFilters] = useState(true);
   const[picklistData,setpicklistData]=useState([]);
 
+  const picklists = localStorage.getItem("picklists");
+  const parsedPicklists = picklists ? JSON.parse(picklists) : null;
+  console.log("parsedPicklists-----", parsedPicklists);
+  console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
@@ -44,17 +49,8 @@ useEffect(() => {
           <label className="block text-sm font-medium mb-1">Select Category of Business</label>
 <select name="category" value={filters.category} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
   <option value="">All</option>
-  {[
-    "E-commerce",
-    "Offline Retail",
-    "Fintech",
-    "Edtech",
-    "Saas",
-    "Education & training",
-    "Restaurant/café",
-    "Mobile App",
-  ].map((item, index) => (
-    <option key={index} value={item}>{item}</option>
+  {parsedPicklists[0].values.map((item, index) => (
+    <option key={index} value={item.value}>{item.value}</option>
   ))}
  
 </select>
@@ -66,10 +62,8 @@ useEffect(() => {
             <option value="">All</option>
             {/* <option value="active">Active</option>
             <option value="passive">Passive</option> */}
-            {[
-    "Cash", "Stock", "Royalty","Acquihire"
-  ].map((item, index) => (
-    <option key={index} value={item}>{item}</option>
+            {parsedPicklists[5].values.map((item, index) => (
+    <option key={index} value={item.value}>{item.value}</option>
   ))}
  
           </select>
@@ -114,8 +108,11 @@ useEffect(() => {
           <label className="block text-sm font-medium mb-1">Select Country</label>
           <select name="country" value={filters.country} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
             <option value="">All</option>
-            <option value="india">India</option>
-            <option value="usa">USA</option>
+            {parsedPicklists[2].values.map((item,index)=>(
+               <option  key={index} value={item.value}>{item.value}</option>
+            ))}
+            {/* <option value="india">India</option>
+            <option value="usa">USA</option> */}
           </select>
 
           {/* Entity Structure */}
@@ -124,10 +121,9 @@ useEffect(() => {
          
           <select name="entityStructure" value={filters.entityStructure} onChange={handleChange} className="w-full p-2 mb-4 border rounded">
             <option value="">All</option>
-       {["PartnerShip", "LLP", "Private Ltd", "Public Ltd"]
-  .map((item, index) => (
-    <option key={index} value={item}>{item}</option>
-  ))}
+       {parsedPicklists[4].values.map((item,index)=>(
+               <option  key={index} value={item.value}>{item.value}</option>
+            ))}
            
           </select>
 

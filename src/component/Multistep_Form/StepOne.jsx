@@ -141,6 +141,7 @@ const StepOne = ({ formData, handleChange,errors,type ,registerData,handleRegist
         <input
           name="phone"
           type="tel"
+          maxLength={10}
           placeholder="Enter Mobile Number"
           value={registerData.phone}
           onChange={handleRegisterChange}

@@ -203,6 +203,8 @@ const Seller = () => {
   const [allBusinesses, setAllBusinesses] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  
+
   const [filters, setFilters] = useState({
     category: "",
     preferredManagement: "",

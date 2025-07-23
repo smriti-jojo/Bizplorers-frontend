@@ -63,7 +63,12 @@ console.log("dataToSend---dataToSend",dataToSend);
       if (response.ok) {
         toast.success(`${type === 'buyer' ? 'Invite' : 'Interest'} sent successfully!`);
       } else {
-        toast.error(data.error || 'Error sending interest');
+        // toast.error(data.error || 'Error sending interest');
+        if (response.status === 404 || data.error === 'Sender or receiver not found.') {
+      toast.error('Buyer/Seller Id Registered by Broker');
+    } else {
+      toast.error(data.error || 'Error sending interest');
+    }
       }
     } catch (err) {
       toast.error('Network error');

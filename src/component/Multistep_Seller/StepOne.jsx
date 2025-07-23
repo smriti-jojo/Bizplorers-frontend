@@ -83,7 +83,27 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
            
         />
         </div>
-        <div className='w-1/3'>
+      <div className="w-1/3">
+  <h1>Mobile Number</h1>
+  <input
+    name="phone"
+    type="tel"
+    placeholder="Enter Mobile Number"
+    value={registerData.phone}
+    onChange={handleRegisterChange}
+    maxLength={10} // This prevents more than 10 characters
+    className={`w-full border rounded-md p-2 ${
+      errors.phone ? 'border-red-500' : 'border-gray-300'
+    }`}
+    required
+  />
+  {errors.phone && (
+    <p className="text-red-500 text-sm mt-1">Mobile number must be 10 digits</p>
+  )}
+</div>
+
+
+        {/* <div className='w-1/3'>
            <h1>Mobile Number</h1>
         <input
           name="phone"
@@ -98,7 +118,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
           required
          
         />
-        </div>
+        </div> */}
         </div>
       <div className="py-2">
         <h1>Company Name</h1>

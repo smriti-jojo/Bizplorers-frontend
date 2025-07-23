@@ -595,10 +595,17 @@ const handleChange = (field, selectedValue) => {
 //   else{
 //     valueToSelect=selectedValue;
 //   }
+let valueToSelect;
+  if(field==='businessCategory' || field==='preferredArrangement'){
+valueToSelect=selectedValue.label;
+  }
+  else{
+    valueToSelect=selectedValue;
+  }
 
   setFormData((prev) => {
     // const next = { ...prev, [field]: valueToSelect};
-     const next = { ...prev, [field]: selectedValue};
+     const next = { ...prev, [field]: valueToSelect};
 
 
     // Reset dependent fields

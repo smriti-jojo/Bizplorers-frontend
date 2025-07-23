@@ -19,6 +19,11 @@ import avatar from '../assests/pic.jpg';
 export const BuyerCard = ({ buyer, type }) => {
   const token = localStorage.getItem('token');
 
+  const picklists = localStorage.getItem("picklists");
+  const parsedPicklists = picklists ? JSON.parse(picklists) : null;
+  console.log("parsedPicklists-----", parsedPicklists);
+  console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]); 
+
   return (
     <div className="relative">
       <div className="w-[350px] border-2 border-slate-300 rounded-md p-4 shadow-lg shadow-slate-400 bg-white">
@@ -94,6 +99,10 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
+   const picklists = localStorage.getItem("picklists");
+  const parsedPicklists = picklists ? JSON.parse(picklists) : null;
+  console.log("parsedPicklists-----", parsedPicklists);
+  console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]);
   return (
     <div className="w-full md:w-64 bg-white p-4 rounded-lg shadow-md">
       <h2 className="text-lg font-semibold mb-4">Filter Buyers</h2>
@@ -106,9 +115,9 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("businesslocationCities", e.target.value)}
         >
           <option value="">All</option>
-          <option value="Mumbai">Mumbai</option>
-          <option value="Bangalore">Bangalore</option>
-          <option value="Delhi">Delhi</option>
+           {parsedPicklists[1].values.map((item,index)=>(
+               <option  key={index} value={item.value}>{item.value}</option>
+            ))}
         </select>
       </div>
 
@@ -120,8 +129,9 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("typeOfBuyer", e.target.value)}
         >
           <option value="">All</option>
-          <option value="Individual">Individual</option>
-          <option value="Organization">Organization</option>
+          {parsedPicklists[7].values.map((item,index)=>(
+               <option  key={index} value={item.value}>{item.value}</option>
+            ))}
         </select>
       </div>
 
@@ -159,14 +169,9 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("businessCategories", e.target.value)}
         >
           <option value="">All</option>
-          <option value="E-commerce">E-commerce</option>
-          <option value="Offline Retail">Offline Retail</option>
-          <option value="Fintech">Fintech</option>
-          <option value="Edtech">Edtech</option>
-          <option value="Saas">Saas</option>
-          <option value="Education & training">Education  & training</option>
-          <option value="Restaurant/café">Restaurant/café</option>
-          <option value="Mobile App">Mobile App</option>
+          {parsedPicklists[0].values.map((item,index)=>(
+               <option  key={index} value={item.value}>{item.value}</option>
+            ))}
         </select>
       </div>
 
@@ -178,10 +183,9 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("preferredArrangement", e.target.value)}
         >
           <option value="">All</option>
-          <option value="Cash">Cash</option>
-          <option value="Stock">Stock</option>
-          <option value="Royalty">Royalty</option>
-          <option value="Acquihire">Acquihire</option>
+           {parsedPicklists[5].values.map((item,index)=>(
+               <option  key={index} value={item.value}>{item.value}</option>
+            ))}
         </select>
       </div>
 
@@ -197,6 +201,212 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
   );
 };
 
+// const Buyer = () => {
+//   const [allBuyers, setAllBuyer] = useState([]);
+//   const [loading, setLoading] = useState(false);
+
+//   const [filters, setFilters] = useState({
+//     businesslocationCities: "",
+//     typeOfBuyer: "",
+//     openToPreRevenue: "",
+//     openToPreBreakeven: "",
+//     ticketSizeMin: "",
+//     ticketSizeMax: "",
+//     businessCategories: "",
+//     preferredArrangement: "",
+    
+//   });
+
+//   const resetFilters = () => {
+//     setFilters({
+//       businesslocationCities: "",
+//       typeOfBuyer: "",
+//       openToPreRevenue: "",
+//       openToPreBreakeven: "",
+//       ticketSizeMin: "",
+//       ticketSizeMax: "",
+//       businessCategories: "",
+//       preferredArrangement: "",
+     
+//     });
+//   };
+
+//   const fetchBuyerData = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await fetch("https://bizplorers-backend.onrender.com/api/buyer/getAllBuyer");
+//       if (!response.ok) throw new Error("Failed to fetch");
+//       const data = await response.json();
+//       setAllBuyer(data);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//     setLoading(false);
+//   };
+
+//   useEffect(() => {
+//     fetchBuyerData();
+//   }, []);
+
+//   const parseNumber = (value) => {
+//     if (!value) return 0;
+//     if (value.includes("Cr")) {
+//       return parseFloat(value.replace(/[^\d.]/g, "")) * 10000000;
+//     } else if (value.includes("L")) {
+//       return parseFloat(value.replace(/[^\d.]/g, "")) * 100000;
+//     }
+//     return parseFloat(value.replace(/[^\d.]/g, ""));
+//   };
+
+//   // const filteredBuyers = allBuyers.filter((buyer) => {
+//   //   const matchesCity = filters.businesslocationCities
+//   //     ? buyer.businesslocationCities === filters.businesslocationCities
+//   //     : true;
+
+//   //   const matchesType = filters.typeOfBuyer
+//   //     ? buyer.typeOfBuyer === filters.typeOfBuyer
+//   //     : true;
+
+//   //   const matchesPreRevenue = filters.openToPreRevenue
+//   //     ? buyer.openToPreRevenue === filters.openToPreRevenue
+//   //     : true;
+
+//   //   const matchesPreBreakeven = filters.openToPreBreakeven
+//   //     ? buyer.openToPreBreakeven === filters.openToPreBreakeven
+//   //     : true;
+
+//   //   const matchesMinTicket = filters.ticketSizeMin
+//   //     ? parseNumber(buyer.ticketSizeMin) >= parseFloat(filters.ticketSizeMin)
+//   //     : true;
+
+//   //   const matchesMaxTicket = filters.ticketSizeMax
+//   //     ? parseNumber(buyer.ticketSizeMax) <= parseFloat(filters.ticketSizeMax)
+//   //     : true;
+
+//   //   const matchesInterest = filters.businessCategories
+//   //     ? buyer.businessCategories === filters.businessCategories
+//   //     : true;
+
+//   //   const matchesArrangement = filters.preferredArrangement
+//   //     ? buyer.preferredArrangement === filters.preferredArrangement
+//   //     : true;
+
+//   //   return (
+//   //     matchesCity &&
+//   //     matchesType &&
+//   //     matchesPreRevenue &&
+//   //     matchesPreBreakeven &&
+//   //     matchesMinTicket &&
+//   //     matchesMaxTicket &&
+//   //     matchesInterest &&
+//   //     matchesArrangement
+//   //   );
+//   // });
+
+//   const filteredBuyers = allBuyers.filter((buyer) => {
+//   // Convert filter values to appropriate types
+//   const filterPreRevenue = filters.openToPreRevenue === "yes" ? true : 
+//                          filters.openToPreRevenue === "no" ? false : null;
+//   const filterPreBreakeven = filters.openToPreBreakeven === "yes" ? true : 
+//                            filters.openToPreBreakeven === "no" ? false : null;
+
+//                            const selectedCategory = filters.businessCategories?.trim().toLowerCase();
+
+//   const matchesCategory =
+//     !selectedCategory ||
+//     (Array.isArray(buyer.businessCategories) &&
+//       buyer.businessCategories.some(
+//         (cat) =>
+//           typeof cat === "string" &&
+//           cat.trim().toLowerCase() === selectedCategory
+//       ));
+
+
+//                            const categories = Array.isArray(buyer.businessCategories)
+//     ? buyer.businessCategories
+//     : typeof buyer.businessCategories === "string"
+//       ? buyer.businessCategories.split(',').map(c => c.trim())
+//       : [];
+
+//       if (filters.businessCategories) {
+//     const normalizedCategories = Array.isArray(buyer.businessCategories)
+//       ? buyer.businessCategories
+//           .filter((c) => typeof c === "string")
+//           .map((c) => c.trim().toLowerCase())
+//       : [];
+
+//     console.log("FILTER (normalized):", selectedCategory);
+//     console.log("BUYER CATEGORIES (normalized):", normalizedCategories);
+//   }
+
+
+//   return (
+//     // City filter - check if city array includes the filter value
+//     (!filters.businesslocationCities || 
+//      (buyer.businesslocationCities && 
+//       buyer.businesslocationCities.includes(filters.businesslocationCities))) &&
+    
+//     // Type filter - fixed typo in "Organization"
+//     (!filters.typeOfBuyer || 
+//      buyer.typeOfBuyer.toLowerCase() === filters.typeOfBuyer.toLowerCase()) &&
+    
+//     // Pre-revenue filter - handle boolean comparison
+//     (filters.openToPreRevenue === "" || 
+//      buyer.openToPreRevenue === filterPreRevenue) &&
+    
+//     // Pre-breakeven filter - handle boolean comparison
+//     (filters.openToPreBreakeven === "" || 
+//      buyer.openToPreBreakeven === filterPreBreakeven) &&
+    
+//     // Ticket size filters
+//     (!filters.ticketSizeMin || 
+//      (buyer.ticketSizeMin && buyer.ticketSizeMin >= parseFloat(filters.ticketSizeMin))) &&
+//     (!filters.ticketSizeMax || 
+//      (buyer.ticketSizeMax && buyer.ticketSizeMax <= parseFloat(filters.ticketSizeMax))) &&
+    
+//     // Business categories - check if array includes the filter value
+//      (!filters.businessCategories ||
+//       categories
+//         .filter(c => typeof c === "string")
+//         .map(c => c.trim().toLowerCase())
+//         .includes(filters.businessCategories.trim().toLowerCase())) &&
+    
+//     // Preferred arrangement - check if array includes the filter value
+//     (!filters.preferredArrangement || 
+//      (buyer.preferredArrangement && 
+//       buyer.preferredArrangement.includes(filters.preferredArrangement)))
+//   );
+// });
+
+//   return (
+//     <div>
+//       <Header />
+//       <div className="flex flex-col md:flex-row p-6 bg-gray-50 min-h-screen gap-6 pt-[5rem]">
+//         <BuyerFilterSidebar filters={filters} setFilters={setFilters} onReset={resetFilters} />
+//         <div className="flex-1">
+//           <div className="flex justify-between items-center mb-4">
+//             <h1 className="text-xl font-bold">{filteredBuyers.length} Buyers Found</h1>
+//           </div>
+
+//           {loading ? (
+//             <div className="flex justify-center w-full min-h-screen">
+//               <CircularProgress />
+//             </div>
+//           ) : (
+//             <div className="flex flex-wrap gap-y-7 gap-x-7 w-full">
+//               {filteredBuyers.map((buyer, index) => (
+//                 <div key={index} className="">
+//                   <ReusableCards type="buyer" data={buyer} location="home" />
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//       <Footer />
+//     </div>
+//   );
+// };
 const Buyer = () => {
   const [allBuyers, setAllBuyer] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -210,7 +420,6 @@ const Buyer = () => {
     ticketSizeMax: "",
     businessCategories: "",
     preferredArrangement: "",
-    
   });
 
   const resetFilters = () => {
@@ -223,7 +432,6 @@ const Buyer = () => {
       ticketSizeMax: "",
       businessCategories: "",
       preferredArrangement: "",
-     
     });
   };
 
@@ -254,93 +462,52 @@ const Buyer = () => {
     return parseFloat(value.replace(/[^\d.]/g, ""));
   };
 
-  // const filteredBuyers = allBuyers.filter((buyer) => {
-  //   const matchesCity = filters.businesslocationCities
-  //     ? buyer.businesslocationCities === filters.businesslocationCities
-  //     : true;
-
-  //   const matchesType = filters.typeOfBuyer
-  //     ? buyer.typeOfBuyer === filters.typeOfBuyer
-  //     : true;
-
-  //   const matchesPreRevenue = filters.openToPreRevenue
-  //     ? buyer.openToPreRevenue === filters.openToPreRevenue
-  //     : true;
-
-  //   const matchesPreBreakeven = filters.openToPreBreakeven
-  //     ? buyer.openToPreBreakeven === filters.openToPreBreakeven
-  //     : true;
-
-  //   const matchesMinTicket = filters.ticketSizeMin
-  //     ? parseNumber(buyer.ticketSizeMin) >= parseFloat(filters.ticketSizeMin)
-  //     : true;
-
-  //   const matchesMaxTicket = filters.ticketSizeMax
-  //     ? parseNumber(buyer.ticketSizeMax) <= parseFloat(filters.ticketSizeMax)
-  //     : true;
-
-  //   const matchesInterest = filters.businessCategories
-  //     ? buyer.businessCategories === filters.businessCategories
-  //     : true;
-
-  //   const matchesArrangement = filters.preferredArrangement
-  //     ? buyer.preferredArrangement === filters.preferredArrangement
-  //     : true;
-
-  //   return (
-  //     matchesCity &&
-  //     matchesType &&
-  //     matchesPreRevenue &&
-  //     matchesPreBreakeven &&
-  //     matchesMinTicket &&
-  //     matchesMaxTicket &&
-  //     matchesInterest &&
-  //     matchesArrangement
-  //   );
-  // });
-
   const filteredBuyers = allBuyers.filter((buyer) => {
-  // Convert filter values to appropriate types
-  const filterPreRevenue = filters.openToPreRevenue === "yes" ? true : 
-                         filters.openToPreRevenue === "no" ? false : null;
-  const filterPreBreakeven = filters.openToPreBreakeven === "yes" ? true : 
-                           filters.openToPreBreakeven === "no" ? false : null;
+    const normalizeText = (text) =>
+      text.toLowerCase().trim().replace(/\s+/g, ' ');
 
-  return (
-    // City filter - check if city array includes the filter value
-    (!filters.businesslocationCities || 
-     (buyer.businesslocationCities && 
-      buyer.businesslocationCities.includes(filters.businesslocationCities))) &&
-    
-    // Type filter - fixed typo in "Organization"
-    (!filters.typeOfBuyer || 
-     buyer.typeOfBuyer.toLowerCase() === filters.typeOfBuyer.toLowerCase()) &&
-    
-    // Pre-revenue filter - handle boolean comparison
-    (filters.openToPreRevenue === "" || 
-     buyer.openToPreRevenue === filterPreRevenue) &&
-    
-    // Pre-breakeven filter - handle boolean comparison
-    (filters.openToPreBreakeven === "" || 
-     buyer.openToPreBreakeven === filterPreBreakeven) &&
-    
-    // Ticket size filters
-    (!filters.ticketSizeMin || 
-     (buyer.ticketSizeMin && buyer.ticketSizeMin >= parseFloat(filters.ticketSizeMin))) &&
-    (!filters.ticketSizeMax || 
-     (buyer.ticketSizeMax && buyer.ticketSizeMax <= parseFloat(filters.ticketSizeMax))) &&
-    
-    // Business categories - check if array includes the filter value
-    (!filters.businessCategories || 
-     (buyer.businessCategories && 
-      buyer.businessCategories.includes(filters.businessCategories))) &&
-    
-    // Preferred arrangement - check if array includes the filter value
-    (!filters.preferredArrangement || 
-     (buyer.preferredArrangement && 
-      buyer.preferredArrangement.includes(filters.preferredArrangement)))
-  );
-});
+    const selectedCategory = filters.businessCategories
+      ? normalizeText(filters.businessCategories)
+      : null;
+
+    const matchesCategory =
+      !selectedCategory ||
+      (Array.isArray(buyer.businessCategories) &&
+        buyer.businessCategories.some(
+          (cat) =>
+            typeof cat === "string" &&
+            normalizeText(cat) === selectedCategory
+        ));
+
+    const filterPreRevenue =
+      filters.openToPreRevenue === "yes" ? true :
+      filters.openToPreRevenue === "no" ? false : null;
+
+    const filterPreBreakeven =
+      filters.openToPreBreakeven === "yes" ? true :
+      filters.openToPreBreakeven === "no" ? false : null;
+
+    return (
+      (!filters.businesslocationCities ||
+        (buyer.businesslocationCities &&
+          buyer.businesslocationCities.includes(filters.businesslocationCities))) &&
+      (!filters.typeOfBuyer ||
+        (buyer.typeOfBuyer &&
+          buyer.typeOfBuyer.toLowerCase() === filters.typeOfBuyer.toLowerCase())) &&
+      (filters.openToPreRevenue === "" ||
+        buyer.openToPreRevenue === filterPreRevenue) &&
+      (filters.openToPreBreakeven === "" ||
+        buyer.openToPreBreakeven === filterPreBreakeven) &&
+      (!filters.ticketSizeMin ||
+        (buyer.ticketSizeMin && parseNumber(buyer.ticketSizeMin) >= parseFloat(filters.ticketSizeMin))) &&
+      (!filters.ticketSizeMax ||
+        (buyer.ticketSizeMax && parseNumber(buyer.ticketSizeMax) <= parseFloat(filters.ticketSizeMax))) &&
+      matchesCategory &&
+      (!filters.preferredArrangement ||
+        (buyer.preferredArrangement &&
+          buyer.preferredArrangement.includes(filters.preferredArrangement)))
+    );
+  });
 
   return (
     <div>
@@ -359,7 +526,7 @@ const Buyer = () => {
           ) : (
             <div className="flex flex-wrap gap-y-7 gap-x-7 w-full">
               {filteredBuyers.map((buyer, index) => (
-                <div key={index} className="">
+                <div key={index}>
                   <ReusableCards type="buyer" data={buyer} location="home" />
                 </div>
               ))}
@@ -371,5 +538,6 @@ const Buyer = () => {
     </div>
   );
 };
+
 
 export default Buyer;
