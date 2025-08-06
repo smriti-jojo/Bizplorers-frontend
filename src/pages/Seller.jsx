@@ -289,10 +289,35 @@ const Seller = () => {
     const matchesCountry = country
       ? biz.country?.toLowerCase() === country.toLowerCase()
       : true;
-    const matchesEntity =
-      entityStructure && biz.entityStructure
-        ? biz.entityStructure.toLowerCase() === entityStructure.toLowerCase()
-        : true;
+    // const matchesEntity =
+    //   entityStructure && biz.entityStructure
+    //     ? biz.entityStructure.toLowerCase() === entityStructure.toLowerCase()
+    //     : true;
+
+    const normalize = (val) => val?.toString().trim().toLowerCase();
+
+const matchesEntity =
+  normalize(entityStructure) && normalize(biz.entityStructure)
+    ? normalize(biz.entityStructure) === normalize(entityStructure)
+    : true;
+
+    
+
+  //   const matchesEntity =
+  // entityStructure
+  //   ? biz.entityStructure?.toLowerCase?.() === entityStructure.toLowerCase()
+  //   : true;
+
+     if (!matchesEntity) {
+  console.log(
+    "❌ Entity mismatch:",
+    "| Filter:",
+    normalize(entityStructure),
+    "| Biz:",
+    normalize(biz.entityStructure)
+  );
+}
+
 
     return (
       matchesCategory &&
@@ -350,11 +375,14 @@ const Seller = () => {
                 </div>
               ) : (
                 <div className="flex flex-wrap gap-y-7 gap-x-7 w-full">
-                  {filteredBusinesses.map((card, index) => (
-                    <div key={index}>
+                  {filteredBusinesses.map((card, index) => {
+                   
+                    console.log("Rendering card with entity:", card.entityStructure);
+                    return(
+                   <div key={index}>
                       <ReusableCards type="seller" data={card} location={'home'}/>
                     </div>
-                  ))}
+)})}
                 </div>
               )}
             </div>

@@ -16,93 +16,110 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Button } from '@mui/material';
 import avatar from '../assests/pic.jpg';
 
-export const BuyerCard = ({ buyer, type }) => {
-  const token = localStorage.getItem('token');
+// export const BuyerCard = ({ buyer, type }) => {
+//   const token = localStorage.getItem('token');
 
-  const picklists = localStorage.getItem("picklists");
-  const parsedPicklists = picklists ? JSON.parse(picklists) : null;
-  console.log("parsedPicklists-----", parsedPicklists);
-  console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]); 
+//   const picklists = localStorage.getItem("picklists");
+//   const parsedPicklists = picklists ? JSON.parse(picklists) : null;
+//   console.log("parsedPicklists-----", parsedPicklists);
+//   console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]); 
 
-  return (
-    <div className="relative">
-      <div className="w-[350px] border-2 border-slate-300 rounded-md p-4 shadow-lg shadow-slate-400 bg-white">
-        <div className="flex gap-3 py-1">
-          <div><EmailIcon fontSize="7px" className="mr-1 text-blue-400" /> Email</div>
-          <div><PhoneIcon fontSize="7px" className="mr-1 text-green-400" /> Phone</div>
-          <div><LinkedInIcon fontSize="7px" className="mr-1 text-red-500" /> LinkedIn</div>
-        </div>
+//   return (
+//     <div className="relative">
+//       <div className="w-[350px] border-2 border-slate-300 rounded-md p-4 shadow-lg shadow-slate-400 bg-white">
+//         <div className="flex gap-3 py-1">
+//           <div><EmailIcon fontSize="7px" className="mr-1 text-blue-400" /> Email</div>
+//           <div><PhoneIcon fontSize="7px" className="mr-1 text-green-400" /> Phone</div>
+//           <div><LinkedInIcon fontSize="7px" className="mr-1 text-red-500" /> LinkedIn</div>
+//         </div>
 
-        <div className="flex justify-between py-1">
-          <div>
-            {buyer.businessCategories
-              ? buyer.businessCategories
-              : 'Looking to acquire businesses in the tech and F&B sectors.'}
-          </div>
-          <div>
-            <img src={avatar} alt="buyer" width="100px" className="rounded-md" />
-          </div>
-        </div>
+//         <div className="flex justify-between py-1">
+//           <div>
+//             {buyer.businessCategories
+//               ? buyer.businessCategories
+//               : 'Looking to acquire businesses in the tech and F&B sectors.'}
+//           </div>
+//           <div>
+//             <img src={avatar} alt="buyer" width="100px" className="rounded-md" />
+//           </div>
+//         </div>
 
-        <div className="py-1">
-          <StarIcon fontSize="small" className="mr-1 text-yellow-400" />
-          9.1 <span className="ml-3">
-            <LocationPinIcon fontSize="small" className="mr-1 text-red-500" />
-            {buyer.businesslocationCities ? buyer.businesslocationCities : 'Mumbai'}
-          </span>
-        </div>
+//         <div className="py-1">
+//           <StarIcon fontSize="small" className="mr-1 text-yellow-400" />
+//           9.1 <span className="ml-3">
+//             <LocationPinIcon fontSize="small" className="mr-1 text-red-500" />
+//             {buyer.businesslocationCities ? buyer.businesslocationCities : 'Mumbai'}
+//           </span>
+//         </div>
 
-        <div className="p-4 bg-slate-100 space-y-2">
-          <div className="flex justify-between text-[15px]">
-            Open to Pre-Revenue <span className="text-green-600">{buyer.openToPreRevenue? 'Yes' : 'No'}</span>
-          </div>
-          <div className="flex justify-between text-[15px]">
-            Open to Pre-Breakeven <span className="text-green-600">{buyer.openToPreBreakeven === 'yes' ? 'Yes' : 'No'}</span>
-          </div>
-        </div>
+//         <div className="p-4 bg-slate-100 space-y-2">
+//           <div className="flex justify-between text-[15px]">
+//             Open to Pre-Revenue <span className="text-green-600">{buyer.openToPreRevenue? 'Yes' : 'No'}</span>
+//           </div>
+//           <div className="flex justify-between text-[15px]">
+//             Open to Pre-Breakeven <span className="text-green-600">{buyer.openToPreBreakeven === 'yes' ? 'Yes' : 'No'}</span>
+//           </div>
+//         </div>
 
-        <div className="flex justify-between py-2">
-          <div className="w-[60%]">
-            <h1>Ticket Size <InfoIcon fontSize="small" /></h1>
-            <div className="flex items-end gap-1 text-blue-700">
-              <p className="text-[12px]">INR</p>
-              <h1 className={token ? 'text-2xl font-bold' : 'text-2xl font-bold blur-sm'}>
-                {buyer.ticketSizeMin ? buyer.ticketSizeMin : '25L'} - {buyer.ticketSizeMax ? buyer.ticketSizeMax : '1Cr'}
-              </h1>
-            </div>
-          </div>
-          <div className="flex items-center">
-            {/* <Button variant="contained" className="!bg-yellow-400 !text-black !w-[150px] !text-[0.7rem] !py-3">
-              Contact Buyer
-            </Button> */}
-            {/* <SendInterestButton type={'buyer'}/> */}
-          </div>
-        </div>
-      </div>
+//         <div className="flex justify-between py-2">
+//           <div className="w-[60%]">
+//             <h1>Ticket Size <InfoIcon fontSize="small" /></h1>
+//             <div className="flex items-end gap-1 text-blue-700">
+//               <p className="text-[12px]">INR</p>
+//               <h1 className={token ? 'text-2xl font-bold' : 'text-2xl font-bold blur-sm'}>
+//                 {buyer.ticketSizeMin ? buyer.ticketSizeMin : '25L'} - {buyer.ticketSizeMax ? buyer.ticketSizeMax : '1Cr'}
+//               </h1>
+//             </div>
+//           </div>
+//           <div className="flex items-center">
+//             {/* <Button variant="contained" className="!bg-yellow-400 !text-black !w-[150px] !text-[0.7rem] !py-3">
+//               Contact Buyer
+//             </Button> */}
+//             {/* <SendInterestButton type={'buyer'}/> */}
+//           </div>
+//         </div>
+//       </div>
 
-      {type === 'home' ? (
-        <span className="absolute top-5 right-10 z-10 inline-block bg-blue-500 rotate-45 text-white text-xs font-semibold px-2.5 py-0.5 shadow">
-          Verified
-        </span>
-      ) : (
-        <span className="absolute top-5 -right-2 z-10 inline-block bg-blue-500 rotate-45 text-white text-xs font-semibold px-2.5 py-0.5 shadow">
-          Verified
-        </span>
-      )}
-    </div>
-  );
-};
+//       {type === 'home' ? (
+//         <span className="absolute top-5 right-10 z-10 inline-block bg-blue-500 rotate-45 text-white text-xs font-semibold px-2.5 py-0.5 shadow">
+//           Verified
+//         </span>
+//       ) : (
+//         <span className="absolute top-5 -right-2 z-10 inline-block bg-blue-500 rotate-45 text-white text-xs font-semibold px-2.5 py-0.5 shadow">
+//           Verified
+//         </span>
+//       )}
+//     </div>
+//   );
+// };
 
 
 const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
+   const[picklistData,setpicklistData]=useState([]);
   const handleChange = (field, value) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
   };
 
-   const picklists = localStorage.getItem("picklists");
-  const parsedPicklists = picklists ? JSON.parse(picklists) : null;
-  console.log("parsedPicklists-----", parsedPicklists);
-  console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]);
+  
+  useEffect(() => {
+  const fetchPicklists = async () => {
+    try {
+      const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+      const result = await response.json();
+      if (response.ok) {
+        setpicklistData(result.data); // Always fresh
+      } else {
+        console.error("❌ Failed to fetch picklists:", result.message);
+      }
+    } catch (err) {
+      console.error("❌ Error fetching picklists:", err);
+    }
+  };
+
+  fetchPicklists();
+}, []);
+
+  
   return (
     <div className="w-full md:w-64 bg-white p-4 rounded-lg shadow-md">
       <h2 className="text-lg font-semibold mb-4">Filter Buyers</h2>
@@ -115,7 +132,7 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("businesslocationCities", e.target.value)}
         >
           <option value="">All</option>
-           {parsedPicklists[1].values.map((item,index)=>(
+           {picklistData[1]?.values.map((item,index)=>(
                <option  key={index} value={item.value}>{item.value}</option>
             ))}
         </select>
@@ -129,7 +146,7 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("typeOfBuyer", e.target.value)}
         >
           <option value="">All</option>
-          {parsedPicklists[7].values.map((item,index)=>(
+          {picklistData[7]?.values.map((item,index)=>(
                <option  key={index} value={item.value}>{item.value}</option>
             ))}
         </select>
@@ -169,7 +186,7 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("businessCategories", e.target.value)}
         >
           <option value="">All</option>
-          {parsedPicklists[0].values.map((item,index)=>(
+          {picklistData[0]?.values.map((item,index)=>(
                <option  key={index} value={item.value}>{item.value}</option>
             ))}
         </select>
@@ -183,7 +200,7 @@ const BuyerFilterSidebar = ({ filters, setFilters, onReset }) => {
           onChange={(e) => handleChange("preferredArrangement", e.target.value)}
         >
           <option value="">All</option>
-           {parsedPicklists[5].values.map((item,index)=>(
+           {picklistData[5]?.values.map((item,index)=>(
                <option  key={index} value={item.value}>{item.value}</option>
             ))}
         </select>

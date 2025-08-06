@@ -183,9 +183,9 @@ const StepTwo = ({ formData, handleChange, errors }) => (
  
       {/**ASSETS */}
       <div>
-        <h1 className="text-2xl font-semibold pt-[3%]">ASSESTS</h1>
+        <h1 className="text-2xl font-semibold pt-[3%]">ASSETS</h1>
         <div className="pt-4">
-          <h1>Description of Key Assest/IP</h1>
+          <h1>Description of Key Asset/IP</h1>
           <TextField
           multiline
           rows={2}

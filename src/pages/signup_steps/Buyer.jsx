@@ -25,8 +25,8 @@ const RegisterBuyer = ({ type,onSuccess}) => {
         name:"",
 email:"",
     phone:"",
-   })
-  const [formData, setFormData] = useState({
+   });
+    const initialState= {
 
     typeOfBuyer: "",
     designation: "",
@@ -44,16 +44,34 @@ email:"",
     // metric: "",
     // maxMultiple: "",
     preferredArrangement: [],
-  });
+  };
+
+
+  const [formData, setFormData] = useState(initialState);
+   const[picklistData,setpicklistData]=useState([]);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-   const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=picklists?JSON.parse(picklists):null;
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistscountryyy-----",parsedPicklists[2]);
-  //  console.log("buyerStateData",buyerStateData);
-
+  
+   
+     useEffect(() => {
+       const fetchPicklists = async () => {
+         try {
+           const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+           const result = await response.json();
+           if (response.ok) {
+             setpicklistData(result.data); // Always fresh
+           } else {
+             console.error("❌ Failed to fetch picklists:", result.message);
+           }
+         } catch (err) {
+           console.error("❌ Error fetching picklists:", err);
+         }
+       };
+     
+       fetchPicklists();
+     }, []);
+   
 //   const handleChange = (e) => {
 //     const { name, multiple, selectedOptions, value } = e.target;
 //     console.log("e.target",e.target);
@@ -86,7 +104,7 @@ const handleChange = (e) => {
   let actualValue;
 
   if (name === 'businesslocationCountry') {
-    const foundItem = parsedPicklists[2]?.values.find(
+    const foundItem = picklistData[2]?.values.find(
       (item) => item.id == value
     );
     actualValue = foundItem?.value; // or use `item.id` if you need the ID
@@ -371,6 +389,7 @@ const newUser = JSON.parse(localStorage.getItem("currentBuyerBeingOnboarded"));
         console.log(response.data);
  showSuccess("Your Registration is Successful");
  onSuccess();
+setFormData(initialState);
  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
 if (!("dataFilled" in user)) {
@@ -382,7 +401,7 @@ if (!("dataFilled" in user)) {
  localStorage.setItem("refreshBuyerList", "true");
  
  localStorage.removeItem("currentUserBeingOnboarded");
-
+// setFormData([]);
         // don't navigate
       } else {
         // alert("Data submitted successfully!");

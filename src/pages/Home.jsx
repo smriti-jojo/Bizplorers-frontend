@@ -40,36 +40,99 @@ const categories = [
 const Home = () => {
   const navigate = useNavigate();
 
-  const fetchAllPicklists = async () => {
-    try {
-      const response = await fetch(
-        // "https://bizplorers-backend.onrender.com/api/picklist/get_all",
-        "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values",
-        {
-          method: "GET",
-          // headers: {
-          //   "Content-Type": "application/json",
-          // },
-        }
-      );
+//   const PICKLIST_EXPIRY = 1000 * 60 * 60 * 6; // 6 hours in milliseconds
 
-      const result = await response.json();
-      console.log("picklistResults---", result);
-      if (response.ok) {
-        // setUserData(result.data);
-        console.log("picklists--value", JSON.stringify(result.data));
-        localStorage.setItem("picklists", JSON.stringify(result.data));
-      } else {
-        console.error("Error fetching users:", result.message);
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-    }
-  };
+// // Save to localStorage
+// function savePicklistsToLocal(data, updatedAt) {
+//   const record = {
+//     data,
+//     updated_at: updatedAt,
+//     expiry: Date.now() + PICKLIST_EXPIRY,
+//   };
+//   console.log(" savePicklistsToLocal---");
+//   localStorage.setItem("picklists", JSON.stringify(record));
+// }
 
-  useEffect(() => {
-    fetchAllPicklists();
-  }, []);
+// // Load from localStorage
+// function loadPicklistsFromLocal() {
+//   const item = localStorage.getItem("picklists");
+//   if (!item) return null;
+
+//   try {
+//     const parsed = JSON.parse(item);
+//     if (Date.now() > parsed.expiry) {
+//       localStorage.removeItem("picklists");
+//       return null;
+//     }
+//     return parsed;
+//   } catch (err) {
+//     console.error("Invalid localStorage picklists");
+//     localStorage.removeItem("picklists");
+//     return null;
+//   }
+// }
+
+// // Main fetch function with caching + freshness check
+// const fetchAllPicklists = async () => {
+//   try {
+//     const local = loadPicklistsFromLocal();
+
+//     const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+//     const result = await response.json();
+//     console.log("data--picklist fetched",result);
+
+//     if (response.ok) {
+//       // If no local cache or backend is newer → update localStorage
+//       if (!local || local.updated_at !== result.updated_at) {
+//         savePicklistsToLocal(result.data, result.updated_at);
+//         console.log("📦 Picklists updated from server");
+//       } else {
+//         console.log("✅ Using cached picklists");
+//       }
+//     } else {
+//       console.error("Error fetching picklists:", result.message);
+//     }
+//   } catch (error) {
+//     console.error("Request failed:", error);
+//   }
+// };
+
+// // Run on app load or wherever needed
+// useEffect(() => {
+//   fetchAllPicklists();
+// }, []);
+
+
+  // const fetchAllPicklists = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       // "https://bizplorers-backend.onrender.com/api/picklist/get_all",
+  //       "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values",
+  //       {
+  //         method: "GET",
+  //         // headers: {
+  //         //   "Content-Type": "application/json",
+  //         // },
+  //       }
+  //     );
+
+  //     const result = await response.json();
+  //     console.log("picklistResults---", result);
+  //     if (response.ok) {
+  //       // setUserData(result.data);
+  //       console.log("picklists--value", JSON.stringify(result.data));
+  //       localStorage.setItem("picklists", JSON.stringify(result.data));
+  //     } else {
+  //       console.error("Error fetching users:", result.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Request failed:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchAllPicklists();
+  // }, []);
 
    const Mentorsettings = {
     // dots: true,
@@ -112,7 +175,7 @@ const Home = () => {
   {
     /**Mentor Slider Next Arrow */
   }
-  const NextArrow = (props: any) => {
+  const NextArrow = (props) => {
     const { onClick } = props;
     return (
       <div

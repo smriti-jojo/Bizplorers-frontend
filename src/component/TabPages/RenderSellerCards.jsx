@@ -18,11 +18,15 @@ import { toast } from "react-toastify";
 const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+let toastAlreadyShown = false;
 
 
   const RenderSellerCards = () => {
     const [openDialog, setOpenDialog] = useState(false);
+    
+
     const[cardData,setCardData]=useState([]);
+    const [refreshFlag, setRefreshFlag] = useState(false);
   const token=localStorage.getItem("token")
     const handleDialogClickOpen = () => {
       setOpenDialog(true);
@@ -50,6 +54,8 @@ const Transition = React.forwardRef((props, ref) => {
         };
  const user=JSON.parse(localStorage.getItem("user"));
  const brokerId=user.id;
+
+ 
      const fetchSellerByBrokerData = async () => {
       try {
         const response = await fetch(`https://bizplorers-backend.onrender.com/api/seller/getAllSeller/${brokerId}`, {
@@ -66,35 +72,36 @@ const Transition = React.forwardRef((props, ref) => {
         // alert('Data fetched successfully!');
         console.log("sellerbybrokerid",data);
         setCardData(data);
+          if (data.length === 0 && !toastAlreadyShown) {
+      notifyNoSeller();
+      toastAlreadyShown = true; 
+    }
       } catch (error) {
         console.error(error);
-        // alert('No Buyers found for this broker.');
-        notifyNoSeller();
+        
       }
     };
 
-useEffect(()=>{
-  if (cardData.length === 0) {
-    fetchSellerByBrokerData();
-  }
-  
-},[cardData])
 
-  const refresh=localStorage.getItem("refreshSellerList");
-useEffect(()=>{
+useEffect(() => {
   
-    fetchSellerByBrokerData();
-  localStorage.removeItem("refreshSellerList");
-  
-},[refresh])
-    // const cardData = [
-    //   { title: "Card 1", content: <ReusableCards /> },
-    //   { title: "Card 2", content: <ReusableCards /> },
-    //   { title: "Card 3", content: <ReusableCards /> },
-    //   { title: "Card 4", content: <ReusableCards /> },
-    //   { title: "Card 5", content: <ReusableCards /> },
-    //   { title: "Card 6", content: <ReusableCards /> },
-    // ];
+  fetchSellerByBrokerData(); // run once on mount
+}, []);
+
+
+
+
+
+const refresh=localStorage.getItem("refreshSellerList");
+
+  useEffect(()=>{
+    
+     fetchSellerByBrokerData();
+    localStorage.removeItem("refreshSellerList");
+    
+  },[refresh])
+
+    
 
     return (
       <>

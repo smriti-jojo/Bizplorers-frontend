@@ -215,7 +215,7 @@ const Transition = React.forwardRef((props, ref) => {
 
 // useEffect(()=>{
 //   if (cardData.length === 0) {
-//     fetchSellerByBrokerData();
+//     
 //   }
   
 // },[cardData])
@@ -593,16 +593,16 @@ const BrokerDashboard = () => {
           });
         };
 
-           const notifyNoSeller = (msg = "No Seller found for this broker!") => {
-          toast.error(msg, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            pauseOnHover: true,
-            draggable: true,
-            theme: "colored",
-          });
-        };
+        //    const notifyNoSeller = (msg = "No Seller found for this broker!") => {
+        //   toast.error(msg, {
+        //     position: "top-right",
+        //     autoClose: 3000,
+        //     hideProgressBar: false,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     theme: "colored",
+        //   });
+        // };
   const handleLogout = () => {
     localStorage.removeItem("token");
      localStorage.removeItem("user");

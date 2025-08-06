@@ -1,12 +1,28 @@
 import ReusableSelect from "../Dropdown";
+import { useState } from "react";
+import { useEffect } from "react";
 
 
 const StepOne = ({ formData, handleChange,errors,type ,registerData,handleRegisterChange}) => {
 
-  const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=JSON.parse(picklists);
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr888-----",parsedPicklists[7]);
+  const[picklistData,setpicklistData]=useState([]);
+  useEffect(() => {
+      const fetchPicklists = async () => {
+        try {
+          const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+          const result = await response.json();
+          if (response.ok) {
+            setpicklistData(result.data); // Always fresh
+          } else {
+            console.error("❌ Failed to fetch picklists:", result.message);
+          }
+        } catch (err) {
+          console.error("❌ Error fetching picklists:", err);
+        }
+      };
+    
+      fetchPicklists();
+    }, []);
 
   return(
   
@@ -171,7 +187,7 @@ const StepOne = ({ formData, handleChange,errors,type ,registerData,handleRegist
 //   id: item.id,
 //   label: item.value
 // }))}
- options={parsedPicklists[7].values.map((item)=>item.value)}
+ options={picklistData[7]?.values.map((item)=>item.value)}
               className="w-full px-3 border rounded"
               width={550}
               error={errors.typeOfBuyer}
@@ -236,7 +252,7 @@ const StepOne = ({ formData, handleChange,errors,type ,registerData,handleRegist
               value={formData.typeOfBuyer}
               onChange={handleChange}
               // options={['Individual', 'Organization']}
-              options={parsedPicklists[7].values.map((item)=>item.value)}
+              options={picklistData[7]?.values.map((item)=>item.value)}
               className="w-full px-3 border rounded"
               width={550}
               error={errors.typeOfBuyer}

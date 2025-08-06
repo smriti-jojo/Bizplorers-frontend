@@ -7,14 +7,29 @@ import {
   FormControl,
   FormHelperText,
 } from "@mui/material";
+import { useState,useEffect } from 'react';
 
 
 const StepThree = ({ formData, handleChange,errors,type }) => {
 
-     const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=JSON.parse(picklists);
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[8]);
+     const[picklistData,setpicklistData]=useState([]);
+         useEffect(() => {
+             const fetchPicklists = async () => {
+               try {
+                 const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+                 const result = await response.json();
+                 if (response.ok) {
+                   setpicklistData(result.data); // Always fresh
+                 } else {
+                   console.error("❌ Failed to fetch picklists:", result.message);
+                 }
+               } catch (err) {
+                 console.error("❌ Error fetching picklists:", err);
+               }
+             };
+           
+             fetchPicklists();
+           }, []);
 
   return(
   
@@ -22,8 +37,9 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
       <h1 className="text-2xl font-semibold ">TRANSACTION DETAILS</h1>
     <div className="flex justify-between w-full ">
       
-    <div className="w-[550px]">
-        <h1>Reason For Sale</h1>
+    <div className="w-[550px] ">
+        {/* <h1>Reason For Sale</h1> */}
+        
       {/* <ReusableSelect
       
         label="Reason for Sale"
@@ -37,9 +53,9 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
         
       /> */}
 
-       
-         <FormControl className={`${type==='modal'?'w-[350px]':'w-[500px]'}`} error={!!errors.salereason} size='small'>
-         <InputLabel>Reason for Sale</InputLabel>
+    <div className='pt-6'>
+         <FormControl className={`${type==='modal'?'w-[350px]':'w-[500px]'} `} error={!!errors.salereason} size='small'>
+         <InputLabel >Reason for Sale</InputLabel>
           <Select
             labelId="salereason"
             label="Select salereason"
@@ -48,7 +64,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
             onChange={handleChange}
             
          >
-            {parsedPicklists[6].values.map((entity,index) => (
+            {picklistData[6]?.values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -56,6 +72,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
           </Select>
           {errors.salereason && <FormHelperText>{errors.salereason}</FormHelperText>}
         </FormControl>
+        </div>
     </div>
 
 
@@ -79,7 +96,7 @@ const StepThree = ({ formData, handleChange,errors,type }) => {
 <div className=''>
   <h1 className="text-xl font-semibold mb-4">Preferred Arrangement</h1>
 <div className=" flex flex-wrap  ">
-  {parsedPicklists[5]?.values.map((option) => (
+  {picklistData[5]?.values.map((option) => (
     <button
       key={option.value}
       type="button"

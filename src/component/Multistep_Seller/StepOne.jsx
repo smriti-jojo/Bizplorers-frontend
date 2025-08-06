@@ -13,35 +13,30 @@ import {
 import ReusableSelect from "../Dropdown";
 
 
-// const countryStateCityMap = {
-//   India: {
-//     Delhi: ["New Delhi", "Dwarka", "Rohini"],
-//     Maharashtra: ["Mumbai", "Pune", "Nagpur"],
-//     Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-//   },
-//   USA: {
-//     NewYork: ["New York City", "Buffalo", "Rochester"],
-//     California: ["Los Angeles", "San Francisco", "San Diego"],
-//     Illinois: ["Chicago", "Springfield", "Naperville"],
-//   },
-//   Germany: {
-//     Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
-//     Bavaria: ["Munich", "Nuremberg", "Augsburg"],
-//     Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
-//   },
-// };
-
-
 const StepOne = ({ formData, handleChange, errors ,type,handleRegisterChange,registerData, sellerStateData,sellerCityData}) => {
   // const [cofounderLinks, setCofounderLinks] = useState(formData.cofounderLinks);
 const [cofounderLinks, setCofounderLinks] = useState(() =>
   formData.cofounderLinks?.length ? formData.cofounderLinks : [""]
 );
 
- const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=JSON.parse(picklists);
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[5]);
+  const[picklistData,setpicklistData]=useState([]);
+     useEffect(() => {
+         const fetchPicklists = async () => {
+           try {
+             const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+             const result = await response.json();
+             if (response.ok) {
+               setpicklistData(result.data); // Always fresh
+             } else {
+               console.error("❌ Failed to fetch picklists:", result.message);
+             }
+           } catch (err) {
+             console.error("❌ Error fetching picklists:", err);
+           }
+         };
+       
+         fetchPicklists();
+       }, []);
 
   useEffect(() => {
     // Push to parent if needed
@@ -174,7 +169,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
             value={formData.entityStructure}
             onChange={handleChange}
          >
-           {parsedPicklists[4].values.map((entity,index) => (
+           {picklistData[4]?.values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -196,7 +191,7 @@ const [cofounderLinks, setCofounderLinks] = useState(() =>
             
          >
          
-            {parsedPicklists[0].values.map((entity,index) => (
+            {picklistData[0]?.values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -390,7 +385,7 @@ width={350}
     label: item.value,
     value: item.id,
   }))} */}
-            {parsedPicklists[2].values.map((country) => (
+            {picklistData[2]?.values.map((country) => (
               <MenuItem key={country.id} value={country.value}>
                 {country.value}
               </MenuItem>
@@ -655,7 +650,7 @@ width={350}
             value={formData.entityStructure}
             onChange={handleChange}
          >
-            {parsedPicklists[4].values.map((entity,index) => (
+            {picklistData[4]?.values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -676,7 +671,7 @@ width={350}
             onChange={handleChange}
             
          >
-             {parsedPicklists[0].values.map((entity,index) => (
+             {picklistData[0]?.values.map((entity,index) => (
               <MenuItem key={index} value={entity.value}>
                 {entity.value}
               </MenuItem>
@@ -826,7 +821,7 @@ width={350}
     label: item.value,
     value: item.id,
   }))} */}
-            {parsedPicklists[2].values.map((country) => (
+            {picklistData[2]?.values.map((country) => (
               <MenuItem key={country.id} value={country.value}>
                 {country.value}
               </MenuItem>

@@ -6,27 +6,65 @@ const SellerFilterSidebar = ({ filters, setFilters, onReset }) => {
   const [showFilters, setShowFilters] = useState(true);
   const[picklistData,setpicklistData]=useState([]);
 
-  const picklists = localStorage.getItem("picklists");
-  const parsedPicklists = picklists ? JSON.parse(picklists) : null;
-  console.log("parsedPicklists-----", parsedPicklists);
-  console.log("parsedPicklistsbuyerrr-----", parsedPicklists[2]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+useEffect(() => {
+  const fetchPicklists = async () => {
+    try {
+      const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+      const result = await response.json();
+      if (response.ok) {
+        setpicklistData(result.data); // Always fresh
+      } else {
+        console.error("Failed to fetch picklists:", result.message);
+      }
+    } catch (err) {
+      console.error("Error fetching picklists:", err);
+    }
   };
 
-  
-useEffect(() => {
-    const SavedData = JSON.parse(localStorage.getItem("picklists"));
-    console.log("localstorage--data", SavedData);
-    if (SavedData?.data) {
-      setpicklistData(SavedData.data);
-    }
-  }, []); 
+  fetchPicklists();
+}, []);
+
+
+
+
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFilters((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
+//   const handleChange = (e) => {
+//   const { name, value } = e.target;
+//   const normalizedValue = name === "entityStructure" ? value.toLowerCase() : value;
+
+//   setFilters((prev) => ({
+//     ...prev,
+//     [name]: normalizedValue,
+//   }));
+// };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  // Normalize entityStructure value to lowercase
+  const normalizedValue =
+    name === "entityStructure" ? value.toLowerCase().trim() : value;
+
+  setFilters((prev) => ({
+    ...prev,
+    [name]: normalizedValue,
+  }));
+};
+
+
+// useEffect(() => {
+//     const SavedData = JSON.parse(localStorage.getItem("picklists"));
+//     console.log("localstorage--data", SavedData);
+//     if (SavedData?.data) {
+//       setpicklistData(SavedData.data);
+//     }
+//   }, []); 
 
   console.log("savedpicklistdata---",picklistData);
 
@@ -49,7 +87,7 @@ useEffect(() => {
           <label className="block text-sm font-medium mb-1">Select Category of Business</label>
 <select name="category" value={filters.category} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
   <option value="">All</option>
-  {parsedPicklists[0].values.map((item, index) => (
+  {picklistData[0]?.values.map((item, index) => (
     <option key={index} value={item.value}>{item.value}</option>
   ))}
  
@@ -62,7 +100,7 @@ useEffect(() => {
             <option value="">All</option>
             {/* <option value="active">Active</option>
             <option value="passive">Passive</option> */}
-            {parsedPicklists[5].values.map((item, index) => (
+            {picklistData[5]?.values.map((item, index) => (
     <option key={index} value={item.value}>{item.value}</option>
   ))}
  
@@ -108,7 +146,7 @@ useEffect(() => {
           <label className="block text-sm font-medium mb-1">Select Country</label>
           <select name="country" value={filters.country} onChange={handleChange} className="w-full p-2 mb-3 border rounded">
             <option value="">All</option>
-            {parsedPicklists[2].values.map((item,index)=>(
+            {picklistData[2]?.values.map((item,index)=>(
                <option  key={index} value={item.value}>{item.value}</option>
             ))}
             {/* <option value="india">India</option>
@@ -121,8 +159,9 @@ useEffect(() => {
          
           <select name="entityStructure" value={filters.entityStructure} onChange={handleChange} className="w-full p-2 mb-4 border rounded">
             <option value="">All</option>
-       {parsedPicklists[4].values.map((item,index)=>(
-               <option  key={index} value={item.value}>{item.value}</option>
+       {picklistData[4]?.values.map((item,index)=>(
+             <option key={index} value={item.value.toLowerCase()}>
+                {item.value}</option>
             ))}
            
           </select>

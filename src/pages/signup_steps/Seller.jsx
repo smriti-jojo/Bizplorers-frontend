@@ -25,8 +25,9 @@ const RegisterSeller = ({ type,onSuccess }) => {
           name:"",
   email:"",
       phone:"",
-     })
-  const [formData, setFormData] = useState({
+     });
+
+     const initialState= {
     
     company_name: "",
     headline:"",
@@ -65,8 +66,10 @@ const RegisterSeller = ({ type,onSuccess }) => {
     askingPrice: "",
     preferredArrangement: [],
    
-  });
+  };
+  const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
+  const[picklistData,setpicklistData]=useState([]);
   const navigate = useNavigate();
 
  
@@ -90,10 +93,24 @@ const RegisterSeller = ({ type,onSuccess }) => {
 //     setFormData((prev) => ({ ...prev, [name]: actualValue }));
 //     setErrors((prev) => ({ ...prev, [name]: "" }));
 //   };
- const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=picklists?JSON.parse(picklists):null;
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistscountryyy-----",parsedPicklists[2]);
+
+  useEffect(() => {
+    const fetchPicklists = async () => {
+      try {
+        const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+        const result = await response.json();
+        if (response.ok) {
+          setpicklistData(result.data); // Always fresh
+        } else {
+          console.error("Failed to fetch picklists:", result.message);
+        }
+      } catch (err) {
+        console.error("Error fetching picklists:", err);
+      }
+    };
+  
+    fetchPicklists();
+  }, []);
 
 
 const handleChange = (e) => {
@@ -110,21 +127,21 @@ const handleChange = (e) => {
   // const parsedValue = parseInt(value, 10);
 
   if (name === 'country') {
-    const foundCountry = parsedPicklists[2]?.values.find(item => item.value === value);
+    const foundCountry = picklistData[2]?.values.find(item => item.value === value);
      console.log("foundCountry",foundCountry);
     actualValue = value // store name instead of id
     fetchStateByCountryData(foundCountry?.id);
   }
 
   if (name === 'state') {
-    const foundState = parsedPicklists[3]?.values.find(item => item.value === value);
+    const foundState = picklistData[3]?.values.find(item => item.value === value);
     console.log("foundState",foundState);
     actualValue = value;
     fetchCityByStateData(foundState?.id);
   }
 
   if (name === 'city') {
-    const foundCity = parsedPicklists[4]?.values.find(item => item.value === value);
+    const foundCity = picklistData[4]?.values.find(item => item.value === value);
      console.log("foundCity",foundCity);
     actualValue = value;
   }
@@ -208,7 +225,7 @@ const handleChange = (e) => {
           newErrors.phone = "Phone is required";
           if (isEmpty(formData.company_name)) newErrors.company_name = "Company Name is required";
        if (isEmpty(formData.headline)) newErrors.headline = "Business Headline is required";
-          if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
+          // if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
       if (isEmpty(formData.entityStructure)) newErrors.entityStructure = "Entity Structure is required";
 
       const entity = safeTrim(formData.entityStructure);
@@ -266,7 +283,7 @@ const handleChange = (e) => {
       else{
     if (step === 1) {
       if (isEmpty(formData.company_name)) newErrors.company_name = "Company Name is required";
-      if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
+      // if (isEmpty(formData.website_url)) newErrors.website_url = "Website URL is required";
       if (isEmpty(formData.entityStructure)) newErrors.entityStructure = "Entity Structure is required";
 
       const entity = safeTrim(formData.entityStructure);
@@ -718,7 +735,7 @@ onSuccess();
    localStorage.setItem("refreshSellerList", "true");
    localStorage.removeItem("currentUserBeingOnboarded");
   
-
+setFormData(initialState);
   // don't navigate
 } else {
   // alert("Data submitted successfully!");

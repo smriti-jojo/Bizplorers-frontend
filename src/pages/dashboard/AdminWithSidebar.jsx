@@ -95,12 +95,12 @@ function Sidebar({
             is_active: true,
           }));
 
-          // ✅ For backend
+          // For backend
           picklistsForBackend[field] = uniqueValues;
         });
       }
 
-      // ✅ Send to backend
+      // Send to backend
       try {
         const response = await fetch(
           "https://bizplorers-backend.onrender.com/api/picklist/multiple_add_value",
@@ -161,12 +161,10 @@ function Sidebar({
     //     console.error("Failed to load picklists:", err);
     //   }
     // };
-
-  useEffect(() => {
-    const fetchPicklists = async () => {
+     const fetchPicklists = async () => {
       try {
         const response = await axios.get(
-          "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values",
+          "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values-admin",
           {
             headers: { Authorization: `Bearer ${token}` }, // if protected
           }
@@ -181,6 +179,26 @@ console.log("picklist--data",response.data.data);
         console.error("Failed to load picklists:", err);
       }
     };
+
+  useEffect(() => {
+//     const fetchPicklists = async () => {
+//       try {
+//         const response = await axios.get(
+//           "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values-admin",
+//           {
+//             headers: { Authorization: `Bearer ${token}` }, // if protected
+//           }
+//         );
+// console.log("picklist--data",response.data.data);
+//         const backendData = response.data.data;
+
+//         setPicklists(backendData);
+//         setManagement(Object.keys(backendData));
+//         setSelectedCategory(Object.keys(backendData)[0] || "");
+//       } catch (err) {
+//         console.error("Failed to load picklists:", err);
+//       }
+//     };
 
     fetchPicklists();
     
@@ -334,6 +352,52 @@ const [parentType,setParentType]=useState(null);
     setOpen(true);
   };
 
+
+    const fetchPicklists = async () => {
+      try {
+        const response = await axios.get(
+          "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values-admin",
+          {
+            headers: { Authorization: `Bearer ${token}` }, // if protected
+          }
+        );
+console.log("picklist--data",response.data.data);
+        const backendData = response.data.data;
+
+        setPicklists(backendData);
+        // setManagement(Object.keys(backendData));
+        // setSelectedCategory(Object.keys(backendData)[0] || "");
+      } catch (err) {
+        console.error("Failed to load picklists:", err);
+      }
+    };
+
+  useEffect(() => {
+//     const fetchPicklists = async () => {
+//       try {
+//         const response = await axios.get(
+//           "https://bizplorers-backend.onrender.com/api/picklist/all-categories-values-admin",
+//           {
+//             headers: { Authorization: `Bearer ${token}` }, // if protected
+//           }
+//         );
+// console.log("picklist--data",response.data.data);
+//         const backendData = response.data.data;
+
+//         setPicklists(backendData);
+//         setManagement(Object.keys(backendData));
+//         setSelectedCategory(Object.keys(backendData)[0] || "");
+//       } catch (err) {
+//         console.error("Failed to load picklists:", err);
+//       }
+//     };
+
+    fetchPicklists();
+    
+    // setFetchData( fetchPicklists());
+  }, []);
+
+
   const handleAddCategory=(category)=>{
     console.log("category--Add---",category);
         setSelectedCategoryId(selectedCategory);
@@ -426,18 +490,18 @@ console.log("apiinviteData1----",inviteData);
       );
       // alert(response.data.message);
       notifySuccess();
-      const updatedValue = response.data.data;
-      setPicklists((prev) => ({
-        ...prev,
-        // [category]: prev[category].filter((item) => item.id !== id),
-        [category]: {
-  ...prev[category],
-  values: prev[category]?.values.filter((item) => item.id !== id),
-}
+    
+//       setPicklists((prev) => ({
+//         ...prev,
+      
+//         [category]: {
+//   ...prev[category],
+//   values: prev[category]?.values.filter((item) => item.id !== id),
+// }
 
-      }));
+//       }));
       setShowDeleteModal(false);
-       window.location.reload();
+      await  fetchPicklists();
     } catch (error) {
       console.error("Deletion failed:", error);
       showError("Failed to delete value. Please try again.");
@@ -498,13 +562,31 @@ else{
       if (response.ok) {
         console.log("Picklists added successfully:", result);
         notifyAdded();
+         await  fetchPicklists();
         // await setFetchData;
-        window.location.reload();
+        // window.location.reload();
 
         // setPicklists((prev) => ({
         //       ...prev,
         //       [category]: [...prev[category], newItem],
         //     }));
+      //   const newItem = {
+      //   id: result?.id || Date.now(),
+      //   value: value,
+      //   is_active: true,
+      //   parent_id: dataToAdd.parent_id || null,
+      // };
+
+      // setPicklists((prev) =>
+      //   prev.map((cat) =>
+      //     cat.id === category.id
+      //       ? {
+      //           ...cat,
+      //           values: [...cat.values, newItem],
+      //         }
+      //       : cat
+      //   )
+      // );
       } else {
         console.error("Error adding picklists:", result.message);
       }
@@ -554,24 +636,25 @@ else{
       // alert(response.data.message);
       const updatedValue = response.data.data;
 
-      setPicklists((prev) => {
-        const existing = prev[category];
+  //     setPicklists((prev) => {
+  //       const existing = prev[category];
 
-  if (!Array.isArray(existing)) {
-    console.error(`Expected array at prev[${category}], but got:`, existing);
-    return prev; // Don't update if the data is bad
-  }
+  // if (!Array.isArray(existing)) {
+  //   console.error(`Expected array at prev[${category}], but got:`, existing);
+  //   return prev; // Don't update if the data is bad
+  // }
 
-  const updated = existing.map((item) =>
-    item.id === id ? { ...item, value: updatedValue?.value } : item
-  );
+  // const updated = existing.map((item) =>
+  //   item.id === id ? { ...item, value: updatedValue?.value } : item
+  // );
 
-  return {
-    ...prev,
-    [category]: updated,
-  };
-      });
-       window.location.reload();
+  // return {
+  //   ...prev,
+  //   [category]: updated,
+  // };
+  //     });
+       
+  await  fetchPicklists();
     } catch (error) {
       console.error("Status Update failed:", error);
       showError("Failed to update status. Please try again.");

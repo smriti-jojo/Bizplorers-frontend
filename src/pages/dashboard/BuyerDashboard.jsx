@@ -505,17 +505,39 @@ const BuyerDashboard = () => {
     preferredArrangement: [],
   });
 
-    const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=JSON.parse(picklists);
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[2]);
+    const[picklistData,setpicklistData]=useState([]);
+    
+  useEffect(() => {
+    fetchBuyerData();
+  }, []);
+      
+      useEffect(() => {
+        const fetchPicklists = async () => {
+          try {
+            const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+            const result = await response.json();
+            if (response.ok) {
+              console.log("result.data",result.data);
+              setpicklistData(result.data); // Always fresh
+            } else {
+              console.error("Failed to fetch picklists:", result.message);
+            }
+          } catch (err) {
+            console.error("Error fetching picklists:", err);
+          }
+        };
+      
+        fetchPicklists();
+      }, []);
+
+
   const token = localStorage.getItem("token");
 
  /* Countries once on mount */
 useEffect(() => {
-  const countryArr = parsedPicklists[2]?.values || [];
+  const countryArr = picklistData[2]?.values || [];
   setCountries(countryArr.map((c) => ({ id: c.id, label: c.value })));
-}, []);
+}, [picklistData]);
 
 /* Fetch cities when a country is chosen */
 const fetchCitiesByCountry = async (countryId) => {
@@ -533,18 +555,8 @@ const fetchCitiesByCountry = async (countryId) => {
 
 
 
-  const businessCategoryOptions = [
-    "E-commerce",
-    "Offline Retail",
-    "Fintech",
-    "Edtech",
-    "Saas",
-    "Education & training",
-    "Restaurant/café",
-    "Mobile App",
-  ];
 
-  const preferredArrangementOptions = ["Cash", "Stock", "Royalty", "Acquihire"];
+  
 
   // const handleChange = (key, value) => {
   //   setBuyerData((prev) => ({ ...prev, [key]: value }));
@@ -653,9 +665,6 @@ const handleChange = (field, selected) => {
     setIsEditing(!isEditing);
   };
 
-  useEffect(() => {
-    fetchBuyerData();
-  }, []);
 
   return (
     <div>
@@ -724,11 +733,17 @@ const handleChange = (field, selected) => {
                     handleChange("businessCategories", Array.from(e.target.selectedOptions, (opt) => opt.value))
                   }
                 >
-                  {businessCategoryOptions.map((cat) => (
+                  {/* {picklistData[0]?.values.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
                     </option>
-                  ))}
+                  ))} */}
+                  {picklistData[0]?.values.map((cat) => (
+  <option key={cat.id} value={cat.value}>
+    {cat.value}
+  </option>
+))}
+
                 </select>
               ) : (
                 <p>{buyerData.businessCategories.join(", ") || "N/A"}</p>
@@ -751,11 +766,12 @@ const handleChange = (field, selected) => {
                     )
                   }
                 >
-                  {preferredArrangementOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
+                 {picklistData[5]?.values.map((option) => (
+  <option key={option.id} value={option.value}>
+    {option.value}
+  </option>
+))}
+
                 </select>
               ) : (
                 <p>{buyerData.preferredArrangement.join(", ") || "N/A"}</p>

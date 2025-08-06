@@ -4,48 +4,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { toast } from "react-toastify";
 import Footer from "../../component/Footer";
 import Header from "../../component/Header";
-import {CircularProgress} from "@mui/material";
-
-// const countryStateCityMap = {
-//   India: {
-//     Delhi: ["New Delhi", "Dwarka", "Rohini"],
-//     Maharashtra: ["Mumbai", "Pune", "Nagpur"],
-//     Karnataka: ["Bangalore", "Mysore", "Mangalore"],
-//   },
-//   USA: {
-//     NewYork: ["New York City", "Buffalo", "Rochester"],
-//     California: ["Los Angeles", "San Francisco", "San Diego"],
-//     Illinois: ["Chicago", "Springfield", "Naperville"],
-//   },
-//   Germany: {
-//     Berlin: ["Mitte", "Kreuzberg", "Prenzlauer Berg"],
-//     Bavaria: ["Munich", "Nuremberg", "Augsburg"],
-//     Hesse: ["Frankfurt", "Wiesbaden", "Kassel"],
-//   },
-// };
-
-// const dropdownOptions = {
-//   businessCategory: [
-//               "E-commerce",
-//               "Offline Retail",
-//               "Fintech",
-//               "Edtech",
-//               "Saas",
-//               "Education & training",
-//               "Restaurant/café",
-//               "Mobile App",
-//             ],
-//   entityStructure: ["PartnerShip", "LLP", "Private Ltd", "Public Ltd"],
-//   salereason: ['No Cash Runway','Bandwidth constraints','Inability to Scale','Relocation'],
-//   preferredArrangement: ["Cash", "Stock", "Royalty", "Acquihire"],
-// };
-
-  const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=JSON.parse(picklists);
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists?.[5]);
-
-   
+import {CircularProgress} from "@mui/material" 
 
 const Section = ({ title, isOpen, toggleOpen, children }) => (
   <div className="border-t pt-4">
@@ -463,6 +422,7 @@ const SellerDashboard = () => {
      const[businessCategoryArray,setbusinessCategoryArray]=useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+     const[picklistData,setpicklistData]=useState([]);
   const[loading,setLoading]=useState(false);
   const [openSections, setOpenSections] = useState({
     company: true,
@@ -510,35 +470,53 @@ const SellerDashboard = () => {
   // setCountries(countryArray);
   
   // },[]);
-  useEffect(() => {
-  const countryArray = parsedPicklists[2]?.values || [];
-  const mapped = countryArray.map((c) => ({
-    id: c.id,
-    label: c.value,
-  }));
-  setCountries(mapped);
+    useEffect(() => {
+       const fetchPicklists = async () => {
+         try {
+           const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+           const result = await response.json();
+           if (response.ok) {
+             setpicklistData(result.data); // Always fresh
+           } else {
+             console.error("Failed to fetch picklists:", result.message);
+           }
+         } catch (err) {
+           console.error("Error fetching picklists:", err);
+         }
+       };
+     
+       fetchPicklists();
+     }, []);
 
-  const SaleArray = parsedPicklists[6]?.values || [];
-  const Salemapped = SaleArray.map((c) => ({
-    id: c.id,
-    label: c.value,
-  }));
-  setSaleReason(Salemapped);
+//   useEffect(() => {
+//   const countryArray = picklistData[2]?.values || [];
+//   const mapped = countryArray.map((c) => ({
+//     id: c.id,
+//     label: c.value,
+//   }));
+//   setCountries(mapped);
 
-  const ArrangementArray = parsedPicklists[5]?.values || [];
-  const arrangemapped = ArrangementArray.map((c) => ({
-    id: c.id,
-    label: c.value,
-  }));
-  setPreferredArrangement(arrangemapped);
-  const businessCategoryArray = parsedPicklists[0]?.values || [];
-  const businessCategorymapped = businessCategoryArray.map((c) => ({
-    id: c.id,
-    label: c.value,
-  }));
-  setbusinessCategoryArray(businessCategorymapped);
+//   const SaleArray = picklistData[6]?.values || [];
+//   const Salemapped = SaleArray.map((c) => ({
+//     id: c.id,
+//     label: c.value,
+//   }));
+//   setSaleReason(Salemapped);
 
-}, []);
+//   const ArrangementArray = picklistData[5]?.values || [];
+//   const arrangemapped = ArrangementArray.map((c) => ({
+//     id: c.id,
+//     label: c.value,
+//   }));
+//   setPreferredArrangement(arrangemapped);
+//   const businessCategoryArray = picklistData[0]?.values || [];
+//   const businessCategorymapped = businessCategoryArray.map((c) => ({
+//     id: c.id,
+//     label: c.value,
+//   }));
+//   setbusinessCategoryArray(businessCategorymapped);
+
+// }, []);
 
 
   // const handleChange = (key, value) => {
@@ -588,24 +566,18 @@ const SellerDashboard = () => {
 const handleChange = (field, selectedValue) => {
   console.log("Field:", field);
   console.log("Value:", selectedValue);
+
 // let valueToSelect;
 //   if(field==='businessCategory'){
-// valueToSelect=selectedValue.value;
+// valueToSelect=selectedValue.label;
 //   }
 //   else{
 //     valueToSelect=selectedValue;
 //   }
-let valueToSelect;
-  if(field==='businessCategory' || field==='preferredArrangement'){
-valueToSelect=selectedValue.label;
-  }
-  else{
-    valueToSelect=selectedValue;
-  }
 
   setFormData((prev) => {
     // const next = { ...prev, [field]: valueToSelect};
-     const next = { ...prev, [field]: valueToSelect};
+     const next = { ...prev, [field]: selectedValue};
 
 
     // Reset dependent fields
@@ -656,6 +628,10 @@ valueToSelect=selectedValue.label;
   };
 
   const updateData = async () => {
+    const updateForm={
+      ...formData,
+      preferredArrangement:formData.preferredArrangement.map((item)=>[item.value])
+    }
     try {
       const res = await fetch("https://bizplorers-backend.onrender.com/api/seller/update_detail", {
         method: "PUT",
@@ -663,7 +639,8 @@ valueToSelect=selectedValue.label;
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        // body: JSON.stringify(formData),
+         body: JSON.stringify(updateData),
       });
       await res.json();
       toast.success("Data updated!");
@@ -799,8 +776,8 @@ const fetchCityByStateData = async (id) => {
             <EditableRow label="Founded Year" value={formData.year} editable={isEditing} onChange={(v) => handleChange("year", v)} options={["2025", "2024", "2023", "2022", "2021", "2020"]} />
             <EditableRow label="Founded Month" value={formData.month} editable={isEditing} onChange={(v) => handleChange("month", v)} options={["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]}/>
             <EditableRow label="Business Description" value={formData.description_business} editable={isEditing} onChange={(v) => handleChange("description_business", v)} type="textarea" />
-            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={businessCategoryArray} />
-            <EditableRow label="Entity Structure" value={formData.entityStructure} editable={isEditing} onChange={(v) => handleChange("entityStructure", v)} options={parsedPicklists[4]?.values} />
+            <EditableRow label="Business Category" value={formData.businessCategory} editable={isEditing} onChange={(v) => handleChange("businessCategory", v)} options={picklistData[0]?.values} />
+            <EditableRow label="Entity Structure" value={formData.entityStructure} editable={isEditing} onChange={(v) => handleChange("entityStructure", v)} options={picklistData[4]?.values} />
           </Section>
 
           {/* Location Section */}
@@ -815,7 +792,7 @@ const fetchCityByStateData = async (id) => {
     value={formData.country}
     editable={isEditing}
     onChange={(v) => handleChange("country", v)}
-    options={countries}
+    options={picklistData[2]?.values}
   />
   <EditableRow
     label="State"
@@ -874,9 +851,9 @@ const fetchCityByStateData = async (id) => {
             isOpen={openSections.exit}
             toggleOpen={() => setOpenSections((p) => ({ ...p, exit: !p.exit }))}
           >
-            <EditableRow label="Reason for Sale" value={formData.salereason} editable={isEditing} onChange={(v) => handleChange("salereason", v)}  options={saleReason}  />
+            <EditableRow label="Reason for Sale" value={formData.salereason} editable={isEditing} onChange={(v) => handleChange("salereason", v)}  options={picklistData[6]?.values}  />
             <EditableRow label="Asking Price" value={formData.askingPrice} editable={isEditing} onChange={(v) => handleChange("askingPrice", v)} />
-            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={isEditing} onChange={(v) => handleChange("preferredArrangement", v)}  options={preferredArrangement}  multiple />
+            <EditableRow label="Preferred Arrangement" value={formData.preferredArrangement} editable={isEditing} onChange={(v) => handleChange("preferredArrangement", v)}  options={picklistData[5]?.values}  multiple />
           </Section>
         </div>
       </div>

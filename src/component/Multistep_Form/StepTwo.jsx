@@ -1,20 +1,29 @@
 import ReusableSelect from "../Dropdown";
 import { TextField } from "@mui/material";
 import ReusableRadioButton from '../RadioButton';
+import { useState,useEffect } from "react";
 
-const countryCityMap = {
-  India: ['Delhi', 'Mumbai', 'Bangalore'],
-  USA: ['New York', 'Los Angeles', 'Chicago'],
-  Germany: ['Berlin', 'Munich', 'Frankfurt'],
-};
 
 const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
 
-   const picklists=localStorage.getItem("picklists");
-   const parsedPicklists=JSON.parse(picklists);
-   console.log("parsedPicklists-----",parsedPicklists);
-   console.log("parsedPicklistsbuyerrr-----",parsedPicklists[0]);
-   console.log("buyerStateData",buyerStateData);
+    const[picklistData,setpicklistData]=useState([]);
+     useEffect(() => {
+         const fetchPicklists = async () => {
+           try {
+             const response = await fetch("https://bizplorers-backend.onrender.com/api/picklist/all-categories-values");
+             const result = await response.json();
+             if (response.ok) {
+               setpicklistData(result.data); // Always fresh
+             } else {
+               console.error("❌ Failed to fetch picklists:", result.message);
+             }
+           } catch (err) {
+             console.error("❌ Error fetching picklists:", err);
+           }
+         };
+       
+         fetchPicklists();
+       }, []);
 
   return(
   <div className="space-y-4 px-[5%]">
@@ -28,7 +37,7 @@ const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
         value={formData.businessCategories}
         onChange={handleChange}
         // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
-        options={parsedPicklists[0].values.map((item)=>item.value)}
+        options={picklistData[0]?.values.map((item)=>item.value)}
         className={`w-full px-3 py-2 border rounded `}
           error={errors.businessCategories}
           width={350}
@@ -55,7 +64,7 @@ const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
         // options={["E-commerce","Offline Retail","Fintech","Edtech","Saas","Education & training","Restaurant/café","Mobile App"]}
       //  options={Object.keys(countryCityMap)}
       //  options={parsedPicklists[2].values.map((item)=>[item.value])}
-      options={parsedPicklists[2].values.map((item) => ({
+      options={picklistData[2]?.values.map((item) => ({
     label: item.value,
     value: item.id,
   }))}
@@ -164,7 +173,7 @@ const StepTwo = ({ formData, handleChange ,errors,buyerStateData}) => {
         value={formData.preferredArrangement}
         onChange={handleChange}
         // options={["Cash", "Stock", "Royalty","Acquihire"]}
-         options={parsedPicklists[6].values.map((item)=>item.value)}
+         options={picklistData[5]?.values.map((item)=>item.value)}
         className={`w-full px-3  border rounded `}
         width={350}
           error={errors.preferredArrangement}

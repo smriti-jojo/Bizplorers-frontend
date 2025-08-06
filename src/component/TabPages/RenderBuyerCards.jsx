@@ -20,6 +20,7 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+let toastAlreadyShown = false;
 
  const RenderBuyerCards = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -66,17 +67,21 @@ const Transition = React.forwardRef((props, ref) => {
       const data = await response.json();
       console.log("buyerbybrokerid", data);
       setCardData(data);
+        if (data.length === 0 && !toastAlreadyShown) {
+      notifyNoBuyer();
+      toastAlreadyShown = true; 
+    }
     } catch (error) {
       console.error(error);
-      notifyNoBuyer();
+     
     }
   };
 
   useEffect(() => {
-    if (cardData.length === 0) {
+    
       fetchBuyerByBrokerData();
-    }
-  }, [cardData]);
+    
+  }, []);
 
   const refresh=localStorage.getItem("refreshBuyerList");
 
